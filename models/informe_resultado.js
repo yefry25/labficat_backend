@@ -1,28 +1,17 @@
 import mongoose from 'mongoose';
 
 const ResultadosSchema = new mongoose.Schema({
-
+    idMuestra: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Muestra",
+        required: true
+    },
     informeResulNumero: {
         type: String,
         required: true
     },
-    fechaRecepMuestra: {
-        type: Date,
-        required: true
-    },
     fechaEmisionInforme: {
         type: Date,
-        required: true
-    },
-    idCliente: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Usuario",
-        required: true
-
-    },
-    idMuestra: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Muestra",
         required: true
     },
     analisisMuestra: [
@@ -33,7 +22,7 @@ const ResultadosSchema = new mongoose.Schema({
             },
             ensayo: {
                 type: mongoose.Schema.ObjectId,
-                ref: "Analisis",
+                ref: "Ensayo",
                 required: true 
             },
             resultado: {
@@ -57,3 +46,5 @@ const ResultadosSchema = new mongoose.Schema({
 })
 
 export default mongoose.model("Resultado", ResultadosSchema) 
+
+/* faltan datos para terminar el modelo por completo */

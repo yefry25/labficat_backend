@@ -1,56 +1,73 @@
 import mongoose from 'mongoose';
 
 const MuestraSchema = new mongoose.Schema({
-    idCliente: {
-        type:mongoose.Schema.ObjectId,
-        ref:"Usuario",
-        required:true
+    solicitante: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Usuario",
+        required: true
     },
-    codMuestra:{
-        type:String,
-        required:true
+    contacto: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Usuario",
+        required: true
     },
-    muniRecoleccion : {
-        type:String,
-        required:true,
+    codMuestra: {  ///  0001-2022
+        type: String,
+        required: true
     },
-    direccionTomaMuestra : {
-        type:String,
-        required:true,
+    munRecoleccion: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Ciudad",
+        required: true,
     },
-    lugarTomaMuestra : {
-        type:String,
-        required:true
+    direccionTomaMuestra: {
+        type: String,
+        required: true,
     },
-    muestraRecolectadaPor : {
-        type:mongoose.Schema.ObjectId,
-        ref:"Usuario",
-        required:true
+    lugarTomaMuestra: {
+        type: String,
+        required: true
     },
-    procedimientoMuestreo : {
-        type:String,
-        required:true
+    muestraRecolectadaPor: {
+        type: String,
+        required: true
     },
-    tipoMuestra : {
+    procedimientoMuestreo: {
+        type: String,
+        required: true,
+        default: "????????????????"//averiguar
+    },
+    tipoMuestra: {
         type: mongoose.Schema.ObjectId,
         ref: "tipoMuestra",
-        required: true 
+        required: true
     },
-    matrizMuestra : {
-        type:String,
-        required:true
+    matrizMuestra: {
+        type: String,//Panela
+        required: true,
+        default: "Panela"
     },
     fechaRecoleccion: {
-        type:Date,
-        required:true
+        type: Date,
+        required: true  ///UTC
     },
-    estado:{
-        type:Number,
-        default:1
+    cotizacion: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Cotizacion",
+        required: true
     },
-    createdAt:{
-        type:Date,
-        default:Date.now
+    item: {
+        type: String,
+        required: true,
+        default: "Item1"
+    },
+    estado: {
+        type: Number,
+        default: 1
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
 })
 

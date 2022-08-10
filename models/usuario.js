@@ -1,59 +1,48 @@
 import mongoose from 'mongoose';
 
 const UsuarioSchema = new mongoose.Schema({
-    nombre:{
-        type:String,
+    nombre: {
+        type: String,
         required: true
     },
-    nitOcc:{
-        type:String,
-        required:true    
-    },
-    direccion:{
-        type:String,
-        required: true 
-    },
-    ciudad:{
-        type:String,
-        required: true
-
-    },
-    departamento:{
-        type:String,
+    documento: {
+        type: String,
         required: true
     },
-    contacto:{
-        type:String,
+    direccion: {
+        type: String,
         required: true
-        
     },
-    telefono:{
-        type:String,
-        maxLength:14,
-        required:true
-        
+    ciudad: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Ciudad",
+        required: true
     },
-    correo:{
-       type:String, 
-       required: true
+    contacto: {
+        type: String,
+        required: true
     },
-    rol:[
-        { 
-            type:String,
-            required:true
-        }
-    ],
-
-    estado:{
-        type:Number,
-        default:1
+    telefono: {
+        type: String,
+        maxLength: 14,
+        required: true
     },
-    
-    createdAt:{
-        type:Date,
-        default:Date.now
+    correo: {
+        type: String,
+        required: true
     },
-    
+    rol: {
+        type: String,
+        required: true
+    },
+    estado: {  //0 inactivo  1:activo   2:vacaciones
+        type: Number,
+        default: 1
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
 })
 
-export default mongoose.model('Usuario',UsuarioSchema)
+export default mongoose.model('Usuario', UsuarioSchema)

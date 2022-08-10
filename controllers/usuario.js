@@ -19,7 +19,7 @@ const usuario = {
         }
     },
 
-    usuarioGetNitoCC: async (req, res) => {
+    usuarioGetDocumento: async (req, res) => {
 
         const { nitOcc } = req.body
 

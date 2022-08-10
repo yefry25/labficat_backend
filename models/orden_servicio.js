@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const Ordenschema = new mongoose.Schema({
 
-fechaIngrMuestra:{
-    type: Date,
-    required:true
-},
 idMuestra: {
     type: mongoose.Schema.ObjectId,
     ref:"Muestra",
@@ -44,3 +40,5 @@ createdAt:{
 })
 
 export default mongoose.model('Orden',Ordenschema)
+
+/* faltan datos para terminar el modelo por completo */
