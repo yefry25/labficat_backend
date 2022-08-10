@@ -8,7 +8,7 @@ import muestra from "../controllers/muestra.js"
 const router = new Router()
 
 router.post('/',[
-    check('idCliente').custom(helpersUsuario.existeUsuarioById),
+    check('solicitante').custom(helpersUsuario.existeUsuarioById),
     check('codMuestra','no puede estar vacio').not().isEmpty(),
     check('muniRecoleccion','no puede estar vacio').not().isEmpty(),
     check('direccionTomaMuestra','no puede estar vacio').not().isEmpty(),

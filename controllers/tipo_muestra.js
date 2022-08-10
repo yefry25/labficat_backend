@@ -4,8 +4,6 @@ const tipomuestra = {
 
     tipoMuestraPost : async (req, res) => {
         const {tipos} = req.body
-
-
         try{
 
             const timuestra = new tipoMuestra({tipos})
