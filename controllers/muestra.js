@@ -2,10 +2,10 @@ import Muestra from '../models/muestra.js';
 
 const muestra = {
     muestraPost: async (req, res) => {
-        const { idCliente, codMuestra, muniRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion } = req.body;
+        const { solicitante, contacto ,codMuestra, munRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion, cotizacion, item, estado } = req.body;
 
         try {
-            const muestra = new Muestra({ idCliente, codMuestra, muniRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion })
+            const muestra = new Muestra({ solicitante, contacto ,codMuestra, munRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion, cotizacion, item, estado })
             if (!muestra) {
                 return res.status(400).json({ msg: "no se pudo registrar la muestra" })
             }
@@ -23,7 +23,6 @@ const muestra = {
             if (!muestra) {
                 return res.status(400).json({ msg: "No hay muestras" })
             }
-
             res.json({ muestra })
 
         } catch (error) {
@@ -37,7 +36,7 @@ const muestra = {
         try {
             const muestra = await Muestra.find({
                 $or: [
-                    { muniRecoleccion: new RegExp(municipio, "i") }
+                    { munRecoleccion: new RegExp(municipio, "i") }
                 ]
             });
 
@@ -45,7 +44,6 @@ const muestra = {
                 return res.json({ msg: "No se encontro lo buscado" })
             }
             res.json({ muestra })
-
         } catch (error) {
             return res.status(500).json({ msg: "Hable con el WebMaster" })
         }

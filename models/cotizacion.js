@@ -19,7 +19,7 @@ const ServicioSchema = new mongoose.Schema({
         ref: "Usuario",
         required: true
     },
-    validezoferta: {
+    validezOferta: {
         type: Date,
         required: true
     },
@@ -119,4 +119,4 @@ const ServicioSchema = new mongoose.Schema({
     }
 })
 
-export default mongoose.model('Servicio', ServicioSchema)
+export default mongoose.model('Cotizacion', ServicioSchema)

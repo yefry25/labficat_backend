@@ -1,33 +1,32 @@
-import Servicio from "../models/oferta_servicio.js"
+import Cotizacion from "../models/oferta_servicio.js"
 
-const servicios = {
+const cotizacion = {
 
-  servicioPost: async (req, res) => {
-    const { numCotizacion, fechaEmision, idCliente, idContacto, idElaboradoPor, item, observaciones, subTotal, iva, total, idClienteAceptaCondiciones } = req.body
-
+  cotizacionPost: async (req, res) => {
+    const { numCotizacion, fechaEmision, idCliente, idContacto, validezOferta ,entregaResultados, idElaboradoPor,items, observaciones, subTotal, descuento ,iva, total } = req.body
     try {
-      const servicio = new Servicio({ numCotizacion, fechaEmision, idCliente, idContacto, idElaboradoPor, item, observaciones, subTotal, iva, total, idClienteAceptaCondiciones })
+      const cotizacion = new Cotizacion({ numCotizacion, fechaEmision, idCliente, idContacto, validezOferta ,entregaResultados, idElaboradoPor,items, observaciones, subTotal, descuento ,iva, total })
 
-      if (!servicio) {
+      if (!cotizacion) {
         return res.status(400).json({ msg: "No se puedo registrar la oferta de servicio" })
       }
       servicio.save()
-      res.json({ servicio })
+      res.json({ cotizacion })
 
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" })
     }
   },
 
-  servicioGet: async (req, res) => {
+  cotizacionGet: async (req, res) => {
 
     try {
-      const servicio = await Servicio.find();
+      const cotizacion = await Cotizacion.find();
 
-      if (!servicio) {
+      if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" })
       }
-      res.json({ servicio })
+      res.json({ cotizacion })
 
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" })
@@ -39,12 +38,12 @@ const servicios = {
 
     try {
 
-      const servicio = await Servicio.find({ numCotizacion });
+      const cotizacion = await Cotizacion.find({ numCotizacion });
 
-      if (!servicio) {
+      if (!cotizacion) {
         return res.status(400).json({ msg: "Numero de cotizacion incorrecto" })
       }
-      res.json({ servicio })
+      res.json({ cotizacion })
 
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" })
@@ -58,7 +57,7 @@ const servicios = {
 
     try {
 
-      const servicio = await Servicio.find({
+      const cotizacion = await Cotizacion.find({
         $and: [
           {
             fechaEmision: {
@@ -74,12 +73,12 @@ const servicios = {
       }
       );
 
-      if (!servicio) {
+      if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro" })
       }
 
       res.json({
-        servicio
+        cotizacion
       })
 
     } catch (error) {
@@ -92,7 +91,7 @@ const servicios = {
 
     try {
 
-      const codReferencia = await Servicio.find().where('item.codigoReferencia').in(codigoReferencia).exec();
+      const codReferencia = await Servicio.find().where('items.item1.itemsEnsayo').in(codigoReferencia).exec();
 
       if (!codReferencia) {
         return res.status(400).json({ msg: "No se encontro" })
@@ -161,4 +160,4 @@ const servicios = {
   },
 }
 
-export default servicios 
+export default cotizacion

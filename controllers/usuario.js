@@ -21,11 +21,11 @@ const usuario = {
 
     usuarioGetDocumento: async (req, res) => {
 
-        const { nitOcc } = req.body
+        const { documento } = req.body
 
         try {
 
-            const usuario = await Usuario.find({ nitOcc })
+            const usuario = await Usuario.find({ documento })
 
             if (!usuario) {
                 return res.status(400).json({
@@ -107,9 +107,9 @@ const usuario = {
     },
 
     usuarioPost: async (req, res,) => {
-        const { nombre, nitOcc, direccion, ciudad, departamento, contacto, telefono, correo, rol, estado } = req.body
+        const { nombre, documento, direccion, ciudad, contacto, telefono, correo, rol, estado } = req.body
         try {
-            const usuario = new Usuario({ nombre, nitOcc, direccion, ciudad, departamento, contacto, telefono, correo, rol, estado })
+            const usuario = new Usuario({ nombre, documento, direccion, ciudad, contacto, telefono, correo, rol, estado })
 
             if (!usuario) {
                 return res.status(400).json({ msg: "no se pudo registrar el cliente" })
@@ -133,6 +133,13 @@ const usuario = {
     },
 
     personaDesactivar: async (req, res) => {
+        const { id } = req.params;
+        const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 })
+        res.json({
+            usuario
+        })
+    },
+    personaVacaciones: async (req, res) => {
         const { id } = req.params;
         const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 })
         res.json({

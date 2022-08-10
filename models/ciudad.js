@@ -5,7 +5,7 @@ const CiudadSchema = new mongoose.Schema({
         type:String,
         required: true
     },
-    coddepartamento:{
+    codDepartamento:{
         type:String,
         required:true    
     },
@@ -13,7 +13,7 @@ const CiudadSchema = new mongoose.Schema({
         type:String,
         required: true 
     },
-    codciudad:{
+    codCiudad:{
         type:String,
         required: true
     },    
