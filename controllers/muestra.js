@@ -91,7 +91,18 @@ const muestra = {
     },
 
     muestraGetLisMaMu: async (req, res) => {
+        try{
+            muestra = await Muestra.find()
+            .populate("solicitante",["nombre","documento","direccion","contacto","telefono","correo"])
+            .populate("ciudad",["ciudad","departamento"])
+            
 
+            if(!muestra){
+                return res.status(400).json({msg: "No se encontro lo buscado"})
+            }
+        }catch(error){
+            return res.status(500).json({ msg: "Hable con el WebMaster"})
+        }
     },
 
     muestraPut: async (req, res) => {
@@ -99,7 +110,6 @@ const muestra = {
         const { _id, idCliente, muestraRecolectadaPor, ...resto } = req.body
 
         try {
-
             const modificar = await Muestra.findByIdAndUpdate(id, resto);
 
             if (!modificar) {

@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
 const UsuarioSchema = new mongoose.Schema({
+    
+    tipopersona: { //Natural  Juridica
+        type: String,
+        required: true,
+        default: "Natural"
+    },
     nombre: {
         type: String,
         required: true

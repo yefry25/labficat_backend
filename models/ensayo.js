@@ -11,6 +11,10 @@ const EnsayoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    tecnica: {
+        type: String,
+        required: true,
+    },
     valorMinimo: {
         type: String,
         required: true,
@@ -31,9 +35,29 @@ const EnsayoSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
+    estado: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+
     descripcion: {
         type: String,
     },
+    limiteCuantificacion: {
+        type: Number,
+        required: true
+    },
+    responsables: {
+        titular: {
+            type: mongoose.Schema.ObjectId,
+            ref: "Usuario",
+        },
+        suplente: {
+            type: mongoose.Schema.ObjectId,
+            ref: "Usuario",
+        }
+    }
 })
 
 export default mongoose.model("Ensayo", EnsayoSchema)

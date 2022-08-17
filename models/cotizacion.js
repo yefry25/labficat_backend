@@ -40,15 +40,15 @@ const ServicioSchema = new mongoose.Schema({
                     ref: "Ensayo",
                     required: true
                 },
-                limiteCuantificacion: {
-                    type: Number,
-                    required: true
-                },
                 costoEnsayo: {
                     type: Number,
                     required: true
                 },
             }],
+            costo:{
+                type:Number,
+                default:0
+            } 
         },
         item2: {
             itemsEnsayo: [{
@@ -57,15 +57,15 @@ const ServicioSchema = new mongoose.Schema({
                     ref: "Ensayo",
                     required: true
                 },
-                limiteCuantificacion: {
-                    type: Number,
-                    required: true
-                },
                 costoEnsayo: {
                     type: Number,
                     required: true
                 },
             }],
+            costo:{
+                type:Number,
+                default:0
+            } 
         },
         item3: {
             itemsEnsayo: [{
@@ -74,20 +74,16 @@ const ServicioSchema = new mongoose.Schema({
                     ref: "Ensayo",
                     required: true
                 },
-                limiteCuantificacion: {
-                    type: Number,
-                    required: true
-                },
                 costoEnsayo: {
                     type: Number,
                     required: true
                 },
             }],
+            costo:{
+                type:Number,
+                default:0
+            } 
         },
-        costo: {
-            type: Number,
-            required: true
-        }
     },
     observaciones: {
         type: String,
