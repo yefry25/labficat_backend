@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const UsuarioSchema = new mongoose.Schema({
     
-    tipopersona: { //Natural  Juridica
+    tipoPersona: { //Natural  Juridica
         type: String,
         required: true,
         default: "Natural"
@@ -26,7 +26,6 @@ const UsuarioSchema = new mongoose.Schema({
     },
     contacto: {
         type: String,
-        required: true
     },
     telefono: {
         type: String,
@@ -35,7 +34,8 @@ const UsuarioSchema = new mongoose.Schema({
     },
     correo: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     rol: {
         type: String,

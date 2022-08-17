@@ -9,52 +9,34 @@ import Ordenes from "../controllers/orden_servicio.js"
 const router = new Router()
 
 router.post('/',[
-    check('fechaIngrMuestra','No puede estar vacio').not().isEmpty(),
     check('idMuestra').custom(helpersMuestra.existeMuestra),
-    check('parametroTecMetodo','No puede estar vacio').not().isEmpty(),
-    check('estadoMuestra','no puede estar vacio').not().isEmpty(),
+    check('ensayo').custom(),
     check('realizadoPor',).custom(helpersUsuario.existeUsuarioById),
     check('supervisadoPor',).custom(helpersUsuario.existeUsuarioById),
-    check('supervisadoPor','no puede estar vacio').not().isEmpty(),
     check('observaciones','no puede estar vacio').not().isEmpty(),
     validarCampos
 ],Ordenes.ordenPost)
 
 router.get('/',Ordenes.ordenGet)
 
-router.get('/fecha',[
-    check('fechaIngrMuestra','no puede estra vacio').not().isEmpty(),
-    validarCampos
-],Ordenes.listarFecha)
-
-router.get('/parametro',[
-    check('parametroTecMetodo','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],Ordenes.ordenGetParametro)
-
-router.get('/estado',[
-    check('estadoMuestra','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],Ordenes.ordenGetEstado)
-
 router.get('/realizado',[
-    check('realizadoPor','no puede estar vacio').not().isEmpty(),
+    check('realizadoPor',).custom(helpersUsuario.existeUsuarioById),
     validarCampos
 ],Ordenes.ordenGetRealizado)
 
 router.get('/supervisado',[
-    check('supervisadoPor','no puede estar vacio').not().isEmpty(),
+    check('supervisadoPor',).custom(helpersUsuario.existeUsuarioById),
     validarCampos
 ],Ordenes.ordenGetSupervisado)
 
-router.put('/modificar/:id',[
-    check('id').custom(helpersOrden.existeOrdenById),
-    check('fechaIngrMuestra','No puede estar vacio').not().isEmpty(),
-    check('parametroTecMetodo','No puede estar vacio').not().isEmpty(),
-    check('estadoMuestra','no puede estar vacio').not().isEmpty(),
-    check('supervisadoPor','no puede estar vacio').not().isEmpty(),
-    check('observaciones','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],Ordenes.ordenPut)
+router.put('/activar/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+],Ordenes.ordenActivar)
+
+router.put('/desactivar/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+],Ordenes.ordenDesactivar)
 
 export default router

@@ -7,7 +7,8 @@ const ServicioSchema = new mongoose.Schema({
     },
     fechaEmision: {
         type: Date,
-        required: true
+        required: true,
+        default:Date.now
     },
     idCliente: {
         type: mongoose.Schema.ObjectId,

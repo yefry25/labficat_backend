@@ -55,24 +55,6 @@ const resultado = {
         }
     },
 
-    resultadoPut: async (req, res) => {
-        const { id } = req.params
-        const { _id,...resto } = req.body
-
-        try {
-            const modificar = await Resultado.findByIdAndUpdate(id, resto);
-
-            if(!modificar){
-                return res.status(400).json({msg:"No se pudo modificar el informe de resultados"})
-            }
-            res.json({
-                modificar
-            })
-
-        } catch (error) {
-            return res.status(500).json({ msg: "Hable con el WebMaster" })
-        }
-    }
 }
 
 export default resultado

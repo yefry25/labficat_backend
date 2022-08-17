@@ -18,23 +18,9 @@ router.post('/',[
     validarCampos
 ],resultado.resultadoPost)
 
-router.get('/fechaRecep',[
-    check('fechaRecepMuestra','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],resultado.resultadoGetfechaRecep)
-
 router.get('/fechaEmi',[
     check('fechaEmisionInforme','no puede estar vacio').not().isEmpty(),
     validarCampos 
 ],resultado.resultadoGetFechaEmi)
-
-router.put('d/modificar/:id',[
-    check('id').custom(helpersResultado.existeResultadoById),
-    check('informeResulNumero','no puede estar vacio').not().isEmpty(),
-    check('fechaRecepMuestra','no puede estar vacio').not().isEmpty(),
-    check('fechaEmisionInforme','no puede estar vacio').not().isEmpty(),
-    check('analisisMuestra','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],resultado.resultadoPut)
 
 export default router

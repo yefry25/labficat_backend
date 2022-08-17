@@ -40,7 +40,6 @@ const EnsayoSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
-
     descripcion: {
         type: String,
     },

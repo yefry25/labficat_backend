@@ -2,10 +2,10 @@ import Muestra from '../models/muestra.js';
 
 const muestra = {
     muestraPost: async (req, res) => {
-        const { solicitante, contacto ,codMuestra, munRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion, cotizacion, item, estado } = req.body;
+        const { solicitante, contacto, codMuestra, munRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion, cotizacion, item } = req.body;
 
         try {
-            const muestra = new Muestra({ solicitante, contacto ,codMuestra, munRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion, cotizacion, item, estado })
+            const muestra = new Muestra({ solicitante, contacto, codMuestra, munRecoleccion, direccionTomaMuestra, lugarTomaMuestra, muestraRecolectadaPor, procedimientoMuestreo, tipoMuestra, matrizMuestra, fechaRecoleccion, cotizacion, item })
             if (!muestra) {
                 return res.status(400).json({ msg: "no se pudo registrar la muestra" })
             }
@@ -78,53 +78,30 @@ const muestra = {
                     { tipoMuestra: new RegExp(tipoMuestra, "i") }
                 ]
             });
-
             if (!muestra) {
                 return res.status(400).json({ msg: "No se encontro lo buscado" })
             }
-
             res.json({ muestra })
-
         } catch (error) {
             return res.status(500).json({ msg: "Hable con el WebMaster" })
         }
     },
 
     muestraGetLisMaMu: async (req, res) => {
-        try{
-            muestra = await Muestra.find()
-            .populate("solicitante",["nombre","documento","direccion","contacto","telefono","correo"])
-            .populate("ciudad",["ciudad","departamento"])
-            
-
-            if(!muestra){
-                return res.status(400).json({msg: "No se encontro lo buscado"})
-            }
-        }catch(error){
-            return res.status(500).json({ msg: "Hable con el WebMaster"})
-        }
-    },
-
-    muestraPut: async (req, res) => {
-        const { id } = req.params
-        const { _id, idCliente, muestraRecolectadaPor, ...resto } = req.body
-
         try {
-            const modificar = await Muestra.findByIdAndUpdate(id, resto);
+            muestra = await Muestra.find()
+                .populate("solicitante", ["nombre", "documento", "direccion", "contacto", "telefono", "correo"])
+                .populate("munRecoleccion", ["ciudad", "departamento"])
 
-            if (!modificar) {
-                return res.status(400).json({ msg: "No se pudo modificar la muestra" })
+            if (!muestra) {
+                return res.status(400).json({ msg: "No se encontro lo buscado" })
             }
-
-            res.json({
-                modificar
-            })
-
         } catch (error) {
             return res.status(500).json({ msg: "Hable con el WebMaster" })
         }
     },
-    personaActivar: async (req, res) => {
+
+    muestraActivar: async (req, res) => {
         const { id } = req.params;
         const muestra = await Muestra.findByIdAndUpdate(id, { estado: 1 })
         res.json({
@@ -132,7 +109,7 @@ const muestra = {
         })
     },
 
-    personaDesactivar: async (req, res) => {
+    muestraDesactivar: async (req, res) => {
         const { id } = req.params;
         const muestra = await Muestra.findByIdAndUpdate(id, { estado: 0 })
         res.json({

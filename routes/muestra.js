@@ -9,14 +9,18 @@ const router = new Router()
 
 router.post('/',[
     check('solicitante').custom(helpersUsuario.existeUsuarioById),
+    check('contacto').custom(helpersUsuario.existeUsuarioById),
     check('codMuestra','no puede estar vacio').not().isEmpty(),
-    check('muniRecoleccion','no puede estar vacio').not().isEmpty(),
+    check('munRecoleccion').custom(),
     check('direccionTomaMuestra','no puede estar vacio').not().isEmpty(),
     check('lugarTomaMuestra','no puede estar vacio').not().isEmpty(),
-    check('muestraRecolectadaPor',).custom(helpersUsuario.existeUsuarioById),
+    check('muestraRecolectadaPor','no puede estar vacio').not().isEmpty(),
     check('procedimientoMuestreo','no puede estar vacio').not().isEmpty(),
-    check('tipoMuestra','no puede estar vacio').not().isEmpty(),
+    check('tipoMuestra').custom(),
     check('matrizMuestra','no puede estar vacio').not().isEmpty(),
+    check('fechaRecoleccion').isDate(),
+    check('cotizacion').custom(),
+    check('item','no puede estar vacio').not().isEmpty(),
     validarCampos
 ],muestra.muestraPost)
 
@@ -36,17 +40,14 @@ router.get('/tipoMuestra',[
     check('tipoMuestra','no puede estar vacio').not().isEmpty(),
 ],muestra.muestraGetTipo)
 
-router.put('/:id',[
-    check('id','no puede estar vacio').not().isEmpty(),
-    check('id').custom(helpersMuestra.existeMuestraById),
-    check('codMuestra','no puede estar vacio').not().isEmpty(),
-    check('muniRecoleccion','no puede estar vacio').not().isEmpty(),
-    check('direccionTomaMuestra','no puede estar vacio').not().isEmpty(),
-    check('lugarTomaMuestra','no puede estar vacio').not().isEmpty(),
-    check('procedimientoMuestreo','no puede estar vacio').not().isEmpty(),
-    check('tipoMuestra','no puede estar vacio').not().isEmpty(),
-    check('matrizMuestra','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],muestra.muestraPut)
+router.put('/activar/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+],muestra.muestraActivar)
+
+router.put('/desactivar/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+],muestra.muestraDesactivar)
 
 export default router
