@@ -3,6 +3,7 @@ import { check } from "express-validator"
 import { validarCampos } from "../middlewares/middleware.js"
 import usuario from "../controllers/usuario.js"
 import helpersUsuario from "../helpers/usuario.js"
+import helpersCiudad from '../helpers/ciudad.js'
 
 const router=new Router()
 
@@ -11,7 +12,7 @@ router.post('/',[
     check('nombre','no puede estar vacio').not().isEmpty(),
     check('documento','no puede estar vacio').not().isEmpty(),
     check('direccion','no puede estar vacio').not().isEmpty(),
-    check('ciudad').custom(),
+    check('ciudad').custom(helpersCiudad.existeCiudadById),
     check('telefono','no puede estar vacio').not().isEmpty(),
     check('telefono','maximo 14 caracteres').isLength({max:14}),
     check('correo','solo formato email').isEmail(),

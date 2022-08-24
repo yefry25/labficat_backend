@@ -36,5 +36,22 @@ const helpersUsuario = {
             throw new Error(`El id no existe ${id}`)
         }
     },
+
+    existeResponsables: async (responsables) => {
+        const titular = responsables.titular 
+        console.log(titular);
+        const suplente = responsables.suplente
+        console.log(suplente);
+        const existeTitular = await Usuario.findById(titular)
+        const existeSuplente = await Usuario.findById(suplente)
+
+        if (!existeTitular) {
+            throw new Error(`El id de titular no existe ${titular}`)
+        }
+
+        if (!existeSuplente) {
+            throw new Error(`El id de suplente no existe ${suplente}`)
+        }
+    }
 }
 export default helpersUsuario

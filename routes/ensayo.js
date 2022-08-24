@@ -2,6 +2,8 @@ import {Router} from "express"
 import { check } from "express-validator"
 import { validarCampos } from "../middlewares/middleware.js"
 import ensayo from '../controllers/ensayo.js'
+import helpersUsuario from '../helpers/usuario.js'
+
 
 const router = new Router()
 
@@ -17,7 +19,7 @@ router.post('/',[
     check('costo','no puede estar vacio').not().isEmpty(),
     check('descripcion','no puede estar vacio').not().isEmpty(),
     check('limiteCuantificacion','no puede estar vacio').not().isEmpty(),
-    check('responsables').custom(),
+    check('responsables').custom(helpersUsuario.existeResponsables),
     validarCampos
 ],ensayo.ensayoPost)
 

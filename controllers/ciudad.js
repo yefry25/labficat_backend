@@ -9,7 +9,7 @@ const ciudad = {
             if (!ciudades) {
                 return res.status(400).json({ msg: "no se pudo registrar la ciudad" })
             }
-            ciudad.save()
+            ciudades.save()
             res.json({
                 ciudades
             })
@@ -17,7 +17,6 @@ const ciudad = {
             return res.status(500).json({ msg: "Hable con el WebMaster" })
         }
     },
-
     ciudadGet: async (req, res) => {
         try {
             const ciudades = await Ciudad.find();

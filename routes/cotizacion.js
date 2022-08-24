@@ -3,6 +3,7 @@ import { check } from "express-validator"
 import { validarCampos } from "../middlewares/middleware.js"
 import helpersUsuario from "../helpers/usuario.js"
 import cotizacion from "../controllers/cotizacion.js"
+import helpersEnsayo from '../helpers/ensayo.js'
 
 const router = new Router();
 
@@ -16,7 +17,7 @@ router.post('/',[
     check('entregaResultados').isDate(),
     check('entregaResultados','el campo no puede estar vacio').not().isEmpty(),
     check('idElaboradoPor').custom(helpersUsuario.existeUsuarioById),
-    check('items').custom(),
+    check('items').custom(helpersEnsayo.itemEnsayo),
     check('subTotal','el campo no puede estar vacio').not().isEmpty(),
     check('descuento','el campo no puede estar vacio').not().isEmpty(),
     check('iva','el campo no puede estar vacio').not().isEmpty(),

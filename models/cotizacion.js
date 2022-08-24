@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const ServicioSchema = new mongoose.Schema({
-    numCotizacion: {          /* ej: 0001-2022V1 */
+    numCotizacion: {        /* ej: 0001-2022V1 */
         type: String,
         required: true
     },
@@ -56,11 +56,11 @@ const ServicioSchema = new mongoose.Schema({
                 ensayo: {
                     type: mongoose.Schema.ObjectId,
                     ref: "Ensayo",
-                    required: true
+                    
                 },
                 costoEnsayo: {
                     type: Number,
-                    required: true
+                    
                 },
             }],
             costo:{
@@ -73,11 +73,11 @@ const ServicioSchema = new mongoose.Schema({
                 ensayo: {
                     type: mongoose.Schema.ObjectId,
                     ref: "Ensayo",
-                    required: true
+                   
                 },
                 costoEnsayo: {
                     type: Number,
-                    required: true
+                    
                 },
             }],
             costo:{

@@ -6,7 +6,7 @@ const helpersMuestra = {
         for (let i = 0; i < idMuestra.length; i++) {
             const element = idMuestra[i];
             const validarId = mongoose.Types.ObjectId(element.codigo);
-    
+
             if(!validarId){
                 throw new Error('el ID no existe')
             }
@@ -36,7 +36,6 @@ const helpersMuestra = {
             if(!validarId){
                 throw new Error('el ID no existe')
             }
-            
             const x = element.idMuestra
             const existe = await Muestra.findById(x);
     

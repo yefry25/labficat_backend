@@ -9,6 +9,6 @@ const helpersResultado = {
             throw new Error(`El id no existe ${id}`)
         }
     },
-} 
+}
 
 export default helpersResultado

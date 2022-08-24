@@ -4,13 +4,14 @@ import { validarCampos } from "../middlewares/middleware.js"
 import helpersMuestra from "../helpers/muestra.js"
 import helpersOrden from "../helpers/orden_servicio.js"
 import helpersUsuario from "../helpers/usuario.js"
+import helpersEnsayo from '../helpers/ensayo.js'
 import Ordenes from "../controllers/orden_servicio.js"
 
 const router = new Router()
 
 router.post('/',[
     check('idMuestra').custom(helpersMuestra.existeMuestra),
-    check('ensayo').custom(),
+    check('ensayo').custom(helpersEnsayo.existeEnsayoById),
     check('realizadoPor',).custom(helpersUsuario.existeUsuarioById),
     check('supervisadoPor',).custom(helpersUsuario.existeUsuarioById),
     check('observaciones','no puede estar vacio').not().isEmpty(),
