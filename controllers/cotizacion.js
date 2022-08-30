@@ -5,6 +5,7 @@ const cotizacion = {
   cotizacionPost: async (req, res) => {
     const { numCotizacion, fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total } = req.body
     try {
+      numCotizacion=contiza()
       const cotizacion = new Cotizacion({ numCotizacion, fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total })
 
       if (!cotizacion) {

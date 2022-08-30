@@ -73,7 +73,6 @@ const ServicioSchema = new mongoose.Schema({
                 ensayo: {
                     type: mongoose.Schema.ObjectId,
                     ref: "Ensayo",
-                   
                 },
                 costoEnsayo: {
                     type: Number,

@@ -15,7 +15,7 @@ const helpersMuestra = {
             const existe = await Muestra.findById(x);
     
             if (!existe){
-                throw new Error('el cliente no existe')
+                throw new Error('el muestra no existe')
             }
         }
     },
@@ -40,7 +40,7 @@ const helpersMuestra = {
             const existe = await Muestra.findById(x);
     
             if (!existe){
-                throw new Error('el cliente no existe')
+                throw new Error('la muestra de recepcion no existe')
             }
         }
     },
