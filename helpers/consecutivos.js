@@ -1,4 +1,4 @@
-function * generadorIds(id=0001){
+function * generadorIds(id=1){
     while(true){
         yield id;
         ++id;
