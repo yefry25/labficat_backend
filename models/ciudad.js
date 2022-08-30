@@ -13,6 +13,7 @@ const CiudadSchema = new mongoose.Schema({
         type:String,
         required: true 
     },
+    
     codCiudad:{
         type:String,
         required: true
