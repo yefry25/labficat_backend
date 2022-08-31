@@ -3,7 +3,7 @@ import { check } from "express-validator"
 import { validarCampos } from "../middlewares/middleware.js"
 import tipomuestra from '../controllers/tipo_muestra.js'
 
-router = new Router()
+const router = new Router()
 
 router.post('/',[
     check('tipos').not().isEmpty(),
