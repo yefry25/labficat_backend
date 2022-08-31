@@ -23,6 +23,4 @@ router.post('/',[
     validarCampos
 ],ensayo.ensayoPost)
 
-router.get('/',ensayo.ensayoGet)
-
 export default router
