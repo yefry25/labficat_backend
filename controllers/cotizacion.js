@@ -1,9 +1,24 @@
 import Cotizacion from "../models/cotizacion.js"
+import Setup from "../models/setup.js"
 
 const cotizacion = {
 
   cotizacionPost: async (req, res) => {
-    const { numCotizacion, fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total } = req.body
+    const { fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total } = req.body
+
+    const consecutivo =await Setup.findOne()
+    let conse=""
+    if (consecutivo.consecutivoOferta.length==1) conse="000"+consecutivo.consecutivoOferta
+    else if (consecutivo.consecutivoOferta.length==2) conse="00"+consecutivo.consecutivoOferta
+    else if (consecutivo.consecutivoOferta.length==3) conse="0"+consecutivo.consecutivoOferta
+    else conse=consecutivo.consecutivoOferta
+
+    const numCotizacion=conse+"-"+getFullYear()+"V1"
+    split
+
+    const nuevoconsecutivo=consecutivo.consecutivoOferta++
+    const guardar=Setup.findByIdAndUpdate(consecutivo._id,{consecutivoOferta:nuevoconsecutivo)
+
     try {
       numCotizacion=contiza()
       const cotizacion = new Cotizacion({ numCotizacion, fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total })
