@@ -25,7 +25,7 @@ router.post('/',[
 ],usuario.usuarioPost)
 
 router.post('/login',[
-    check('correo','ya existe un cliente registrado con este correo').custom(helpersUsuario.existeEmail),
+    check('correo','el campo correo no puede estar vacio').not().isEmpty(),
     check('correo','solo formato email').isEmail(),
     check('password','el campo password no puede estar vacio').not().isEmpty(),
     check('password','la contraseña no puede tener menos de 8 caracteres').isLength({min:8}),
