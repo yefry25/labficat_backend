@@ -22,6 +22,14 @@ router.post('/',[
     validarCampos
 ],usuario.usuarioPost)
 
+router.post('/login',[
+    check('email','El campo email no puede estar vacio').not().isEmpty(),
+    check('email','solo formato email').isEmail(),
+    check('password','el campo password no puede estar vacio').not().isEmpty(),
+    check('password','la contraseña no puede tener menos de 8 caracteres').isLength({min:8}),
+    validarCampos,
+],usuario.usuarioLogin)
+
 router.get('/',usuario.usuarioGet)
 
 router.get('/documento',[
@@ -48,5 +56,7 @@ router.put('/desactivar/:id',[
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
 ],usuario.personaDesactivar)
+
+
 
 export default router

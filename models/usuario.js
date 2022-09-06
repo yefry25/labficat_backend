@@ -37,6 +37,11 @@ const UsuarioSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    password:{
+        type:String,
+        required: true,
+        minLength:8
+    },
     rol: {
         type: String,
         required: true

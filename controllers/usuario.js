@@ -1,4 +1,6 @@
 import Usuario from "../models/usuario.js"
+import bcryptjs from "bcryptjs"
+import validar from "../middlewares/validar.js"
 
 const usuario = {
     usuarioGet: async (req, res) => {
@@ -77,6 +79,33 @@ const usuario = {
             })
         } catch (error) {
             return res.status(500).json({ msg: "Hable con el WebMaster" })
+        }
+    },
+    usuarioLogin: async (req, res) => {
+        const { correo, password } = req.body;
+        try {
+            const usuario = await Usuario.findOne({ correo })
+            if (!usuario) {
+                return res.status(400).json({
+                    msg: "Usuario / Password no son correctos"
+                })
+            }
+            const validPassword = bcryptjs.compareSync(password, usuario.password);
+            if (!validPassword) {
+                return res.status(400).json({
+                    msg: "Usuario / Password no son correctos"
+                    
+                })
+            }
+            const token = await validar.generarJWT(usuario.id);
+            res.json({
+                usuario,
+                token
+            })
+        } catch (error) {
+            return res.status(500).json({
+                msg: "Hable con el WebMaster"
+            })
         }
     },
     personaActivar: async (req, res) => {

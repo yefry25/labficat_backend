@@ -4,7 +4,6 @@ import { validarCampos } from "../middlewares/middleware.js"
 import ensayo from '../controllers/ensayo.js'
 import helpersUsuario from '../helpers/usuario.js'
 
-
 const router = new Router()
 
 router.get('/',ensayo.ensayoGet)

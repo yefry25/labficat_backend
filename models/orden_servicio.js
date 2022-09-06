@@ -7,21 +7,33 @@ const Ordenschema = new mongoose.Schema({
         ref: "Muestra",
         required: true
     },
-    ensayo: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Ensayo",
-        required: true
-    },
-    realizadoPor: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Usuario",
-        required: true
-    },
-    supervisadoPor: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Usuario",
-        required: true
-    },
+    itemsorden: [{
+        idensayo:{
+            type: mongoose.Schema.ObjectId,
+            ref: "Ensayo",
+            required: true
+        },
+        responsable:{
+            type: mongoose.Schema.ObjectId,
+            ref: "Usuario",
+        },
+        supervisor:{
+            type: mongoose.Schema.ObjectId,
+            ref: "Usuario",
+        },
+        resultado:{
+            type: Number,
+            default: ""
+        },
+        incertidumbre:{
+            type: Number,
+            default: ""
+        },
+        estado:{
+            type: String,
+            default: "En proceso"
+        },
+    }],
     observaciones: {
         type: String,
         default: ""
