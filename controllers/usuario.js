@@ -67,9 +67,12 @@ const usuario = {
         }
     },
     usuarioPost: async (req, res,) => {
-        const { tipoPersona, nombre, documento, direccion, ciudad, contacto, telefono, correo, rol } = req.body
+        const { tipoPersona, nombre, documento, direccion, ciudad, contacto, telefono, correo, password, rol } = req.body
+
         try {
-            const usuario = new Usuario({ tipoPersona, nombre, documento, direccion, ciudad, contacto, telefono, correo, rol })
+            const usuario = new Usuario({ tipoPersona, nombre, documento, direccion, ciudad, contacto, telefono, correo, password, rol })
+            const salt = bcryptjs.genSaltSync(10)
+            usuario.password = bcryptjs.hashSync(password, salt)
             if (!usuario) {
                 return res.status(400).json({ msg: "no se pudo registrar el cliente" })
             }

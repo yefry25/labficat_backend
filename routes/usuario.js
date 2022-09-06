@@ -18,13 +18,15 @@ router.post('/',[
     check('telefono','maximo 14 caracteres').isLength({max:14}),
     check('correo','solo formato email').isEmail(),
     check('correo','ya existe un cliente registrado con este correo').custom(helpersUsuario.existeEmail),
+    check('password','el campo password no puede estar vacio').not().isEmpty(),
+    check('password','la contraseña no puede tener menos de 8 caracteres').isLength({min:8}),
     check('rol','no puede estar vacio').not().isEmpty(),
     validarCampos
 ],usuario.usuarioPost)
 
 router.post('/login',[
-    check('email','El campo email no puede estar vacio').not().isEmpty(),
-    check('email','solo formato email').isEmail(),
+    check('correo','ya existe un cliente registrado con este correo').custom(helpersUsuario.existeEmail),
+    check('correo','solo formato email').isEmail(),
     check('password','el campo password no puede estar vacio').not().isEmpty(),
     check('password','la contraseña no puede tener menos de 8 caracteres').isLength({min:8}),
     validarCampos,
