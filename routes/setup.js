@@ -12,12 +12,7 @@ router.get('/:id',[
     check('id').custom(helpersUsuario.existeUsuarioById),
 ],consecutivo.idConsecutivoGet)
 
-router.post('/',[
-check('consecutivoMuestra','el campo consecutivoMuestra no puede estar vacio ').not().isEmpty(),
-check('consecutivoMuestra','el campo consecutivoOferta no puede estar vacio ').not().isEmpty(),
-check('iva','en campo iva no puede estar vacio').not().isEmpty(),
-validarCampos
-],consecutivo.ConsecutivoPost)
+router.post('/',consecutivo.ConsecutivoPost)
 
 export default router
 

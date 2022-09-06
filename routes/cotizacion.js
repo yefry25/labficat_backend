@@ -8,7 +8,6 @@ import helpersEnsayo from '../helpers/ensayo.js'
 const router = new Router();
 
 router.post('/',[
-    check('numCotizacion','no puede estar vacio').not().isEmpty(),
     check('fechaEmision','solo formato fecha').isDate(),
     check('idCliente').custom(helpersUsuario.existeUsuarioById),
     check('idContacto').custom(helpersUsuario.existeUsuarioById),

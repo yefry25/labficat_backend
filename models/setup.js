@@ -4,10 +4,12 @@ const ConsecutivoSchema= new mongoose.Schema({
     consecutivoMuestra:{
         type: Number,
         required: true,
+        default:1
     },
     consecutivoOferta:{
         type: Number,
         required: true,
+        default:1
     },
     iva:{
         type:Number,

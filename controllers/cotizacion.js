@@ -5,23 +5,35 @@ const cotizacion = {
 
   cotizacionPost: async (req, res) => {
     const { fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total } = req.body
-
-    const consecutivo =await Setup.findOne()
-    let conse=""
-    if (consecutivo.consecutivoOferta.length==1) conse="000"+consecutivo.consecutivoOferta
-    else if (consecutivo.consecutivoOferta.length==2) conse="00"+consecutivo.consecutivoOferta
-    else if (consecutivo.consecutivoOferta.length==3) conse="0"+consecutivo.consecutivoOferta
-    else conse=consecutivo.consecutivoOferta
-
-    const numCotizacion=conse+"-"+getFullYear()+"V1"
-    split
-
-    const nuevoconsecutivo=consecutivo.consecutivoOferta++
-    const guardar=Setup.findByIdAndUpdate(consecutivo._id,{consecutivoOferta:nuevoconsecutivo)
-
+    
+    
     try {
-      numCotizacion=contiza()
-      const cotizacion = new Cotizacion({ numCotizacion, fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total })
+
+      const consecutivo =await Setup.findOne()
+    let conse =""
+    if (consecutivo.consecutivoOferta.toString().length==1){
+      conse=`000${consecutivo.consecutivoOferta}`
+    }
+    else if (consecutivo.consecutivoOferta.toString().length==2){
+      conse=`00${consecutivo.consecutivoOferta}`
+    } 
+    else if (consecutivo.consecutivoOferta.toString().length==3){
+      conse=`0${consecutivo.consecutivoOferta}`
+    } 
+    else{
+      conse=consecutivo.consecutivoOferta
+    } 
+    const d = new Date();
+    let year = d.getFullYear()
+    let cotiNumero= ''.concat(conse,'-',year,'V1')
+    /* console.log(''.concat(conse,'-',year,'V1')); */
+    console.log("conca: "+cotiNumero);
+    consecutivo.consecutivoOferta++
+    let consecutivooferta = consecutivo.consecutivoOferta++
+    const guardar= await Setup.findByIdAndUpdate(consecutivo._id,{consecutivoOferta:consecutivooferta})
+    guardar.save()
+
+      const cotizacion = new Cotizacion({ numCotizacion:cotiNumero, fechaEmision, idCliente, idContacto, validezOferta, entregaResultados, idElaboradoPor, items, observaciones, subTotal, descuento, iva, total })
 
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se puedo registrar la oferta de servicio" })
