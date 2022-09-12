@@ -36,5 +36,7 @@ router.post('/fechaEmision',[
     validarCampos
 ],cotizacion.servicioGetFechaEmision)
 
+router.put('/modificar/:id',cotizacion.cotizacionPut)
+
 export default router
 
