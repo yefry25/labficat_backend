@@ -3,15 +3,14 @@ import Ciudad from '../models/ciudad.js'
 const helpersCiudad = {
 
     existeCiudadById : async (id) => {
-        existe = await Ciudad.findById(id)
+     const existe = await Ciudad.findById(id)
 
         if(!existe){
             throw new Error(`El id no existe ${id}`)
         }
     },
     existeMunicipioById : async (id) => {
-        existe = await Ciudad.findById(id)
-
+        const existe = await Ciudad.findById(id)
         if(!existe){
             throw new Error(`El id no existe ${id}`)
         }

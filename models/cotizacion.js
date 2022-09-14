@@ -41,6 +41,10 @@ const ServicioSchema = new mongoose.Schema({
                     ref: "Ensayo",
                     required: true
                 },
+                limiteCuantificacion:{
+                    type:Number,
+                    required:true
+                },
                 costoEnsayo: {
                     type: Number,
                     required: true
@@ -48,7 +52,8 @@ const ServicioSchema = new mongoose.Schema({
             }],
             costo:{
                 type:Number,
-                default:0
+                default:0,
+                required: true
             } 
         },
         item2: {
@@ -56,16 +61,20 @@ const ServicioSchema = new mongoose.Schema({
                 ensayo: {
                     type: mongoose.Schema.ObjectId,
                     ref: "Ensayo",
-                    
+                    default:""
+                },
+                limiteCuantificacion:{
+                    type:Number,
+                    default:0
                 },
                 costoEnsayo: {
                     type: Number,
-                    
+                    default:0
                 },
             }],
             costo:{
                 type:Number,
-                default:0
+                default:""
             } 
         },
         item3: {
@@ -73,17 +82,27 @@ const ServicioSchema = new mongoose.Schema({
                 ensayo: {
                     type: mongoose.Schema.ObjectId,
                     ref: "Ensayo",
+                    default:""
+                },
+                limiteCuantificacion:{
+                    type:Number,
+                    default:0
                 },
                 costoEnsayo: {
                     type: Number,
-                    
+                    default:0
                 },
             }],
             costo:{
                 type:Number,
-                default:0
+                default:""
             } 
         },
+        costoItem:{ 
+            type:Number,
+            default:0,
+            required:true
+        }
     },
     observaciones: {
         type: String,

@@ -12,13 +12,40 @@ const cotizacion = {
       idElaboradoPor,
       items,
       observaciones,
-      subTotal,
       descuento,
-      iva,
-      total,
+
     } = req.body;
+
+    
     try {
+
+      const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
+        return (acc += it.costoEnsayo);
+      }, 0);
+      items.item1.costo = dale;
+      items.costoItem = items.item1.costo ;
+  
+      if(items.item2)  {
+        const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
+          return (acc += it.costoEnsayo) ;
+        }, 0);
+        items.item2.costo = dale;
+        items.costoItem +=  items.item2.costo 
+      };
+  
+      if(items.item3) {
+        const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
+          return (acc += it.costoEnsayo) ;
+        }, 0);
+        items.item3.costo = dale;
+        items.costoItem +=  items.item3.costo
+      };
+      let sub=items.costoItem-descuento 
+
       const consecutivo = await Setup.findOne();
+      console.log("iva"+consecutivo.iva);
+      let to= Math.round(sub + sub * (consecutivo.iva/100))
+      console.log('iva'+to);
       let conse = "";
       if (consecutivo.consecutivoOferta.toString().length == 1) {
         conse = `000${consecutivo.consecutivoOferta}`;
@@ -35,16 +62,14 @@ const cotizacion = {
       /* console.log(''.concat(conse,'-',year,'V1')); */
       console.log("conca: " + cotiNumero);
       /* consecutivo.consecutivoOferta++ */
-      let consecutivooferta = consecutivo.consecutivoOferta+1;
+      let consecutivooferta = consecutivo.consecutivoOferta + 1;
       const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
         consecutivoOferta: consecutivooferta,
       });
       if (!guardar) {
-        return res
-          .status(400)
-          .json({
-            msg: "No se pudo actualizar la informacion del consecutivo oferta",
-          });
+        return res.status(400).json({
+          msg: "No se pudo actualizar la informacion del consecutivo oferta",
+        });
       }
       const cotizacion = new Cotizacion({
         numCotizacion: cotiNumero,
@@ -56,10 +81,10 @@ const cotizacion = {
         idElaboradoPor,
         items,
         observaciones,
-        subTotal,
+        subTotal:items.costoItem,
         descuento,
-        iva,
-        total,
+        iva:consecutivo.iva,
+        total:to,
       });
       if (!cotizacion) {
         return res
@@ -68,6 +93,20 @@ const cotizacion = {
       }
       cotizacion.save();
       res.json({ cotizacion });
+
+      /* if (items.item2.itemsEnsayo != "") {
+        const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
+          return (acc += it.costoEnsayo) ;
+        }, 0);
+        items.item2.costo = dale;
+      }
+  
+      if (items.item3.itemsEnsayo != "") { 
+        const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
+          return (acc += it.costoEnsayo);
+        }, 0);
+        items.item3.costo = dale;
+      } */
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
@@ -91,20 +130,20 @@ const cotizacion = {
       total,
     } = req.body;
     try {
-      const usuario = await Cotizacion.findByIdAndUpdate(id, { estado: 0 })
+      const usuario = await Cotizacion.findByIdAndUpdate(id, { estado: 0 });
       if (!usuario) {
         return res
           .status(400)
           .json({ msg: "No se puedo registrar la oferta de servicio" });
       }
-      let consecutivo = await Cotizacion.findById(id)
-      let version = consecutivo.numCotizacion
-      console.log(version.split('V')[1]);
-      let primeraParte  = version.split('V')[0]
-      let versionNew=Number(version.split('V')[1])+1
-      console.log("version nueva"+versionNew);
-      console.log("version"+version);
-      let concaNueva = `${primeraParte}V${versionNew}`
+      let consecutivo = await Cotizacion.findById(id);
+      let version = consecutivo.numCotizacion;
+      console.log(version.split("V")[1]);
+      let primeraParte = version.split("V")[0];
+      let versionNew = Number(version.split("V")[1]) + 1;
+      console.log("version nueva" + versionNew);
+      console.log("version" + version);
+      let concaNueva = `${primeraParte}V${versionNew}`;
       console.log(concaNueva);
 
       const cotizacion = new Cotizacion({
@@ -123,9 +162,8 @@ const cotizacion = {
         total,
       });
 
-      cotizacion.save()
+      cotizacion.save();
       res.json({ cotizacion });
-
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }

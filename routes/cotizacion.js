@@ -15,12 +15,9 @@ router.post('/',[
     check('validezOferta','el campo no puede estar vacio').not().isEmpty(),
     check('entregaResultados').isDate(),
     check('entregaResultados','el campo no puede estar vacio').not().isEmpty(),
-    check('idElaboradoPor').custom(helpersUsuario.existeUsuarioById),
-    check('items').custom(helpersEnsayo.itemEnsayo),
-    check('subTotal','el campo no puede estar vacio').not().isEmpty(),
-    check('descuento','el campo no puede estar vacio').not().isEmpty(),
-    check('iva','el campo no puede estar vacio').not().isEmpty(),
-    check('total','el campo no puede estar vacio').not().isEmpty(),
+    check('idElaboradoPor').custom(helpersUsuario.existeUsuarioById) ,
+    /* check('items').custom(helpersEnsayo.itemEnsayo), */
+    check('descuento','el campo no puede estar vacio').not().isEmpty() ,
     validarCampos
 ],cotizacion.cotizacionPost)
 

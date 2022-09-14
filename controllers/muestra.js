@@ -1,5 +1,8 @@
 import Muestra from "../models/muestra.js";
 import Setup from "../models/setup.js";
+import Ensayo from '../models/ensayo.js'
+import Usuario from '../models/usuario.js';
+import Orden from '../models/orden_servicio.js'
 
 const muestra = {
   muestraPost: async (req, res) => {
@@ -65,6 +68,16 @@ const muestra = {
         return res.status(400).json({ msg: "no se pudo registrar la muestra" });
       }
       muestra.save();
+
+      const ensayo= await Ensayo.findOne()
+    const usuario= await Usuario.findOne()
+    console.log(ensayo._id);
+    const ordes= new Orden({
+      idMuestra:muestra._id, itemsorden:[{idensayo:ensayo._id,responsable:usuario._id,supervisor:usuario._id}]
+    })
+    ordes.save()
+    console.log("ordes",ordes);
+
       res.json({ muestra });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
