@@ -46,6 +46,20 @@ const consecutivo = {
         }
     },
 
+    ConsecutivoPut: async (req, res) => {
+        const { id } = req.params
+        const { _id, createAt, ...resto } = req.body;
+        try {
+            const modificar = await Consecutivo.findByIdAndUpdate(id, resto);
+            if (!modificar) {
+                return res.status(500).json({ msg: "No se pudo actualizar la informacion de los consecutivos" })
+            }
+            res.json({
+                modificar
+            })
+        } catch (error) {
+            return res.status(500).json({ msg: "Hable con el WebMaster" })
+        }
+    },
 }
-
 export default consecutivo

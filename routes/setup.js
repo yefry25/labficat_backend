@@ -14,9 +14,6 @@ router.get('/:id',[
 
 router.post('/',consecutivo.ConsecutivoPost)
 
+router.put('/modificar/:id',consecutivo.ConsecutivoPut)
+
 export default router
-
-
-
-
-

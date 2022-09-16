@@ -18,7 +18,6 @@ const cotizacion = {
 
     
     try {
-
       const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
         return (acc += it.costoEnsayo);
       }, 0);
@@ -32,7 +31,6 @@ const cotizacion = {
         items.item2.costo = dale;
         items.costoItem +=  items.item2.costo 
       };
-  
       if(items.item3) {
         const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
           return (acc += it.costoEnsayo) ;
