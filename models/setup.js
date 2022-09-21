@@ -11,6 +11,11 @@ const ConsecutivoSchema= new mongoose.Schema({
         required: true,
         default:1
     },
+    consecutivoInforme:{
+        type: Number,
+        required: true,
+        default:1
+    },
     iva:{
         type:Number,
         required:true,

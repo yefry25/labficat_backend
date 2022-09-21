@@ -9,15 +9,14 @@ const CiudadSchema = new mongoose.Schema({
         type:String,
         required:true    
     },
-    ciudad:{
+    Ciudad:{
         type:String,
         required: true 
     },
-    
     codCiudad:{
         type:String,
         required: true
-    },    
+    },  
 })
 
 export default mongoose.model('Ciudad',CiudadSchema)

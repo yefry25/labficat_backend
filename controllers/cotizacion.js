@@ -13,17 +13,14 @@ const cotizacion = {
       items,
       observaciones,
       descuento,
-
     } = req.body;
 
-    
     try {
       const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
         return (acc += it.costoEnsayo);
       }, 0);
       items.item1.costo = dale;
       items.costoItem = items.item1.costo ;
-  
       if(items.item2)  {
         const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
           return (acc += it.costoEnsayo) ;
@@ -39,7 +36,6 @@ const cotizacion = {
         items.costoItem +=  items.item3.costo
       };
       let sub=items.costoItem-descuento 
-
       const consecutivo = await Setup.findOne();
       console.log("iva"+consecutivo.iva);
       let to= Math.round(sub + sub * (consecutivo.iva/100))
@@ -112,7 +108,6 @@ const cotizacion = {
 
   cotizacionPut: async (req, res) => {
     const { id } = req.params;
-
     const {
       fechaEmision,
       idCliente,
@@ -122,12 +117,39 @@ const cotizacion = {
       idElaboradoPor,
       items,
       observaciones,
-      subTotal,
       descuento,
-      iva,
-      total,
     } = req.body;
     try {
+      // con los reduce realizo las sumas de los costos de los items
+      const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
+        return (acc += it.costoEnsayo);
+      }, 0);
+      items.item1.costo = dale;
+      items.costoItem = items.item1.costo ;
+
+      if(items.item2)  {
+        const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
+          return (acc += it.costoEnsayo) ;
+        }, 0);
+        items.item2.costo = dale;
+        items.costoItem +=  items.item2.costo 
+      };
+
+      if(items.item3) {
+        const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
+          return (acc += it.costoEnsayo) ;
+        }, 0);
+        items.item3.costo = dale;
+        items.costoItem +=  items.item3.costo
+      };
+      console.log("costo del item: "+items.costoItem);
+      let sub=items.costoItem-descuento 
+      console.log("subtotal: "+sub);
+      const consecutivoSetup = await Setup.findOne();
+      console.log("iva: "+consecutivoSetup.iva);
+      let to= Math.round(sub + sub * (consecutivoSetup.iva/100))
+      console.log('total: '+to);
+
       const usuario = await Cotizacion.findByIdAndUpdate(id, { estado: 0 });
       if (!usuario) {
         return res
@@ -136,13 +158,9 @@ const cotizacion = {
       }
       let consecutivo = await Cotizacion.findById(id);
       let version = consecutivo.numCotizacion;
-      console.log(version.split("V")[1]);
       let primeraParte = version.split("V")[0];
       let versionNew = Number(version.split("V")[1]) + 1;
-      console.log("version nueva" + versionNew);
-      console.log("version" + version);
       let concaNueva = `${primeraParte}V${versionNew}`;
-      console.log(concaNueva);
 
       const cotizacion = new Cotizacion({
         numCotizacion: concaNueva,
@@ -154,10 +172,10 @@ const cotizacion = {
         idElaboradoPor,
         items,
         observaciones,
-        subTotal,
+        subTotal:items.costoItem,
         descuento,
-        iva,
-        total,
+        iva:consecutivoSetup.iva,
+        total:to,
       });
 
       cotizacion.save();
@@ -196,29 +214,19 @@ const cotizacion = {
 
   servicioGetFechaEmision: async (req, res) => {
     const { fechaEmision } = req.body;
+    
     let fechaI = `${fechaEmision}T00:00:00.000-05:00`;
     let fechaF = `${fechaEmision}T23:59:59.000-05:00`;
+    console.log('fecha incial: '+fechaI);
+    console.log('fecha final: '+fechaF);
 
     try {
       const cotizacion = await Cotizacion.find({
-        $and: [
-          {
-            fechaEmision: {
-              $gte: new Date(fechaI),
-            },
-          },
-          {
-            fechaEmision: {
-              $lte: new Date(fechaF),
-            },
-          },
-        ],
+        $and: [{fechaEmision: {$gte: new Date(fechaI), $lt: new Date(fechaF)}}]
       });
-
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro" });
       }
-
       res.json({
         cotizacion,
       });

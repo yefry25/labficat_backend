@@ -5,35 +5,27 @@ import ciudad from '../controllers/ciudad.js'
 
 const router = new Router()
 
-router.post('/',[
-    check('departamento','no puede estar vacio').not().isEmpty(),
-    check('codDepartamento','no puede estar vacio').not().isEmpty(),
-    check('ciudad','no puede estar vacio').not().isEmpty(),
-    check('codCiudad','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],ciudad.ciudadPost)
-
 router.get('/',ciudad.ciudadGet)
 
 router.post('/codigoCiudad',[
-    check('codCiudad','no puede estar vacio').not().isEmpty(),
+    check('codCiudad','no puede estar vacio el campo codigo de la ciudad').not().isEmpty(),
     validarCampos
 ],ciudad.ciudadGetCod)
 
-router.post('codDepartamento',[
-    check('codDepartamento','no puede estar vacio').not().isEmpty(),
+router.post('/codigoDepartamento',[
+    check('codDepartamento','no puede estar vacio el campo codigo del departamento').not().isEmpty(),
     validarCampos
 ],ciudad.ciudadGetDepartamento)
 
-router.post('/ciudad',[
-    check('ciudad','no puede estar vacio').not().isEmpty(),
+router.post('/nombreCiudad',[
+    check('ciudad','no puede estar vacio el campo nombre de la ciudad').not().isEmpty(),
     validarCampos
 ],ciudad.ciudadGetNombre)
 
-router.post('/departamento',[
-    check('departamento','no puede estar vacio').not().isEmpty(),
+router.post('/nombreDepartamento',[
+    check('departamento','no puede estar vacio el campo nombre del departamento').not().isEmpty(),
     validarCampos
-],ciudad.ciudadGetNombre)
+],ciudad.ciudadGetNombreDepartamento)
 
 export default router
 

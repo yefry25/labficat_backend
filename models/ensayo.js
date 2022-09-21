@@ -5,7 +5,7 @@ const EnsayoSchema = new mongoose.Schema({
     ensayo: {
         type: String,
         required: true,
-        unique: true
+        unique: true  //helpers para que funcione, ya que si lo emetmeos con el mismo nombre crahea ya que es unica, no puede haber dos ensayos con el mism nombre
     },
     metodo: {
         type: String,
@@ -38,7 +38,7 @@ const EnsayoSchema = new mongoose.Schema({
     estado: {
         type: Number,
         required: true,
-        default: 0
+        default: 1
     },
     descripcion: {
         type: String,

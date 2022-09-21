@@ -27,9 +27,16 @@ const helpersEnsayo = {
       throw new Error(`El id ensayo no existe ${id}`);
     }
   },
-
-  itemEnsayo: async (items) => {
+  existeEnsayoByNombre : async (ensayo) => {
+    const existe = await Ensayo.find()
     
+    existe.forEach((datos)=>{
+      if(datos.ensayo==ensayo){
+        throw new Error(`El nombre del ensayo ya existe: '${ensayo}'`);
+      }
+    })
+  },
+  itemEnsayo: async (items) => {
     items.item1.itemsEnsayo.forEach( async (valor) => {
       const element = valor.ensayo
       const validarId = mongoose.Types.ObjectId(element);
@@ -38,16 +45,15 @@ const helpersEnsayo = {
         throw new Error("el ID no existe");
       }
       const x = element;
-      const existe = await Ensayo.findById(x);
+      const existe = await Ensayo.findById(x); 
       if (!existe) {
-        throw new Error("el item1 no existe");
+        throw new Error("el item1 no existe"); 
       }
     });
-
     if (items.item2.itemsEnsayo.length > 0) {
       items.item2.itemsEnsayo.forEach(async (valor)=>{
         const element = valor.ensayo
-      const validarId = mongoose.Types.ObjectId(element);
+      const validarId = mongoose.Types.ObjectId(element); 
 
       if (!validarId) {
         throw new Error("el ID no existe");
@@ -59,7 +65,6 @@ const helpersEnsayo = {
       }
       })
     }
-
     if (items.item3.itemsEnsayo.length > 0) {
       items.item3.itemsEnsayo.forEach(async (valor)=>{
         const element = valor.ensayo
@@ -78,4 +83,4 @@ const helpersEnsayo = {
   },
 };
 
-export default helpersEnsayo;
+export default helpersEnsayo ;

@@ -59,7 +59,7 @@ const MuestraSchema = new mongoose.Schema({
     item: {
         type: String,
         required: true,
-        default: "Item1"
+        default: "Item1" //mostrar con validaciones en el frontend si existe mas items para que le usuario pueda escojerlo a través del frontend
     },
     estado: {
         type: Number,

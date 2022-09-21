@@ -7,6 +7,12 @@ const helpersCotizacion= {
         if (!existe) {
             throw new Error(`El id no existe ${id}`)
         } 
+    },
+
+    modificarCotizacion : async (id)=>{
+        const existe = await Cotizacion.findOne();
+        console.log("id base de datos"+existe._id);
+        console.log("id que traigo"+id);
     }
 }
 

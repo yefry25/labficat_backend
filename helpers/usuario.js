@@ -31,7 +31,6 @@ const helpersUsuario = {
 
     existeUsuarioById: async (id) => {
         const existe = await Usuario.findById(id)
-
         if (!existe) {
             throw new Error(`El id no existe ${id}`)
         }
@@ -39,9 +38,9 @@ const helpersUsuario = {
 
     existeResponsables: async (responsables) => {
         const titular = responsables.titular 
-        console.log(titular);
+        
         const suplente = responsables.suplente
-        console.log(suplente);
+        
         const existeTitular = await Usuario.findById(titular)
         const existeSuplente = await Usuario.findById(suplente)
 

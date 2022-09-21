@@ -3,20 +3,28 @@ import { check } from "express-validator"
 import { validarCampos } from "../middlewares/middleware.js"
 import ensayo from '../controllers/ensayo.js'
 import helpersUsuario from '../helpers/usuario.js'
+import helpersEnsayo from '../helpers/ensayo.js'
 
 const router = new Router()
 
 router.get('/',ensayo.ensayoGet)
 
 router.post('/',[
-    check('ensayo','no puede estar vacio').not().isEmpty(),
-    check('metodo','no puede estar vacio').not().isEmpty(),
-    check('tecnica','no puede estar vacio').not().isEmpty(),
-    check('costo','no puede estar vacio').not().isEmpty(),
-    check('descripcion','no puede estar vacio').not().isEmpty(),
-    check('limiteCuantificacion','no puede estar vacio').not().isEmpty(),
+    check('ensayo').custom(helpersEnsayo.existeEnsayoByNombre),
+    check('ensayo','el campo ensayo no puede estar vacio').not().isEmpty(),
+    check('metodo','el metodo no puede estar vacio').not().isEmpty(),
+    check('tecnica','la tecnica no puede estar vacio').not().isEmpty(),
+    check('costo','el costo no puede estar vacio').not().isEmpty(),
+    check('descripcion','descripcion no puede estar vacio').not().isEmpty(),
+    check('limiteCuantificacion','limite de cuantificacion no puede estar vacio').not().isEmpty(),
     check('responsables').custom(helpersUsuario.existeResponsables),
     validarCampos
 ],ensayo.ensayoPost)
+
+router.put('/:id',[
+    check("id").isMongoId(),
+    check('id').custom(helpersEnsayo.existeEnsayoById),
+    validarCampos //para que funcione los check debe haber el validarCampos para que capture los errores y los muestre
+],ensayo.ensayoPut)
 
 export default router
