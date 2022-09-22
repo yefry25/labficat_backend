@@ -1,8 +1,8 @@
 import Muestra from "../models/muestra.js";
 import Setup from "../models/setup.js";
-import Ensayo from '../models/ensayo.js'
-import Usuario from '../models/usuario.js';
-import Orden from '../models/orden_servicio.js'
+import Ensayo from "../models/ensayo.js";
+import Usuario from "../models/usuario.js";
+import Orden from "../models/orden_servicio.js";
 
 const muestra = {
   muestraPost: async (req, res) => {
@@ -38,21 +38,20 @@ const muestra = {
       let cotiNumero = "".concat(conse, "-", year);
       console.log(cotiNumero);
 
-      let consecutivoMuestra = consecutivo.consecutivoMuestra+1;
+      let consecutivoMuestra = consecutivo.consecutivoMuestra + 1;
       const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
         consecutivoMuestra: consecutivoMuestra,
       });
       if (!guardar) {
-        return res
-          .status(400)
-          .json({
-            msg: "No se pudo actualizar la informacion del consecutivo muestra",
-          });
+        return res.status(400).json({
+          msg: "No se pudo actualizar la informacion del consecutivo muestra",
+        });
       }
+
       const muestra = new Muestra({
         solicitante,
         contacto,
-        codMuestra:cotiNumero,
+        codMuestra: cotiNumero,
         munRecoleccion,
         direccionTomaMuestra,
         lugarTomaMuestra,
@@ -69,21 +68,27 @@ const muestra = {
       }
       muestra.save();
 
-      const ensayo= await Ensayo.findOne()
-    const usuario= await Usuario.findOne()
-    console.log(ensayo._id);
-    const ordes= new Orden({
-      idMuestra:muestra._id, itemsorden:[{idensayo:ensayo._id,responsable:usuario._id,supervisor:usuario._id}]
-    })
-    ordes.save()
-    console.log("ordes",ordes);
+      const ensayo = await Ensayo.findOne();
+      const usuario = await Usuario.findOne();
+      console.log(ensayo._id);
+      const ordes = new Orden({
+        idMuestra: muestra._id,
+        itemsorden: [
+          {
+            idensayo: ensayo._id,
+            responsable: usuario._id,
+            supervisor: usuario._id,
+          },
+        ],
+      });
+      ordes.save();
+      console.log("ordes", ordes);
 
       res.json({ muestra });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-
   muestraGet: async (req, res) => {
     try {
       const muestra = await Muestra.find();
@@ -96,94 +101,151 @@ const muestra = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-
-  muestraGetMunicipio: async (req, res) => {
-    const { municipio } = req.body;
-
-    try {
-      const muestra = await Muestra.find({
-        $or: [{ munRecoleccion: new RegExp(municipio, "i") }],
-      });
-
-      if (!muestra) {
-        return res.json({ msg: "No se encontro lo buscado" });
-      }
-      res.json({ muestra });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-
-  muestraGetLugar: async (req, res) => {
-    const { lugar } = req.body;
-
-    try {
-      const muestra = await Muestra.find({
-        $or: [{ lugarTomaMuestra: new RegExp(lugar, "i") }],
-      });
-
-      if (!muestra) {
-        return res.status(400).json({ msg: "No se encontro lo buscado" });
-      }
-      res.json({ muestra });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-
-  muestraGetTipo: async (req, res) => {
-    const { tipoMuestra } = req.body;
-
-    try {
-      const muestra = await Muestra.find({
-        $or: [{ tipoMuestra: new RegExp(tipoMuestra, "i") }],
-      });
-      if (!muestra) {
-        return res.status(400).json({ msg: "No se encontro lo buscado" });
-      }
-      res.json({ muestra });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-
   muestraGetLisMaMu: async (req, res) => {
     try {
-      muestra = await Muestra.find()
-        .populate("solicitante", [
-          "nombre",
-          "documento",
-          "direccion",
-          "contacto",
-          "telefono",
-          "correo",
-        ])
-        .populate("munRecoleccion", ["ciudad", "departamento"]);
-
+      const muestra = await Muestra.find({})
+        .populate({
+          path: "solicitante",
+          populate: { path: "ciudad" },
+        })
+        .populate({
+          path: "munRecoleccion",
+          select: ["Ciudad", "departamento"],
+        })
+        .populate({ path: "tipoMuestra", select: ["tipos"] });
       if (!muestra) {
         return res.status(400).json({ msg: "No se encontro lo buscado" });
       }
+      res.json({ muestra });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  solsegrec: async (req, res) => {
+    try {
+      const muestra = await Muestra.find()
+      .populate({
+        path: "solicitante",
+        populate :{ path: 'ciudad'}
+      })
+      .populate({ path: 'contacto' ,select :['nombre', 'telefono', 'correo']})
 
-  muestraActivar: async (req, res) => {
-    const { id } = req.params;
-    const muestra = await Muestra.findByIdAndUpdate(id, { estado: 1 });
-    res.json({
-      muestra,
-    });
+      if (!muestra) {
+        return res.status(400).json({ msg: "No se encontro lo buscado" });
+      }
+      res.json(muestra);
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
   },
-
-  muestraDesactivar: async (req, res) => {
+  muestraPut: async (req, res) => {
     const { id } = req.params;
-    const muestra = await Muestra.findByIdAndUpdate(id, { estado: 0 });
-    res.json({
-      muestra,
-    });
+    const {
+      solicitante,
+      contacto,
+      munRecoleccion,
+      direccionTomaMuestra,
+      lugarTomaMuestra,
+      muestraRecolectadaPor,
+      procedimientoMuestreo,
+      tipoMuestra,
+      matrizMuestra,
+      fechaRecoleccion,
+      cotizacion,
+      item,
+    } = req.body;
+
+    try {
+      const consecutivo = await Setup.findOne();
+      let conse = "";
+      if (consecutivo.consecutivoMuestra.toString().length == 1) {
+        conse = `000${consecutivo.consecutivoMuestra}`;
+      } else if (consecutivo.consecutivoMuestra.toString().length == 2) {
+        conse = `00${consecutivo.consecutivoMuestra}`;
+      } else if (consecutivo.consecutivoMuestra.toString().length == 3) {
+        conse = `0${consecutivo.consecutivoMuestra}`;
+      } else {
+        conse = consecutivo.consecutivoOferta;
+      }
+      const d = new Date();
+      let year = d.getFullYear();
+      let cotiNumero = "".concat(conse, "-", year);
+      console.log(cotiNumero);
+
+      let consecutivoMuestra = consecutivo.consecutivoMuestra + 1;
+      const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
+        consecutivoMuestra: consecutivoMuestra,
+      });
+      if (!guardar) {
+        return res.status(400).json({
+          msg: "No se pudo actualizar la informacion del consecutivo muestra",
+        });
+      }
+
+      const muestras = await Muestra.findByIdAndUpdate(id, { estado: 0 });
+      if (!muestras) {
+        return res
+          .status(400)
+          .json({ msg: "No se puedo registrar la oferta de servicio" });
+      }
+
+      const muestra = new Muestra({
+        solicitante,
+        contacto,
+        codMuestra: cotiNumero,
+        munRecoleccion,
+        direccionTomaMuestra,
+        lugarTomaMuestra,
+        muestraRecolectadaPor,
+        procedimientoMuestreo,
+        tipoMuestra,
+        matrizMuestra,
+        fechaRecoleccion,
+        cotizacion,
+        item,
+      });
+      if (!muestra) {
+        return res.status(400).json({ msg: "no se pudo registrar la muestra" });
+      }
+      muestra.save();
+
+      const ordenes = await Orden.find();
+
+      for (let i = 0; i < ordenes.length; i++) {
+        const element = ordenes[i];
+
+        if (element.idMuestra == id) {
+          const orden = await Orden.findByIdAndUpdate(element._id, {
+            estado: 0,
+          });
+          if (!orden) {
+            return res
+              .status(400)
+              .json({ msg: "No se pudo inhabilitar la orden" });
+          }
+        }
+      }
+
+      const ensayo = await Ensayo.findOne();
+      const usuario = await Usuario.findOne();
+      console.log(ensayo._id);
+      const ordes = new Orden({
+        idMuestra: muestra._id,
+        itemsorden: [
+          {
+            idensayo: ensayo._id,
+            responsable: usuario._id,
+            supervisor: usuario._id,
+          },
+        ],
+      });
+      ordes.save();
+      console.log("ordes", ordes);
+
+      res.json({ muestra });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
   },
 };
-
 export default muestra;
-

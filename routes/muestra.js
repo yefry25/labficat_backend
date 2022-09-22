@@ -28,28 +28,13 @@ router.post('/',[
 
 router.get('/',muestra.muestraGet)
 
-router.get('/lugar',[
-    check('lugar','no puede estar vacio').not().isEmpty(),
+router.get('/lismamu',muestra.muestraGetLisMaMu)
+
+router.get('/solsegrec',muestra.solsegrec)
+
+router.put('/:id',[
+    check('id').isMongoId(),
+    check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
-],muestra.muestraGetLugar)
-
-router.get('/municipio',[
-    check('municipio','no puede estar vacio').not().isEmpty(),
-    validarCampos
-],muestra.muestraGetMunicipio)
-
-router.get('/tipoMuestra',[
-    check('tipoMuestra','no puede estar vacio').not().isEmpty(),
-],muestra.muestraGetTipo)
-
-router.put('/activar/:id',[
-    check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom(helpersUsuario.existeUsuarioById),
-],muestra.muestraActivar)
-
-router.put('/desactivar/:id',[
-    check('id', 'No es un ID válido').isMongoId(),
-    check('id').custom(helpersUsuario.existeUsuarioById),
-],muestra.muestraDesactivar)
-
+],muestra.muestraPut)
 export default router

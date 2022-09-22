@@ -12,7 +12,7 @@ const helpersMuestra = {
             }
             
             const x = element.codigo
-            const existe = await Muestra.findById(x);
+            const existe = await Muestra.findById(x) ;
     
             if (!existe){
                 throw new Error('el muestra no existe')
