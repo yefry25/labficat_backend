@@ -3,7 +3,8 @@ import Ciudad from "../models/ciudad.js"
 const ciudad = {
     ciudadGet: async (req, res) => {
         try {
-            const ciudades = await Ciudad.find();
+            const ciudades = await Ciudad.find()
+
             if (!ciudades) {
                 return res.status(400).json({
                     msg: "No hay ciudades"
@@ -86,6 +87,22 @@ const ciudad = {
                 })
             }
             res.json({ ciudades })
+        } catch (error) {
+            return res.status(500).json({
+                msg: "Hable con el WebMaster"
+            })
+        }
+    },
+    listarDepartamentos: async (req, res)=> {
+        const { codigoDepartamentos } = req.body
+        try {
+            const departamentos = await Ciudad.find({ todoDepartamento:codigoDepartamentos })
+            if (!departamentos) {
+                return res.status(400).json({
+                    msg: "codigo departamentos incorrectos"
+                })
+            }
+            res.json({ departamentos })
         } catch (error) {
             return res.status(500).json({
                 msg: "Hable con el WebMaster"

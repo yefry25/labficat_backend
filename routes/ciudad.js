@@ -27,5 +27,10 @@ router.post('/nombreDepartamento',[
     validarCampos
 ],ciudad.ciudadGetNombreDepartamento)
 
+router.post('/departamentos',[
+    check('codigoDepartamentos','el campo codigo de departamentos no puede estar vacio').not().isEmpty(),
+    validarCampos
+],ciudad.listarDepartamentos)
+
 export default router
 

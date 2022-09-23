@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const CiudadSchema = new mongoose.Schema({
+    todoDepartamento:{
+        type:String,
+        required: true
+    },
     departamento:{
         type:String,
         required: true
