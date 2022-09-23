@@ -1,26 +1,30 @@
-import Orden from "../models/orden_servicio.js";
+import Orden from "../models/orden_servicio.js" ;
 
 const Ordenes = {
   ordenGet: async (req, res) => {
+    
     try {
-      const orden = await Orden.find();
-      let ensa = "";
-      /* orden.forEach((item) => {
-        item.itemsorden.forEach((tem)=>{
-          ensa= tem.idensayo
-        })
+      const orden = await Orden.find()
+      .populate({
+        path:'itemsorden.idensayo'
       })
-      console.log(ensa); */
-      let palo = await Orden.find().populate({
-        path: "itemsorden.idensayo",
-        populate: { path: "responsables.titular" }
-      });
-      console.log(palo);
+      .populate({
+        // path:"itemsorden.idensayo",
+        // populate: {path:"responsables.titular"},
+        path:'itemsorden.responsable',
+        select: ['nombre']
+      })
+      .populate({
+        path:"itemsorden.supervisor",
+        select :['nombre']
+      })
 
-      // if (!orden) {
-      //   res.json(400).json({ msg: "No se encontro" })
-      // }
-      res.json({ palo });
+      if (!orden) {
+        return res
+          .status(400)
+          .json({ msg: "No se encontro la orden del servicio" });
+      }
+      res.json({ orden });
     } catch (error) {
       res.status(500).json({ msg: "Hable con el WebMaster" });
     }

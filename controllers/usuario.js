@@ -127,11 +127,26 @@ const usuario = {
     },
     personaVacaciones: async (req, res) => {
         const { id } = req.params;
-        const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 })
+        const usuario = await Usuario.findByIdAndUpdate(id, { estado: 2 })
         res.json({
             usuario
         })
-    }
+    },
+    usuarioPut: async (req, res) => {
+        const { id } = req.params
+        const { _id, createdAt, estado, ...resto } = req.body;
+        try {
+            const modificar = await Usuario.findByIdAndUpdate(id, resto);
+            if (!modificar) {
+                return res.status(500).json({ msg: "No se pudo actualizar la informacion del usuario" })
+            }
+            res.json({
+                modificar
+            })
+        } catch (error) {
+            return res.status(500).json({ msg: "Hable con el WebMaster" })
+        }
+    },
 }
 
 export default usuario

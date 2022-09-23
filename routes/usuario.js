@@ -12,8 +12,8 @@ router.post('/',[
     check('nombre','no puede estar vacio').not().isEmpty(),
     check('documento','no puede estar vacio').not().isEmpty(),
     check('direccion','no puede estar vacio').not().isEmpty(),
-    // check('ciudad').custom(helpersCiudad.existeCiudadById),
-    check('ciudad').isMongoId(),
+    check('ciudad').custom(helpersCiudad.existeCiudadById),
+    check('ciudad','id debe ser válido').isMongoId(),
     check('telefono','no puede estar vacio').not().isEmpty(),
     check('telefono','maximo 14 caracteres').isLength({max:14}),
     check('correo','solo formato email').isEmail(),
@@ -34,31 +34,43 @@ router.post('/login',[
 
 router.get('/',usuario.usuarioGet)
 
-router.get('/documento',[
-    check('documento','este campo no puede estar vacio').not().isEmpty(),
+router.post('/documento',[
+    check('documento','este campo no puede estar vacio documento').not().isEmpty(),
     validarCampos
 ],usuario.usuarioGetDocumento)
 
-router.get('/nombre',[
-    check('nombre','no puede estar vacio').not().isEmpty(),
+router.post('/nombre',[
+    check('nombre','no puede estar vacio el campo nombre').not().isEmpty(),
     validarCampos
 ],usuario.usuarioGetNombre)
 
-router.get('/roles',[
-    check('rol','no puede estar vacio').not().isEmpty(),
+router.post('/roles',[
+    check('rol','no puede estar vacio el campo rol').not().isEmpty(),
     validarCampos
-],usuario.usuarioGetRoles)
+],usuario.usuarioGetRoles )
 
 router.put('/activar/:id',[
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
+    validarCampos
 ],usuario.personaActivar)
 
 router.put('/desactivar/:id',[
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
+    validarCampos
 ],usuario.personaDesactivar)
 
+router.put('/vacaciones/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+    validarCampos
+],usuario.personaVacaciones)
 
+router.put('/modificar/:id',[
+    check('id','el id debe ser válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+    validarCampos
+],usuario.usuarioPut)
 
 export default router
