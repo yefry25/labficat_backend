@@ -93,22 +93,7 @@ const ciudad = {
             })
         }
     },
-    listarDepartamentos: async (req, res)=> {
-        const { codigoDepartamentos } = req.body
-        try {
-            const departamentos = await Ciudad.find({ todoDepartamento:codigoDepartamentos })
-            if (!departamentos) {
-                return res.status(400).json({
-                    msg: "codigo departamentos incorrectos"
-                })
-            }
-            res.json({ departamentos })
-        } catch (error) {
-            return res.status(500).json({
-                msg: "Hable con el WebMaster"
-            })
-        }
-    },
+    
 }
 
 export default ciudad
