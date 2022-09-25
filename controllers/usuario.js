@@ -5,8 +5,7 @@ import validar from "../middlewares/validar.js"
 const usuario = {
     usuarioGet: async (req, res) => {
         try {
-            const usuario = await Usuario.find()
-            .populate({path:'ciudad', select:['Ciudad','departamento']})
+            const usuario = await Usuario.find().populate({path:'ciudad', select:['Ciudad','departamento']})
 
             if (!usuario) {
                 return res.status(400).json({
