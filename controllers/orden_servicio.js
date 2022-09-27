@@ -2,7 +2,6 @@ import Orden from "../models/orden_servicio.js" ;
 
 const Ordenes = {
   ordenGet: async (req, res) => {
-    
     try {
       const orden = await Orden.find()
       .populate({

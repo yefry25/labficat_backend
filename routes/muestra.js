@@ -37,4 +37,17 @@ router.put('/:id',[
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
 ],muestra.muestraPut)
+
+router.put('/activar/:id',[
+    check('id').isMongoId(),
+    check('id').custom(helpersMuestra.existeMuestraById),
+    validarCampos
+],muestra.muestraActivar)
+
+router.put('/desactivar/:id',[
+    check('id').isMongoId(),
+    check('id').custom(helpersMuestra.existeMuestraById),
+    validarCampos
+],muestra.muestraDesactivar)
+
 export default router

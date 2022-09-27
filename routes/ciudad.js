@@ -27,5 +27,8 @@ router.post('/nombreDepartamento',[
     validarCampos
 ],ciudad.ciudadGetNombreDepartamento)
 
+router.get('/departamentos',[
+],ciudad.ciudadDepartamentos)
+
 export default router
 

@@ -21,11 +21,11 @@ const Ordenschema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: "Usuario",
         },
-        resultado:{
+        resultado:{  //hacer un put para llenar estos datos
             type: Number,
             default: ""
         },
-        incertidumbre:{
+        incertidumbre:{  //hacer un put para llenar estos datos
             type: Number,
             default: ""
         },

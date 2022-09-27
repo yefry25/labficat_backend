@@ -261,5 +261,63 @@ const muestra = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+
+  muestraActivar: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const muestra = await Muestra.findByIdAndUpdate(id, { estado: 1 });
+      if (!muestra) {
+        return res.status(400).json({ msg: "No se activo la muestra" });
+      }
+      const ordenes = await Orden.find();
+      for (let i = 0; i < ordenes.length; i++) {
+        const element = ordenes[i];
+        if (element.idMuestra == id) {
+          const orden = await Orden.findByIdAndUpdate(element._id, {
+            estado: 1,
+          });
+          if (!orden) {
+            return res
+              .status(400)
+              .json({ msg: "No se pudo habilitar la orden" });
+          }
+        }
+      }
+      res.json({
+        muestra,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
+
+  muestraDesactivar: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const muestra = await Muestra.findByIdAndUpdate(id, { estado: 0 });
+      if (!muestra) {
+        return res.status(400).json({ msg: "No se desactivo la muestra" });
+      }
+      const ordenes = await Orden.find();
+      for (let i = 0; i < ordenes.length; i++) {
+        const element = ordenes[i];
+        if (element.idMuestra == id) {
+          const orden = await Orden.findByIdAndUpdate(element._id, {
+            estado: 0,
+          });
+          if (!orden) {
+            return res
+              .status(400)
+              .json({ msg: "No se pudo inhabilitar la orden" });
+          }
+        }
+      }
+      res.json({
+        muestra,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
 };
 export default muestra;

@@ -95,8 +95,27 @@ const ciudad = {
                 msg: "Hable con el WebMaster"
             })
         }
+
+        const ciudades=await Ciudad.find({departamento})
+
     },
-    
+    ciudadDepartamentos : async (req, res)=>{
+       
+
+        try{
+            const departamentos= await Ciudad.find().distinct('departamento')
+            if (!departamentos) {
+                return res.status(400).json({
+                    ms: "departamentos no encontrada"
+                })
+            }
+            res.json({ departamentos })
+        }catch (error) {
+            return res.status(500).json({
+                msg: "Hable con el WebMaster"
+            })
+        }
+    }
 }
 
 export default ciudad
