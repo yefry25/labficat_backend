@@ -51,6 +51,7 @@ const ciudad = {
     },
     ciudadGetNombre: async (req, res) => {
         const { ciudad } = req.body
+        console.log(ciudad);
         try {
             const ciudades = await Ciudad.find({
                 $or: [
@@ -66,7 +67,9 @@ const ciudad = {
                     ms: "ciudad no encontrada"
                 })
             }
+            console.log(ciudades);
             res.json({ ciudades })
+
         } catch (error) {
             return res.status(500).json({
                 msg: "Hable con el WebMaster"

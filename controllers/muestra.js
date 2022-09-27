@@ -124,11 +124,14 @@ const muestra = {
   solsegrec: async (req, res) => {
     try {
       const muestra = await Muestra.find()
-      .populate({
-        path: "solicitante",
-        populate :{ path: 'ciudad'}
-      })
-      .populate({ path: 'contacto' ,select :['nombre', 'telefono', 'correo']})
+        .populate({
+          path: "solicitante",
+          populate: { path: "ciudad" },
+        })
+        .populate({
+          path: "contacto",
+          select: ["nombre", "telefono", "correo"],
+        });
 
       if (!muestra) {
         return res.status(400).json({ msg: "No se encontro lo buscado" });
@@ -139,7 +142,7 @@ const muestra = {
     }
   },
   muestraPut: async (req, res) => {
-    const { id } = req.params;
+    /* const { id } = req.params;
     const {
       solicitante,
       contacto,
@@ -153,10 +156,9 @@ const muestra = {
       fechaRecoleccion,
       cotizacion,
       item,
-    } = req.body;
+    } = req.body; */
 
-    try {
-      const consecutivo = await Setup.findOne();
+    /* const consecutivo = await Setup.findOne();
       let conse = "";
       if (consecutivo.consecutivoMuestra.toString().length == 1) {
         conse = `000${consecutivo.consecutivoMuestra}`;
@@ -241,8 +243,20 @@ const muestra = {
       });
       ordes.save();
       console.log("ordes", ordes);
+      res.json({ muestra }); */
 
-      res.json({ muestra });
+    const { id } = req.params;
+    const { _id, createdAt, cotizacion, item, ...resto } = req.body;
+    try {
+      const modificar = await Muestra.findByIdAndUpdate(id, resto);
+      if (!modificar) {
+        return res
+          .status(400)
+          .json({ msg: "No se pudo actualizar la informacion de la muestra" });
+      }
+      res.json({
+        modificar,
+      });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
