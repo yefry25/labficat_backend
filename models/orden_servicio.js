@@ -23,11 +23,11 @@ const Ordenschema = new mongoose.Schema({
         },
         resultado:{  //hacer un put para llenar estos datos
             type: Number,
-            default: ""
+            default: 0
         },
         incertidumbre:{  //hacer un put para llenar estos datos
             type: Number,
-            default: ""
+            default: 0
         },
         estado:{
             type: String,
@@ -37,7 +37,7 @@ const Ordenschema = new mongoose.Schema({
     observaciones: {
         type: String,
         default: ""
-    },
+    },  //informe de resultados en un get de orden de servicio 
     estado: {
         type: Number,
         default: 1
