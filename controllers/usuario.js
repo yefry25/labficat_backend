@@ -68,10 +68,10 @@ const usuario = {
         }
     },
     usuarioPost: async (req, res,) => {
-        const { tipoPersona, nombre, documento, direccion, ciudad, contacto, telefono, correo, password, rol } = req.body
+        const { tipoPersona, nombre, documento, direccion, ciudad, contacto, celularContacto ,telefono, correo, password, rol } = req.body
 
         try {
-            const usuario = new Usuario({ tipoPersona, nombre, documento, direccion, ciudad, contacto, telefono, correo, password, rol })
+            const usuario = new Usuario({ tipoPersona, nombre, documento, direccion, ciudad, contacto, celularContacto ,telefono, correo, password, rol })
             const salt = bcryptjs.genSaltSync(10)
             usuario.password = bcryptjs.hashSync(password, salt)
             if (!usuario) {

@@ -15,11 +15,6 @@ const ServicioSchema = new mongoose.Schema({
         ref: "Usuario",
         required: true
     },
-    idContacto: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Usuario",
-        required: true
-    },
     validezOferta: {
         type: Date,
         required: true

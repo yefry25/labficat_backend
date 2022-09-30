@@ -27,6 +27,9 @@ const UsuarioSchema = new mongoose.Schema({
     contacto: {
         type: String,
     },
+    celularContacto:{
+        type:String
+    },
     telefono: {
         type: String,
         maxLength: 14,
