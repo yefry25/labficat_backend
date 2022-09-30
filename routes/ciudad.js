@@ -18,7 +18,7 @@ router.post('/codigoDepartamento',[
 ],ciudad.ciudadGetDepartamento)
 
 router.post('/nombreCiudad',[
-    check('ciudad','no puede estar vacio el campo nombre de la ciudad').not().isEmpty(),
+    check('ciudad','no puede estar vacio el campo nombre de la ciudad').not().isEmpty() ,
     validarCampos
 ],ciudad.ciudadGetNombre)
 
