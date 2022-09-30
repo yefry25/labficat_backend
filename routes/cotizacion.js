@@ -12,8 +12,6 @@ router.post('/',[
     check('fechaEmision','solo formato fecha').isDate(),
     check('idCliente','el id del cliente no es correcto').isMongoId(),
     check('idCliente').custom(helpersUsuario.existeUsuarioById),
-    check('idContacto','el id del contacto no es correcto').isMongoId(),
-    check('idContacto').custom(helpersUsuario.existeUsuarioById),
     check('validezOferta','el campo digitado debe ser tipo fecha').isDate(),
     check('validezOferta','el campo validez oferta no puede estar vacio').not().isEmpty(),
     check('entregaResultados','el campo digitado debe ser tipo fecha').isDate(),
