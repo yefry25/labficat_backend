@@ -9,7 +9,6 @@ const muestra = {
   muestraPost: async (req, res) => {
     const {
       solicitante,
-      contacto,
       munRecoleccion,
       direccionTomaMuestra,
       lugarTomaMuestra,
@@ -50,7 +49,6 @@ const muestra = {
 
     const muestra = new Muestra({
       solicitante,
-      contacto,
       codMuestra: cotiNumero,
       munRecoleccion,
       direccionTomaMuestra,
@@ -225,109 +223,6 @@ const muestra = {
     }
   },
   muestraPut: async (req, res) => {
-    /* const { id } = req.params;
-    const {
-      solicitante,
-      contacto,
-      munRecoleccion,
-      direccionTomaMuestra,
-      lugarTomaMuestra,
-      muestraRecolectadaPor,
-      procedimientoMuestreo,
-      tipoMuestra,
-      matrizMuestra,
-      fechaRecoleccion,
-      cotizacion,
-      item,
-    } = req.body; */
-
-    /* const consecutivo = await Setup.findOne();
-      let conse = "";
-      if (consecutivo.consecutivoMuestra.toString().length == 1) {
-        conse = `000${consecutivo.consecutivoMuestra}`;
-      } else if (consecutivo.consecutivoMuestra.toString().length == 2) {
-        conse = `00${consecutivo.consecutivoMuestra}`;
-      } else if (consecutivo.consecutivoMuestra.toString().length == 3) {
-        conse = `0${consecutivo.consecutivoMuestra}`;
-      } else {
-        conse = consecutivo.consecutivoOferta;
-      }
-      const d = new Date();
-      let year = d.getFullYear();
-      let cotiNumero = "".concat(conse, "-", year);
-      console.log(cotiNumero);
-
-      let consecutivoMuestra = consecutivo.consecutivoMuestra + 1;
-      const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
-        consecutivoMuestra: consecutivoMuestra,
-      });
-      if (!guardar) {
-        return res.status(400).json({
-          msg: "No se pudo actualizar la informacion del consecutivo muestra",
-        });
-      }
-
-      const muestras = await Muestra.findByIdAndUpdate(id, { estado: 0 });
-      if (!muestras) {
-        return res
-          .status(400)
-          .json({ msg: "No se puedo registrar la oferta de servicio" });
-      }
-
-      const muestra = new Muestra({
-        solicitante,
-        contacto,
-        codMuestra: cotiNumero,
-        munRecoleccion,
-        direccionTomaMuestra,
-        lugarTomaMuestra,
-        muestraRecolectadaPor,
-        procedimientoMuestreo,
-        tipoMuestra,
-        matrizMuestra,
-        fechaRecoleccion,
-        cotizacion,
-        item,
-      });
-      if (!muestra) {
-        return res.status(400).json({ msg: "no se pudo registrar la muestra" });
-      }
-      muestra.save();
-
-      const ordenes = await Orden.find();
-
-      for (let i = 0; i < ordenes.length; i++) {
-        const element = ordenes[i];
-
-        if (element.idMuestra == id) {
-          const orden = await Orden.findByIdAndUpdate(element._id, {
-            estado: 0,
-          });
-          if (!orden) {
-            return res
-              .status(400)
-              .json({ msg: "No se pudo inhabilitar la orden" });
-          }
-        }
-      }
-
-      const ensayo = await Ensayo.findOne();
-      const usuario = await Usuario.findOne();
-      console.log(ensayo._id);
-      const ordes = new Orden({
-        idMuestra: muestra._id,
-        itemsorden: [
-          {
-            idensayo: ensayo._id,
-            responsable: usuario._id,
-            supervisor: usuario._id,
-          },
-        ],
-      });
-      ordes.save();
-      console.log("ordes", ordes);
-      res.json({ muestra }); */
-
     const { id } = req.params;
     const { _id, createdAt, cotizacion, item, ...resto } = req.body;
     try {

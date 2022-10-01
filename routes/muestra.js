@@ -12,7 +12,6 @@ const router = new Router()
 
 router.post('/',[
     check('solicitante').custom(helpersUsuario.existeUsuarioById),
-    check('contacto').custom(helpersUsuario.existeUsuarioById),
     check('munRecoleccion').custom(helpersCiudad.existeMunicipioById),
     check('direccionTomaMuestra','no puede estar vacio').not().isEmpty(),
     check('lugarTomaMuestra','no puede estar vacio').not().isEmpty(),

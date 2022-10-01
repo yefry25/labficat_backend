@@ -6,11 +6,6 @@ const MuestraSchema = new mongoose.Schema({
         ref: "Usuario",
         required: true
     },
-    contacto: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Usuario",
-        required: true
-    },
     codMuestra: {  ///  0001-2022
         type: String,
         required: true
