@@ -4,6 +4,7 @@ import Ensayo from "../models/ensayo.js";
 import Usuario from "../models/usuario.js";
 import Orden from "../models/orden_servicio.js";
 import Cotizacion from "../models/cotizacion.js";
+import transporter from '../database/mailer.js'
 
 const muestra = {
   muestraPost: async (req, res) => {
@@ -46,7 +47,6 @@ const muestra = {
         msg: "No se pudo actualizar la informacion del consecutivo muestra",
       });
     }
-
     const muestra = new Muestra({
       solicitante,
       codMuestra: cotiNumero,
@@ -65,110 +65,68 @@ const muestra = {
       return res.status(400).json({ msg: "no se pudo registrar la muestra" });
     }
     muestra.save();
+
+    const email= await Usuario.findOne().populate()
+
+    console.log("persona: "+email);
+    await transporter.sendMail({
+      from: '"Muestra creada" <jefabecerra@misena.edu.co>', // sender address
+      to: email.correo, // list of receivers
+      subject: "La muestra fue creada exitosamente", // Subject line
+      html: `La matriz de tu muestra creada es: ${muestra.matrizMuestra}`, // html body
+    });
+
     console.log(cotizacion);
     const cotizacion1 = await Cotizacion.findById(cotizacion);
-    let cotilla = cotizacion1.items.item1.itemsEnsayo;
-    //item??
-    let usuarios = "";
-    let ensayo = "";
-    let supervisores = "";
-    for (let i = 0; i < cotilla.length; i++) {
-      const element = cotilla[i];
-      /*  console.log(element.items.item1.itemsEnsayo); */
-      for (let i = 0; i < cotilla.length; i++) {
-        const elemento = cotilla[i];
-
-        ensayo = elemento.ensayo;
-        const person = await Ensayo.findById(elemento.ensayo)
-          .populate({ path: "responsables.titular" })
-          .populate({ path: "responsables.suplente" });
-
-        if (
-          person.responsables.titular.estado == 0 ||
-          person.responsables.titular.estado == 2
-        ) {
-          console.log("suplente por inactividad: ");
-          if (
-            person.responsables.suplente.estado == 0 ||
-            person.responsables.suplente.estado == 2
-          ) {
-            usuarios = "";
-          }
-        } else {
-          usuarios = person.responsables.titular._id;
-        }
-        /* console.log("id titular: "+person.responsables.titular._id); */
-
-        const supervisor = await Usuario.find({ rol: "supervisor" });
-        console.log("super: " + supervisor);
-        supervisores = supervisor[0]._id;
-      }
+    
+    let cotilla=''
+    if(item=="Item1"){
+      cotilla = cotizacion1.items.item1.itemsEnsayo;
+      console.log("Item1");
+    }else if(item=="Item2"){
+      cotilla = cotizacion1.items.item2.itemsEnsayo ;
+      console.log("item2");
+    }else {
+      cotilla = cotizacion1.items.item3.itemsEnsayo;
+      console.log("item3");
     }
+    const itemsOrden = [];
+    for (let i = 0; i < cotilla.length; i++) {
+      const elemento = cotilla[i];
+      console.log("ensayo: "+elemento);
+      const itemOrden = {};
+      itemOrden.idensayo = elemento.ensayo;
 
-    const ordes = new Orden({
-      idMuestra: muestra._id,
-      itemsorden: [
-        {
-          idensayo: ensayo,
-          responsable: usuarios,
-          supervisor: supervisores,
-        },
-      ],
-    });
-    ordes.save();
+      const person = await Ensayo.findById(elemento.ensayo)
+        .populate({ path: "responsables.titular" })
+        .populate({ path: "responsables.suplente" });
 
-    console.log('id de la orden: '+ordes._id);
-    /* const modificarOrden = await Orden.findByIdAndUpdate(ordes._id, {
-      $push: {
-        'itemsorden': 
-            {
-              idensayo: ensayo,
-              responsable: usuarios,
-              supervisor: supervisores,
-              resultado:0,
-              incertidumbre:0,
-              estado:'en proceso'
-            }
-      },
-    });
-    res.json({ modificarOrden }); */
-
-    const moda = await Orden.updateMany({_id:ordes._id},
-      {$push:{
-        itemsorden:{
-          $each:[{
-              idensayo: ensayo,
-              responsable: usuarios,
-              supervisor: supervisores,
-              resultado:0,
-              incertidumbre:0,
-              estado:'en proceso'
-          }]
+      if (
+        person.responsables.titular.estado == 0 ||
+        person.responsables.titular.estado == 2
+      ) {
+        console.log("suplente por inactividad: ");
+        if (
+          person.responsables.suplente.estado == 0 ||
+          person.responsables.suplente.estado == 2
+        ) {
+        } else {
+          itemOrden.responsable = person.responsables.suplente._id;
         }
+      } else {
+        itemOrden.responsable = person.responsables.titular._id;
       }
-      })
+      const supervisor = await Usuario.findOne({ rol: "supervisor" });
+      if (supervisor){
+        itemOrden.supervisor = supervisor._id;
+      }
+      itemsOrden.push(itemOrden);
+    }
+    const idMuestra=muestra._id
+    const orden= new Orden({idMuestra,itemsorden:itemsOrden});
 
-      res.json({moda})
-    /* const cotizacion = await Ensayo.find();
-      console.log(ensayo);
-      const usuario = await Usuario.findOne();
-      console.log(ensayo._id);
-      const ordes = new Orden({
-        idMuestra: muestra._id,
-        itemsorden: [
-          {
-            idensayo: ensayo._id,
-            responsable: usuario._id,
-            supervisor: usuario._id,
-          },
-        ],
-      });
-      ordes.save();
-      console.log("ordes", ordes); */
-
-    console.log("usuarios: " + usuarios);
-    console.log("ensayos: " + ensayo);
-    console.log("supervisores: " + supervisores);
+    orden.save();
+    res.json({orden})
   },
   muestraGet: async (req, res) => {
     try {
