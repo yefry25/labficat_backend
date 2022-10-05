@@ -11,6 +11,7 @@ const helpersCiudad = {
     },
     existeMunicipioById : async (id) => {
         const existe = await Ciudad.findById(id)
+        console.log(existe);
         if(!existe){
             throw new Error(`El id no existe ${id}`)
         }

@@ -68,42 +68,7 @@ const Ordenes = {
             msg: "No se pudo agregar resultado e incertidumbre a la orden",
           });
       }
-      const verificar = await Orden.findById(id);
-      console.log("resultado: "+verificar.itemsorden[0].resultado);
-      console.log("incertidumbre: "+verificar.itemsorden[0].incertidumbre);
-      if (
-        verificar.itemsorden[0].resultado != 0 &&
-        verificar.itemsorden[0].incertidumbre != 0
-      ) {
-        console.log("id: "+id);
-        const updateDocument={
-          $push: {"itemsorden.$[item].estado":"Analiado"}
-        }
-        const options = {
-          arrayFilters:[
-            "item.idensayo"
-          ]
-        }
-        const actualizar = await Orden.findByIdAndUpdate(id,updateDocument);
-        if (!actualizar) {
-          return res
-            .status(400)
-            .json({ msg: "No se pudo actualizar el estado de la orden de servicio"});
-        }
-        res.json({
-          actualizar
-        });
-      }
-      /* for (let i = 0; i < verificar.itemsorden.length; i++) {
-        const element = verificar[i];
-        console.log(element);
-        console.log("si: "+element.resultado);
-        console.log("no: "+element.incertidumbre);
-
-        if(element.resultado!=null && element.incertidumbre!=null){
-          console.log('sirve');
-        }
-      } */
+      res.json({modificar})
     }catch(error){
       return res.status(500).json({ msg: "Hable con el WebMaster" })
     }

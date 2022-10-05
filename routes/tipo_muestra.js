@@ -7,7 +7,7 @@ import helpersMuestra from '../helpers/tipo_muestra.js'
 const router = new Router()
 
 router.post('/',[
-    check('tipos').not().isEmpty(),
+    check('tipos','el campo tipos no puede estar vacio').not().isEmpty(),
     validarCampos
 ],tipomuestra.tipoMuestraPost)
 

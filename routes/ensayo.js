@@ -21,7 +21,7 @@ router.post('/',[
     validarCampos
 ],ensayo.ensayoPost)
 
-router.put('/:id',[
+router.put('/:id', [
     check("id").isMongoId(),
     check('id').custom(helpersEnsayo.existeEnsayoById),
     validarCampos //para que funcione los check debe haber el validarCampos para que capture los errores y los muestre

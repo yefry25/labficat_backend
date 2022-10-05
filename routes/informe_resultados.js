@@ -10,13 +10,13 @@ const router = new Router()
 
 router.post('/',[
     check('idMuestra').custom(helpersMuestra.existeMuestraById),
-    check('fechaEmisionInforme','no puede estar vacio').not().isEmpty(),
+    check('fechaEmisionInforme','fecha emision no puede estar vacio').not().isEmpty(),
     check('analisisMuestra').custom(helpersEnsayo.existeAnalisisMuestra),
     validarCampos
 ],resultado.resultadoPost)
 
 router.get('/fechaEmi',[
-    check('fechaEmisionInforme','no puede estar vacio').not().isEmpty(),
+    check('fechaEmisionInforme','fecha emision no puede estar vacio').not().isEmpty(),
     validarCampos 
 ],resultado.resultadoGetFechaEmi)
 

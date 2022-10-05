@@ -13,15 +13,15 @@ const router = new Router()
 router.post('/',[
     check('solicitante').custom(helpersUsuario.existeUsuarioById),
     check('munRecoleccion').custom(helpersCiudad.existeMunicipioById),
-    check('direccionTomaMuestra','no puede estar vacio').not().isEmpty(),
-    check('lugarTomaMuestra','no puede estar vacio').not().isEmpty(),
-    check('muestraRecolectadaPor','no puede estar vacio').not().isEmpty(),
-    check('procedimientoMuestreo','no puede estar vacio').not().isEmpty(),
+    check('direccionTomaMuestra','direccion de toma de muestra no puede estar vacio').not().isEmpty(),
+    check('lugarTomaMuestra','lugar de toma de muestra no puede estar vacio').not().isEmpty(),
+    check('muestraRecolectadaPor',' recolectador no puede estar vacio').not().isEmpty(),
+    check('procedimientoMuestreo','procedimiento de muestreo no puede estar vacio').not().isEmpty(),
     check('tipoMuestra').custom(helpersTipoMuestra.existeTipoMuestraId),
-    check('matrizMuestra','no puede estar vacio').not().isEmpty(),
-    check('fechaRecoleccion').isDate(),
+    check('matrizMuestra','matriz no puede estar vacio').not().isEmpty(),
+    check('fechaRecoleccion','fecha de recoleccion debe ser tipo date').isDate(),
     check('cotizacion').custom(helpersCotizacion.existeCotizacion),
-    check('item','no puede estar vacio').not().isEmpty(),
+    check('item','item no puede estar vacio').not().isEmpty(),
     validarCampos
 ],muestra.muestraPost)
 
@@ -32,7 +32,7 @@ router.get('/lismamu',muestra.muestraGetLisMaMu)
 router.get('/solsegrec',muestra.solsegrec)
 
 router.put('/:id',[
-    check('id').isMongoId(),
+    check('id','el id de lam uestra debe ser uno válido').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
 ],muestra.muestraPut)

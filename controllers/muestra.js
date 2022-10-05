@@ -167,11 +167,6 @@ const muestra = {
           path: "solicitante",
           populate: { path: "ciudad" },
         })
-        .populate({
-          path: "contacto",
-          select: ["nombre", "telefono", "correo"],
-        });
-
       if (!muestra) {
         return res.status(400).json({ msg: "No se encontro lo buscado" });
       }

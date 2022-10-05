@@ -19,19 +19,19 @@ router.post('/',[
     check('idElaboradoPor','el id del usuario no es correcto').isMongoId(),  
     check('idElaboradoPor').custom(helpersUsuario.existeUsuarioById) ,
     /* check('items').custom(helpersEnsayo.itemEnsayo), */
-    check('descuento','el campo no puede estar vacio').not().isEmpty() ,
+    check('descuento','el campo descuento no puede estar vacio').not().isEmpty() ,
     validarCampos
 ],cotizacion.cotizacionPost)
 
 router.get('/',cotizacion.cotizacionGet)
 
 router.post('/numCotizacion',[
-    check('numCotizacion','el campo no puede estar vacio').not().isEmpty(),
+    check('numCotizacion','el campo numero de cotizacion no puede estar vacio').not().isEmpty(),
     validarCampos
 ],cotizacion.listarCotizacion)
 
 router.post('/fechaEmision',[
-    check('fechaEmision').isDate(),
+    check('fechaEmision','Fecha emision debe ser de tipo fecha').isDate(),
     validarCampos
 ],cotizacion.servicioGetFechaEmision)
 
