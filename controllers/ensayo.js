@@ -40,7 +40,6 @@ const ensayo = {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
   },
-
   ensayoGet: async (req, res) => {
     try {
       const ensayos = await Ensayo.find();
@@ -53,7 +52,6 @@ const ensayo = {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
   },
-
   ensayoPut: async (req, res) => {
     const { id } = req.params;
     const { _id, estado, ...resto } = req.body;

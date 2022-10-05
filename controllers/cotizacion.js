@@ -234,6 +234,18 @@ const cotizacion = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  cotizacionGetCliente: async (req, res)=>{
+    const {idCliente}=req.body
+    try{
+      const cotizacion = await Cotizacion.find({idCliente});
+      if (!cotizacion) {
+        return res.status(400).json({ msg: "No se encontro nada" });
+      }
+      res.json({ cotizacion });
+    }catch(error){
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  }
 };
 
 export default cotizacion;

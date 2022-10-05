@@ -35,6 +35,11 @@ router.post('/fechaEmision',[
     validarCampos
 ],cotizacion.servicioGetFechaEmision)
 
+router.post('/cliente',[
+    check('idCliente','idCliente no puede estar vacio').not().isEmpty(),
+    validarCampos
+],cotizacion.cotizacionGetCliente)
+
 router.put('/modificar/:id',[
     check('id').custom(helpersCotizacion.existeCotizacion)
 ],cotizacion.cotizacionPut)
