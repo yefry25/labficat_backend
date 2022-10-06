@@ -24,19 +24,18 @@ router.post('/',[
     check('item','item no puede estar vacio').not().isEmpty(),
     validarCampos
 ],muestra.muestraPost)
-
+router.post('/cliente',[
+    check('solicitante','solicitante no puede estar vacio').not().isEmpty(),
+    validarCampos
+],muestra.muestraGetCliente)
 router.get('/',muestra.muestraGet)
-
 router.get('/lismamu',muestra.muestraGetLisMaMu)
-
 router.get('/solsegrec',muestra.solsegrec)
-
 router.put('/:id',[
     check('id','el id de lam uestra debe ser uno válido').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
 ],muestra.muestraPut)
-
 router.put('/activar/:id',[
     check('id').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),

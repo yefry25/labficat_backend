@@ -131,13 +131,24 @@ const muestra = {
   muestraGet: async (req, res) => {
     try {
       const muestra = await Muestra.find();
-
       if (!muestra) {
         return res.status(400).json({ msg: "No hay muestras" });
       }
       res.json({ muestra });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
+  muestraGetCliente: async (req, res)=>{
+    const {solicitante}= req.body
+    try{
+      const muestra = await Muestra.find({solicitante})
+      if(!muestra){
+        return res.status(400).json({ msg: "No hay muestras" });
+      }
+      res.json({ muestra });
+    }catch(error){
+      return res.status(500).json({msg: "Hable con el WebMaster"})
     }
   },
   muestraGetLisMaMu: async (req, res) => {
