@@ -143,6 +143,8 @@ const muestra = {
     const {solicitante}= req.body
     try{
       const muestra = await Muestra.find({solicitante})
+      .populate({path:'munRecoleccion', select: ["departamento",'Ciudad']})
+      .populate({ path: "tipoMuestra", select: ["tipos"] });
       if(!muestra){
         return res.status(400).json({ msg: "No hay muestras" });
       }
