@@ -175,8 +175,11 @@ const cotizacion = {
     try {
       const cotizacion = await Cotizacion.find()
       .populate({path:'idCliente',populate:{path:'ciudad',select:['departamento','Ciudad']}})
-      .populate({path:'idElaboradoPor',populate:{path:'ciudad'}});
-
+      .populate({path:'idElaboradoPor',populate:{path:'ciudad'}})
+      .populate({path:'items.item1.itemsEnsayo.ensayo'})
+      .populate({path:'items.item2.itemsEnsayo.ensayo'})
+      .populate({path:'items.item3.itemsEnsayo.ensayo'});
+      
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" });
       }
