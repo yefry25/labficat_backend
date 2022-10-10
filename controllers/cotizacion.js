@@ -173,7 +173,9 @@ const cotizacion = {
   },
   cotizacionGet: async (req, res) => {
     try {
-      const cotizacion = await Cotizacion.find();
+      const cotizacion = await Cotizacion.find()
+      .populate({path:'idCliente'})
+      .populate({path:'idElaboradoPor'});
 
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" });
