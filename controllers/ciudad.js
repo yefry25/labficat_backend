@@ -96,11 +96,8 @@ const ciudad = {
             })
         }
 
-        const ciudades=await Ciudad.find({departamento})
-
     },
     ciudadDepartamentos : async (req, res)=>{
-
         try{
             const departamentos= await Ciudad.find().distinct('departamento')
             if (!departamentos) {

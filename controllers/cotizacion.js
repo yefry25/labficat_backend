@@ -88,24 +88,11 @@ const cotizacion = {
       cotizacion.save();
       res.json({ cotizacion });
 
-      /* if (items.item2.itemsEnsayo != "") {
-        const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
-          return (acc += it.costoEnsayo) ;
-        }, 0);
-        items.item2.costo = dale;
-      }
-  
-      if (items.item3.itemsEnsayo != "") { 
-        const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
-          return (acc += it.costoEnsayo);
-        }, 0);
-        items.item3.costo = dale;
-      } */
+      
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
   },
-
   cotizacionPut: async (req, res) => {
     const { id } = req.params;
     const {
@@ -184,7 +171,6 @@ const cotizacion = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-
   cotizacionGet: async (req, res) => {
     try {
       const cotizacion = await Cotizacion.find();
@@ -197,7 +183,6 @@ const cotizacion = {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
   },
-
   listarCotizacion: async (req, res) => {
     const { numCotizacion } = req.body;
     try {
@@ -211,7 +196,6 @@ const cotizacion = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-
   servicioGetFechaEmision: async (req, res) => {
     const { fechaEmision } = req.body;
     

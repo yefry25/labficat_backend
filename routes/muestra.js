@@ -19,7 +19,7 @@ router.post('/',[
     check('procedimientoMuestreo','procedimiento de muestreo no puede estar vacio').not().isEmpty(),
     check('tipoMuestra').custom(helpersTipoMuestra.existeTipoMuestraId),
     check('matrizMuestra','matriz no puede estar vacio').not().isEmpty(),
-    check('fechaRecoleccion','fecha de recoleccion debe ser tipo date').isDate(),
+    check('fechaRecoleccion','fecha de recoleccion debe ser tipo date').isISO8601().toDate(),
     check('cotizacion').custom(helpersCotizacion.existeCotizacion),
     check('item','item no puede estar vacio').not().isEmpty(),
     validarCampos
@@ -41,7 +41,6 @@ router.put('/activar/:id',[
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
 ],muestra.muestraActivar)
-
 router.put('/desactivar/:id',[
     check('id').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),

@@ -118,7 +118,6 @@ const ServicioSchema = new mongoose.Schema({
     total: {
         type: Number,
         required: true
-        
     },
     estado:{
         type: Number,
