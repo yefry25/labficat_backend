@@ -130,7 +130,8 @@ const muestra = {
   },
   muestraGet: async (req, res) => {
     try {
-      const muestra = await Muestra.find();
+      const muestra = await Muestra.find()
+      .populate({path:'solicitante',populate:{path:'ciudad',select:['departamento','Ciudad']}});
       if (!muestra) {
         return res.status(400).json({ msg: "No hay muestras" });
       }
