@@ -168,7 +168,7 @@ const cotizacion = {
       if (!cotizacion) {
         return res
           .status(400)
-          .json({ msg: "No se puedo actualizar la oferta de servicio" });
+          .json({ msg: "No se puedo actualizar la oferta de servicio" } );
       }
 
       cotizacion.save();
