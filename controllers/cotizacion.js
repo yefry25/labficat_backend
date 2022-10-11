@@ -165,6 +165,12 @@ const cotizacion = {
         total:to,
       });
 
+      if (!cotizacion) {
+        return res
+          .status(400)
+          .json({ msg: "No se puedo actualizar la oferta de servicio" });
+      }
+
       cotizacion.save();
       res.json({ cotizacion });
     } catch (error) {
@@ -179,7 +185,7 @@ const cotizacion = {
       .populate({path:'items.item1.itemsEnsayo.ensayo'})
       .populate({path:'items.item2.itemsEnsayo.ensayo'})
       .populate({path:'items.item3.itemsEnsayo.ensayo'});
-      
+
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" });
       }
