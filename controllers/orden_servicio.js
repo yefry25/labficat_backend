@@ -16,7 +16,8 @@ const Ordenes = {
         .populate({
           path: "itemsorden.supervisor",
           select: ["nombre"],
-        });
+        })
+        .populate({path:'idMuestra'});
 
       if (!orden) {
         return res
@@ -102,5 +103,4 @@ const Ordenes = {
     }
   }
 };
-
 export default Ordenes;

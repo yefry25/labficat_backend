@@ -4,7 +4,7 @@ import Ensayo from "../models/ensayo.js";
 import Usuario from "../models/usuario.js";
 import Orden from "../models/orden_servicio.js";
 import Cotizacion from "../models/cotizacion.js";
-import transporter from '../database/mailer.js'
+import transporter from "../database/mailer.js";
 
 const muestra = {
   muestraPost: async (req, res) => {
@@ -66,9 +66,9 @@ const muestra = {
     }
     muestra.save();
 
-    const email= await Usuario.findOne().populate()
+    const email = await Usuario.findOne().populate();
 
-    console.log("persona: "+email);
+    console.log("persona: " + email);
     await transporter.sendMail({
       from: '"Muestra creada" <jefabecerra@misena.edu.co>', // sender address
       to: email.correo, // list of receivers
@@ -78,22 +78,22 @@ const muestra = {
 
     console.log(cotizacion);
     const cotizacion1 = await Cotizacion.findById(cotizacion);
-    
-    let cotilla=''
-    if(item=="Item1"){
+
+    let cotilla = "";
+    if (item == "Item1") {
       cotilla = cotizacion1.items.item1.itemsEnsayo;
       console.log("Item1");
-    }else if(item=="Item2"){
-      cotilla = cotizacion1.items.item2.itemsEnsayo ;
+    } else if (item == "Item2") {
+      cotilla = cotizacion1.items.item2.itemsEnsayo;
       console.log("item2");
-    }else {
+    } else {
       cotilla = cotizacion1.items.item3.itemsEnsayo;
       console.log("item3");
     }
     const itemsOrden = [];
     for (let i = 0; i < cotilla.length; i++) {
       const elemento = cotilla[i];
-      console.log("ensayo: "+elemento);
+      console.log("ensayo: " + elemento);
       const itemOrden = {};
       itemOrden.idensayo = elemento.ensayo;
 
@@ -117,21 +117,24 @@ const muestra = {
         itemOrden.responsable = person.responsables.titular._id;
       }
       const supervisor = await Usuario.findOne({ rol: "supervisor" });
-      if (supervisor){
+      if (supervisor) {
         itemOrden.supervisor = supervisor._id;
       }
       itemsOrden.push(itemOrden);
     }
-    const idMuestra=muestra._id
-    const orden= new Orden({idMuestra,itemsorden:itemsOrden});
+    const idMuestra = muestra._id;
+    const orden = new Orden({ idMuestra, itemsorden: itemsOrden });
 
     orden.save();
-    res.json({orden})
+    res.json({ orden });
   },
   muestraGet: async (req, res) => {
     try {
-      const muestra = await Muestra.find()
-      .populate({path:'solicitante',populate:{path:'ciudad',select:['departamento','Ciudad']}});
+      const muestra = await Muestra.find().populate({
+        path: "solicitante",
+        populate: { path: "ciudad", select: ["departamento", "Ciudad"] },
+      })
+      .populate({ path: 'cotizacion'});
       if (!muestra) {
         return res.status(400).json({ msg: "No hay muestras" });
       }
@@ -140,18 +143,21 @@ const muestra = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  muestraGetCliente: async (req, res)=>{
-    const {solicitante}= req.body
-    try{
-      const muestra = await Muestra.find({solicitante})
-      .populate({path:'munRecoleccion', select: ["departamento",'Ciudad']})
-      .populate({ path: "tipoMuestra", select: ["tipos"] });
-      if(!muestra){
+  muestraGetCliente: async (req, res) => {
+    const { solicitante } = req.body;
+    try {
+      const muestra = await Muestra.find({ solicitante })
+        .populate({
+          path: "munRecoleccion",
+          select: ["departamento", "Ciudad"],
+        })
+        .populate({ path: "tipoMuestra", select: ["tipos"] });
+      if (!muestra) {
         return res.status(400).json({ msg: "No hay muestras" });
       }
       res.json({ muestra });
-    }catch(error){
-      return res.status(500).json({msg: "Hable con el WebMaster"})
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
   muestraGetLisMaMu: async (req, res) => {
@@ -176,11 +182,10 @@ const muestra = {
   },
   solsegrec: async (req, res) => {
     try {
-      const muestra = await Muestra.find()
-        .populate({
-          path: "solicitante",
-          populate: { path: "ciudad" },
-        })
+      const muestra = await Muestra.find().populate({
+        path: "solicitante",
+        populate: { path: "ciudad" },
+      });
       if (!muestra) {
         return res.status(400).json({ msg: "No se encontro lo buscado" });
       }
