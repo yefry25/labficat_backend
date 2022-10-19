@@ -1,6 +1,7 @@
 import Usuario from "../models/usuario.js"
 import bcryptjs from "bcryptjs"
 import validar from "../middlewares/validar.js"
+import helperBitacora from '../helpers/bitacora.js'
 
 const usuario = {
     usuarioGet: async (req, res) => {
@@ -102,6 +103,10 @@ const usuario = {
                 })
             }
             const token = await validar.generarJWT(usuario.id);
+            const id = usuario._id
+            const observacion = `inicio sesion ${usuario.nombre}`
+
+            helperBitacora.llenarBitacora(id,observacion)
             res.json({
                 usuario,
                 token

@@ -10,6 +10,8 @@ import orden from "../routes/orden_servicio.js"
 import setup from '../routes/setup.js'
 import usuario from "../routes/usuario.js"
 import tipomuestra from "../routes/tipo_muestra.js"
+import bitacora from '../routes/bitacora.js'
+import calidad from '../routes/calidad.js'
 
 class Server {
     constructor() {
@@ -20,6 +22,8 @@ class Server {
         this.routes()
     }
     routes () {
+        this.app.use('/api/calidad',calidad)
+        this.app.use('/api/bitacora',bitacora)
         this.app.use('/api/ciudad',ciudad)
         this.app.use('/api/cotizacion',cotizacion)
         this.app.use('/api/ensayo',ensayo)
@@ -30,16 +34,13 @@ class Server {
         this.app.use('/api/tipoMuestra',tipomuestra)
         this.app.use('/api/usuario',usuario)
     }
-
     async conectarBd(){
         await dbConnection()
     }
-
     middleware () {
         this.app.use(express.json())
         this.app.use(cors())
     }
-
     escuchar () {
         this.app.listen(this.port, ()=>{
             console.log(`servidor escuchando en el puerto ${this.port}`);
