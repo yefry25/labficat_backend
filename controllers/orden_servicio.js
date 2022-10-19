@@ -75,9 +75,10 @@ const Ordenes = {
     }
   },
   informeDeResultados: async (req, res)=>{
-    try{
+    const { id } = req.params;
 
-      const informe = await Orden.find()
+    try{
+      const informe = await Orden.findById(id)
       .populate({path:'idMuestra',
       populate :{path:'solicitante',
       populate: {path:'ciudad'}},

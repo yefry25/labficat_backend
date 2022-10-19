@@ -204,6 +204,8 @@ const muestra = {
           .status(400)
           .json({ msg: "No se pudo actualizar la informacion de la muestra" });
       }
+      const observacion="dhfhsdafjsdkajfklasd"
+      utils.guardarbitacora(observacion)
       res.json({
         modificar,
       });

@@ -26,6 +26,10 @@ router.put('/completado/:id',[
     validarCampos
 ],Ordenes.ordenPut)
 
-router.get('/informeDeResultados',Ordenes.informeDeResultados)
+router.get('/informeDeResultados/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(helpersOrden.existeOrdenById),
+    validarCampos
+],Ordenes.informeDeResultados)
 
 export default router
