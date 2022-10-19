@@ -240,6 +240,18 @@ const cotizacion = {
     }catch(error){
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
+  },
+  cotizacionGetIdCotizacion: async (req, res) => {
+    const {id} = req.params
+    try{
+      const cotizacion = await Cotizacion.findById(id)
+      if (!cotizacion) {
+        return res.status(400).json({ msg: "No se encontro nada" });
+      }
+      res.json({ cotizacion });
+    }catch(error){
+      return res.status(500).json({ msg: "Hable con el webMaster" });
+    }
   }
 };
 

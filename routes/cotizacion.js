@@ -25,6 +25,12 @@ router.post('/',[
 
 router.get('/',cotizacion.cotizacionGet)
 
+router.get('/idCotizacion/:id',[
+    check('id','el id no es compatible').isMongoId(),
+    check('id').custom(helpersCotizacion.existeCotizacion),
+    validarCampos
+],cotizacion.cotizacionGetIdCotizacion)
+
 router.post('/numCotizacion',[
     check('numCotizacion','el campo numero de cotizacion no puede estar vacio').not().isEmpty(),
     validarCampos
@@ -41,7 +47,9 @@ router.post('/cliente',[
 ],cotizacion.cotizacionGetCliente)
 
 router.put('/modificar/:id',[
-    check('id').custom(helpersCotizacion.existeCotizacion)
+    check('id','el id no es compatible').isMongoId(),
+    check('id').custom(helpersCotizacion.existeCotizacion),
+    validarCampos
 ],cotizacion.cotizacionPut)
 
 export default router
