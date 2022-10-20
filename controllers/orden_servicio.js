@@ -84,7 +84,8 @@ const Ordenes = {
       populate: {path:'ciudad'}},
       })
       .populate({path:'idMuestra',
-      populate: {path:'munRecoleccion'}
+      populate: {path:'munRecoleccion'},
+      populate: {path:'cotizacion.items.item1.itemsEnsayo'}
       })
       .populate({path:'idMuestra',
         populate: {path:'tipoMuestra'}
