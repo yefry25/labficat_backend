@@ -17,7 +17,7 @@ const Ordenes = {
           path: "itemsorden.supervisor",
           select: ["nombre"],
         })
-        .populate({path:'idMuestra'});
+        .populate({ path: "idMuestra" });
 
       if (!orden) {
         return res
@@ -60,49 +60,46 @@ const Ordenes = {
   ordenPut: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, idMuestra, estado, ...resto } = req.body;
-    try{
-      const modificar = await Orden.findByIdAndUpdate(id, resto) ;
+    try {
+      const modificar = await Orden.findByIdAndUpdate(id, resto);
       if (!modificar) {
-        return res
-          .status(400)
-          .json({
-            msg: "No se pudo agregar resultado e incertidumbre a la orden",
-          });
+        return res.status(400).json({
+          msg: "No se pudo agregar resultado e incertidumbre a la orden",
+        });
       }
-      res.json({modificar})
-    }catch(error){
-      return res.status(500).json({ msg: "Hable con el WebMaster" })
+      res.json({ modificar });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  informeDeResultados: async (req, res)=>{
+  informeDeResultados: async (req, res) => {
     const { id } = req.params;
 
-    try{
+    try {
       const informe = await Orden.findById(id)
-      .populate({path:'idMuestra',
-      populate :{path:'solicitante',
-      populate: {path:'ciudad'}},
-      })
-      .populate({path:'idMuestra',
-      populate: {path:'munRecoleccion'},
-      populate: {path:'cotizacion.items.item1.itemsEnsayo'}
-      })
-      .populate({path:'idMuestra',
-        populate: {path:'tipoMuestra'}
-      })
-      .populate({
-        path:'itemsorden.idensayo'
-      })
+        .populate({
+          path: "idMuestra",
+          populate: { path: "solicitante", populate: { path: "ciudad" } },
+        })
+        .populate({ path: "idMuestra", populate: { path: "munRecoleccion" } })
+        .populate({
+          path: "idMuestra",
 
-      if(!informe) {
+          populate: { path: "cotizacion.items.item1.itemsEnsayo" },
+        })
+        .populate({ path: "idMuestra", populate: { path: "tipoMuestra" } })
+        .populate({
+          path: "itemsorden.idensayo",
+        });
+
+      if (!informe) {
         res.status(400).json({ msg: "No se encontro lo buscado" });
       }
 
-      res.json({informe})
-
-    }catch(error){
-      return res.status(500).json({ msg: "Hable con el WebMaster" })
+      res.json({ informe });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
-  }
+  },
 };
 export default Ordenes;
