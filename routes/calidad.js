@@ -20,6 +20,6 @@ router.put('/modificar/:id',[
     check('id','el campo debe ser valido').isMongoId(),
     check('id').custom(helpersCalidad.existeCalidadById),
     validarCampos
-],)
+],calidad.calidadPut)
 
 export default router

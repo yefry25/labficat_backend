@@ -1,5 +1,6 @@
 import Cotizacion from "../models/cotizacion.js";
 import Setup from "../models/setup.js";
+import helperBitacora from '../helpers/bitacora.js'
 
 const cotizacion = {
   cotizacionPost: async (req, res) => {
@@ -86,9 +87,13 @@ const cotizacion = {
           .json({ msg: "No se puedo registrar la oferta de servicio" });
       }
       cotizacion.save();
-      res.json({ cotizacion });
 
-      
+      /* let fecha = new Date();
+      let fechaCompleta = fecha.toLocaleString();
+      const idPerson = cotizacion.idCliente;
+      const observacion = `Cotizacion registrada exitosamente, realizada por a las ${fechaCompleta}`;
+      helperBitacora.llenarBitacora(idPerson, observacion); */
+      res.json({ cotizacion });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
