@@ -33,7 +33,7 @@ const calidad = {
   },
   calidadGet: async (req, res) => {
     try {
-      const calidad = await Calidad.find();
+      const calidad = await Calidad.find() ;
       if (!calidad) {
         return res.status(400).json({ msg: "no se pudo registrar" });
       }
