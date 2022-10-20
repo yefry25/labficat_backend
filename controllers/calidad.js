@@ -38,7 +38,7 @@ const calidad = {
         return res.status(400).json({ msg: "no se pudo registrar" });
       }
       res.json({
-        calidad,
+        calidad ,
       });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
