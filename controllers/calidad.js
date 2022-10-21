@@ -44,6 +44,24 @@ const calidad = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  calidadNombre: async  (req, res) =>{
+    const { nombre } = req.body;
+    try {
+      const calidad = await Calidad.find({
+        $or: [{ formato: new RegExp(nombre, "i") }],
+      });
+      if (!calidad) {
+        return res.status(400).json({
+          ms: "Formato no encontrado",
+        });
+      }
+      res.json({ calidad });
+    } catch (error) {
+      return res.status(500).json({
+        msg: "Hable con el WebMaster",
+      });
+    }
+  }
 };
 
 export default calidad;

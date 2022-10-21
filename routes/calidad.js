@@ -16,6 +16,11 @@ router.post('/insertar',[
     validarCampos
 ],calidad.calidadPost)
 
+router.post('/formato',[
+    check('nombre','El campo nombre no puede estar vacio').not().isEmpty(),
+    validarCampos
+],calidad.calidadNombre)
+
 router.put('/modificar/:id',[
     check('id','el campo debe ser valido').isMongoId(),
     check('id').custom(helpersCalidad.existeCalidadById),
