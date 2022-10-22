@@ -1,6 +1,7 @@
 import Cotizacion from "../models/cotizacion.js";
 import Setup from "../models/setup.js";
 import helperBitacora from '../helpers/bitacora.js'
+import Usuario from '../models/usuario.js'
 
 const cotizacion = {
   cotizacionPost: async (req, res) => {
@@ -38,9 +39,9 @@ const cotizacion = {
       };
       let sub=items.costoItem-descuento 
       const consecutivo = await Setup.findOne();
-      console.log("iva"+consecutivo.iva);
+      /* console.log("iva"+consecutivo.iva); */
       let to= Math.round(sub + sub * (consecutivo.iva/100))
-      console.log('iva'+to);
+      /* console.log('iva'+to); */
       let conse = "";
       if (consecutivo.consecutivoOferta.toString().length == 1) {
         conse = `000${consecutivo.consecutivoOferta}`;
@@ -55,7 +56,7 @@ const cotizacion = {
       let year = d.getFullYear();
       let cotiNumero = "".concat(conse, "-", year, "V1");
       /* console.log(''.concat(conse,'-',year,'V1')); */
-      console.log("conca: " + cotiNumero);
+      /* console.log("conca: " + cotiNumero); */
       /* consecutivo.consecutivoOferta++ */
       let consecutivooferta = consecutivo.consecutivoOferta + 1;
       const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
@@ -88,11 +89,10 @@ const cotizacion = {
       }
       cotizacion.save();
 
-      /* let fecha = new Date();
-      let fechaCompleta = fecha.toLocaleString();
-      const idPerson = cotizacion.idCliente;
-      const observacion = `Cotizacion registrada exitosamente, realizada por a las ${fechaCompleta}`;
-      helperBitacora.llenarBitacora(idPerson, observacion); */
+      const user = await Usuario.findById(cotizacion.idElaboradoPor)
+      const idPerson = cotizacion.idElaboradoPor;
+      const observacion = `Cotizacion registrada exitosamente, realizada por ${user.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ cotizacion });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" });
@@ -177,6 +177,11 @@ const cotizacion = {
       }
 
       cotizacion.save();
+
+      const user = await Usuario.findById(cotizacion.idElaboradoPor)
+      const idPerson = cotizacion.idElaboradoPor;
+      const observacion = `Cotizacion modificada exitosamente, realizada por ${user.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ cotizacion });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });

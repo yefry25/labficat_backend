@@ -108,10 +108,8 @@ const usuario = {
       }
       usuario.save();
 
-      let fecha = new Date();
-      let fechaCompleta = fecha.toLocaleString();
       const idPerson = idUsuario;
-      const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${nombreUsuario} a las ${fechaCompleta}`;
+      const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${nombreUsuario}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         usuario,
@@ -141,10 +139,9 @@ const usuario = {
       console.log("id del Usuario que inicio sesión: " + idUsuario);
       console.log("nombre del Usuario que inicio sesión: " + nombreUsuario);
       const token = await validar.generarJWT(usuario.id);
-      let fecha = new Date();
-      let fechaCompleta = fecha.toLocaleString();
+
       const idPerson = usuario._id;
-      const observacion = `Inicio de sesión realizado por ${usuario.nombre} a las ${fechaCompleta}`;
+      const observacion = `Inicio de sesión realizado por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         usuario,
@@ -160,10 +157,8 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 1 });
 
-    let fecha = new Date();
-    let fechaCompleta = fecha.toLocaleString();
     const idPerson = idUsuario;
-    const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${nombreUsuario} a las ${fechaCompleta}`;
+    const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${nombreUsuario}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
       usuario,
@@ -173,11 +168,9 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 });
 
-    let fecha = new Date();
-    let fechaCompleta = fecha.toLocaleString();
     const idPerson = idUsuario;
     console.log("hola: " + idPerson);
-    const observacion = `El usuario ${usuario.nombre} fue inactivado exitosamente por ${nombreUsuario} a las ${fechaCompleta}`;
+    const observacion = `El usuario ${usuario.nombre} fue inactivado exitosamente por ${nombreUsuario}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
       usuario,
@@ -187,11 +180,9 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 2 });
 
-    let fecha = new Date();
-    let fechaCompleta = fecha.toLocaleString();
     const idPerson = idUsuario;
     console.log("hola: " + idPerson);
-    const observacion = `El usuario ${usuario.nombre} fue actualizado su estado a vacaciones exitosamente por ${nombreUsuario} a las ${fechaCompleta}`;
+    const observacion = `El usuario ${usuario.nombre} fue actualizado su estado a vacaciones exitosamente por ${nombreUsuario}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
       usuario,
@@ -207,11 +198,10 @@ const usuario = {
           .status(500)
           .json({ msg: "No se pudo actualizar la informacion del usuario" });
       }
-      let fecha = new Date();
-      let fechaCompleta = fecha.toLocaleString();
+
       const idPerson = idUsuario;
       console.log("hola: " + idPerson);
-      const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${nombreUsuario} a las ${fechaCompleta}`;
+      const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${nombreUsuario}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         modificar,

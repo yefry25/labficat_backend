@@ -1,4 +1,5 @@
 import Orden from "../models/orden_servicio.js";
+import helperBitacora from "../helpers/bitacora.js"
 
 const Ordenes = {
   ordenGet: async (req, res) => {
@@ -36,6 +37,16 @@ const Ordenes = {
       if (!activar) {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
+
+      const user = await Orden.findById(id).populate({
+        path: "idMuestra",
+        populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
+        
+      });
+      console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
+      const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
+      const observacion = `Orden activada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         activar,
       });
@@ -50,6 +61,16 @@ const Ordenes = {
       if (!desactivar) {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
+
+      const user = await Orden.findById(id).populate({
+        path: "idMuestra",
+        populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
+        
+      });
+      console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
+      const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
+      const observacion = `Orden inactivada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         desactivar,
       });
@@ -67,6 +88,16 @@ const Ordenes = {
           msg: "No se pudo agregar resultado e incertidumbre a la orden",
         });
       }
+
+      const user = await Orden.findById(id).populate({
+        path: "idMuestra",
+        populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
+        
+      });
+      console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
+      const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
+      const observacion = `Orden modificada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ modificar });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
