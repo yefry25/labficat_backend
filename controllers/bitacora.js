@@ -4,6 +4,7 @@ const bitacora = {
     bitacoraGet: async (req, res) => {
         try {
             const bitacoras = await Bitacora.find()
+            .populate({ path:'usuario'});
             if (!bitacoras) {
                 return res.status(400).json({
                     msg: "No hay informacion"
