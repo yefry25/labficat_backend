@@ -176,7 +176,9 @@ const muestra = {
           path: "munRecoleccion",
           select: ["Ciudad", "departamento"],
         })
-        .populate({ path: "tipoMuestra", select: ["tipos"] });
+        .populate({ path: "tipoMuestra", select: ["tipos"] })
+        .populate({ path: "cotizacion" });
+
       if (!muestra) {
         return res.status(400).json({ msg: "No se encontro lo buscado" });
       }
@@ -212,7 +214,7 @@ const muestra = {
 
       const user = await Muestra.findById(id).populate({
         path: "cotizacion",
-        populate:{ path:'idElaboradoPor'}
+        populate: { path: "idElaboradoPor" },
       });
       console.log("user: " + user.cotizacion.idElaboradoPor.nombre);
       const idPerson = user.cotizacion.idElaboradoPor._id;
@@ -242,10 +244,14 @@ const muestra = {
 
           const user = await Orden.findById(element._id).populate({
             path: "idMuestra",
-            populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
-            
+            populate: {
+              path: "cotizacion",
+              populate: { path: "idElaboradoPor" },
+            },
           });
-          console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
+          console.log(
+            "user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre
+          );
           const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
           const observacion = `Orden activada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
           helperBitacora.llenarBitacora(idPerson, observacion);
@@ -259,7 +265,7 @@ const muestra = {
 
       const user = await Muestra.findById(id).populate({
         path: "cotizacion",
-        populate:{ path:'idElaboradoPor'}
+        populate: { path: "idElaboradoPor" },
       });
       console.log("user: " + user.cotizacion.idElaboradoPor.nombre);
       const idPerson = user.cotizacion.idElaboradoPor._id;
@@ -289,10 +295,14 @@ const muestra = {
 
           const user = await Orden.findById(element._id).populate({
             path: "idMuestra",
-            populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
-            
+            populate: {
+              path: "cotizacion",
+              populate: { path: "idElaboradoPor" },
+            },
           });
-          console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
+          console.log(
+            "user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre
+          );
           const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
           const observacion = `Orden inactivada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
           helperBitacora.llenarBitacora(idPerson, observacion);
@@ -306,7 +316,7 @@ const muestra = {
 
       const user = await Muestra.findById(id).populate({
         path: "cotizacion",
-        populate:{ path:'idElaboradoPor'}
+        populate: { path: "idElaboradoPor" },
       });
       console.log("user: " + user.cotizacion.idElaboradoPor.nombre);
       const idPerson = user.cotizacion.idElaboradoPor._id;
