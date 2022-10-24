@@ -5,6 +5,6 @@ import bitacora from '../controllers/bitacora.js'
 
 const router = new Router()
 
-router.get('/',bitacora.bitacoraGet)
+router.get('/',bitacora.bitacoraGet )
 
 export default router
