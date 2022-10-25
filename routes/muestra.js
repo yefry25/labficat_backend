@@ -7,10 +7,12 @@ import helpersCiudad from '../helpers/ciudad.js'
 import helpersTipoMuestra from '../helpers/tipo_muestra.js'
 import helpersCotizacion from '../helpers/cotizacion.js'
 import muestra from "../controllers/muestra.js"
+import validar from '../middlewares/validar.js'
 
 const router = new Router()
 
 router.post('/',[
+    validar.validarJWT,
     check('solicitante').custom(helpersUsuario.existeUsuarioById),
     check('munRecoleccion').custom(helpersCiudad.existeMunicipioById),
     check('direccionTomaMuestra','direccion de toma de muestra no puede estar vacio').not().isEmpty(),
@@ -24,24 +26,34 @@ router.post('/',[
     check('item','item no puede estar vacio').not().isEmpty(),
     validarCampos
 ],muestra.muestraPost)
+
 router.post('/cliente',[
     check('solicitante','solicitante no puede estar vacio').not().isEmpty(),
     validarCampos
 ],muestra.muestraGetCliente)
+
 router.get('/',muestra.muestraGet)
+
 router.get('/lismamu',muestra.muestraGetLisMaMu)
+
 router.get('/solsegrec',muestra.solsegrec)
+
 router.put('/:id',[
-    check('id','el id de lam uestra debe ser uno válido').isMongoId(),
+    validar.validarJWT,
+    check('id','el id de la muestra debe ser uno válido').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
 ],muestra.muestraPut)
+
 router.put('/activar/:id',[
+    validar.validarJWT,
     check('id').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos
 ],muestra.muestraActivar)
+
 router.put('/desactivar/:id',[
+    validar.validarJWT,
     check('id').isMongoId(),
     check('id').custom(helpersMuestra.existeMuestraById),
     validarCampos

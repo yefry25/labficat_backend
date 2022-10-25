@@ -125,11 +125,9 @@ const muestra = {
     orden.save();
     res.json({ orden });
 
-    const user = await Cotizacion.findById(cotizacion).populate({
-      path: "idElaboradoPor",
-    });
-    const idPerson = user.idElaboradoPor._id;
-    const observacion = `Muestra registrada exitosamente, realizada por ${user.idElaboradoPor.nombre}`;
+    const usuario=req.usuario
+    const idPerson = usuario._id;
+    const observacion = `Muestra registrada exitosamente, realizada por ${usuario.nombre}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
   },
   muestraGet: async (req, res) => {
@@ -212,13 +210,9 @@ const muestra = {
           .json({ msg: "No se pudo actualizar la informacion de la muestra" });
       }
 
-      const user = await Muestra.findById(id).populate({
-        path: "cotizacion",
-        populate: { path: "idElaboradoPor" },
-      });
-      console.log("user: " + user.cotizacion.idElaboradoPor.nombre);
-      const idPerson = user.cotizacion.idElaboradoPor._id;
-      const observacion = `Muestra modificada exitosamente, realizada por ${user.cotizacion.idElaboradoPor.nombre}`;
+      const usuario=req.usuario
+      const idPerson = usuario._id;
+      const observacion = `Muestra modificada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         modificar,
@@ -230,6 +224,7 @@ const muestra = {
   muestraActivar: async (req, res) => {
     const { id } = req.params;
     try {
+      const usuario=req.usuario
       const muestra = await Muestra.findByIdAndUpdate(id, { estado: 1 });
       if (!muestra) {
         return res.status(400).json({ msg: "No se activo la muestra" });
@@ -242,18 +237,8 @@ const muestra = {
             estado: 1,
           });
 
-          const user = await Orden.findById(element._id).populate({
-            path: "idMuestra",
-            populate: {
-              path: "cotizacion",
-              populate: { path: "idElaboradoPor" },
-            },
-          });
-          console.log(
-            "user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre
-          );
-          const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
-          const observacion = `Orden activada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+          const idPerson = usuario._id;
+          const observacion = `Orden activada exitosamente, realizada por ${usuario.nombre}`;
           helperBitacora.llenarBitacora(idPerson, observacion);
           if (!orden) {
             return res
@@ -263,13 +248,8 @@ const muestra = {
         }
       }
 
-      const user = await Muestra.findById(id).populate({
-        path: "cotizacion",
-        populate: { path: "idElaboradoPor" },
-      });
-      console.log("user: " + user.cotizacion.idElaboradoPor.nombre);
-      const idPerson = user.cotizacion.idElaboradoPor._id;
-      const observacion = `Muestra activada exitosamente, realizada por ${user.cotizacion.idElaboradoPor.nombre}`;
+      const idPerson = usuario._id;
+      const observacion = `Muestra activada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         muestra,
@@ -281,6 +261,7 @@ const muestra = {
   muestraDesactivar: async (req, res) => {
     const { id } = req.params;
     try {
+      const usuario=req.usuario
       const muestra = await Muestra.findByIdAndUpdate(id, { estado: 0 });
       if (!muestra) {
         return res.status(400).json({ msg: "No se desactivo la muestra" });
@@ -293,18 +274,8 @@ const muestra = {
             estado: 0,
           });
 
-          const user = await Orden.findById(element._id).populate({
-            path: "idMuestra",
-            populate: {
-              path: "cotizacion",
-              populate: { path: "idElaboradoPor" },
-            },
-          });
-          console.log(
-            "user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre
-          );
-          const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
-          const observacion = `Orden inactivada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+          const idPerson = usuario._id;
+          const observacion = `Orden inactivada exitosamente, realizada por ${usuario.nombre}`;
           helperBitacora.llenarBitacora(idPerson, observacion);
           if (!orden) {
             return res
@@ -314,13 +285,8 @@ const muestra = {
         }
       }
 
-      const user = await Muestra.findById(id).populate({
-        path: "cotizacion",
-        populate: { path: "idElaboradoPor" },
-      });
-      console.log("user: " + user.cotizacion.idElaboradoPor.nombre);
-      const idPerson = user.cotizacion.idElaboradoPor._id;
-      const observacion = `Muestra inactivada exitosamente, realizada por ${user.cotizacion.idElaboradoPor.nombre}`;
+      const idPerson = usuario._id;
+      const observacion = `Muestra inactivada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         muestra,

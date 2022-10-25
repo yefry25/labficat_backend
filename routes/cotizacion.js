@@ -3,12 +3,13 @@ import { check } from "express-validator"
 import { validarCampos } from "../middlewares/middleware.js"
 import helpersUsuario from "../helpers/usuario.js"
 import cotizacion from "../controllers/cotizacion.js"
-import helpersEnsayo from '../helpers/ensayo.js'
 import helpersCotizacion from "../helpers/cotizacion.js"
+import validar from '../middlewares/validar.js'
 
 const router = new Router();
 
 router.post('/',[
+    validar.validarJWT,
     check('fechaEmision','solo formato fecha').isISO8601().toDate(),
     check('idCliente','el id del cliente no es correcto').isMongoId(),
     check('idCliente').custom(helpersUsuario.existeUsuarioById),
@@ -32,6 +33,7 @@ router.get('/idCotizacion/:id',[
 ],cotizacion.cotizacionGetIdCotizacion)
 
 router.post('/numCotizacion',[
+
     check('numCotizacion','el campo numero de cotizacion no puede estar vacio').not().isEmpty(),
     validarCampos
 ],cotizacion.listarCotizacion)
@@ -47,6 +49,7 @@ router.post('/cliente',[
 ],cotizacion.cotizacionGetCliente)
 
 router.put('/modificar/:id',[
+    validar.validarJWT,
     check('id','el id no es compatible').isMongoId(),
     check('id').custom(helpersCotizacion.existeCotizacion),
     validarCampos

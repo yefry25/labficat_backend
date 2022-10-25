@@ -38,14 +38,9 @@ const Ordenes = {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
 
-      const user = await Orden.findById(id).populate({
-        path: "idMuestra",
-        populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
-        
-      });
-      console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
-      const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
-      const observacion = `Orden activada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+      const usuario = req.usuario
+      const idPerson = usuario._id;
+      const observacion = `Orden activada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         activar,
@@ -62,14 +57,9 @@ const Ordenes = {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
 
-      const user = await Orden.findById(id).populate({
-        path: "idMuestra",
-        populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
-        
-      });
-      console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
-      const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
-      const observacion = `Orden inactivada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+      const usuario = req.usuario
+      const idPerson = usuario._id;
+      const observacion = `Orden inactivada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         desactivar,
@@ -89,14 +79,9 @@ const Ordenes = {
         });
       }
 
-      const user = await Orden.findById(id).populate({
-        path: "idMuestra",
-        populate:{path:'cotizacion',populate:{path:'idElaboradoPor'}}
-        
-      });
-      console.log("user: " + user.idMuestra.cotizacion.idElaboradoPor.nombre);
-      const idPerson = user.idMuestra.cotizacion.idElaboradoPor._id;
-      const observacion = `Orden modificada exitosamente, realizada por ${user.idMuestra.cotizacion.idElaboradoPor.nombre}`;
+      const usuario = req.usuario
+      const idPerson = usuario._id;
+      const observacion = `Orden modificada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ modificar });
     } catch (error) {
@@ -105,7 +90,6 @@ const Ordenes = {
   },
   informeDeResultados: async (req, res) => {
     const { id } = req.params;
-
     try {
       const informe = await Orden.findById(id)
         .populate({
@@ -132,5 +116,23 @@ const Ordenes = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  lismamu: async(req, res)=> {
+    try {
+      const lismamu = await Orden.find()
+      .populate({path:'idMuestra', populate:{path:'solicitante'}})
+      .populate({path:'idMuestra',populate:{path:'cotizacion'}})
+      .populate({path:'idMuestra', populate:{path:'tipoMuestra'}})
+      .populate({path:'idMuestra',populate:{path:'solicitante', populate:{path:'ciudad'}}})
+      .populate({path:'idMuestra', populate:{path:'munRecoleccion'}});
+
+      if (!lismamu) {
+        res.status(400).json({ msg: "No se encontro lo buscado" });
+      }
+
+      res.json({ lismamu });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  }
 };
 export default Ordenes;

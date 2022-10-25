@@ -1,7 +1,6 @@
 import Cotizacion from "../models/cotizacion.js";
 import Setup from "../models/setup.js";
 import helperBitacora from '../helpers/bitacora.js'
-import Usuario from '../models/usuario.js'
 
 const cotizacion = {
   cotizacionPost: async (req, res) => {
@@ -89,9 +88,9 @@ const cotizacion = {
       }
       cotizacion.save();
 
-      const user = await Usuario.findById(cotizacion.idElaboradoPor)
-      const idPerson = cotizacion.idElaboradoPor;
-      const observacion = `Cotizacion registrada exitosamente, realizada por ${user.nombre}`;
+      const usuario=req.usuario
+      const idPerson = usuario._id;
+      const observacion = `Cotizacion registrada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ cotizacion });
     } catch (error) {
@@ -178,8 +177,8 @@ const cotizacion = {
 
       cotizacion.save();
 
-      const user = await Usuario.findById(cotizacion.idElaboradoPor)
-      const idPerson = cotizacion.idElaboradoPor;
+      const user=req.usuario
+      const idPerson = user._id;
       const observacion = `Cotizacion modificada exitosamente, realizada por ${user.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ cotizacion });
