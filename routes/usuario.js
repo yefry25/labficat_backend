@@ -4,10 +4,12 @@ import { validarCampos } from "../middlewares/middleware.js"
 import usuario from "../controllers/usuario.js"
 import helpersUsuario from "../helpers/usuario.js"
 import helpersCiudad from '../helpers/ciudad.js'
+import validar from '../middlewares/validar.js'
 
 const router=new Router()
 
 router.post('/',[
+    validar.validarJWT,
     check('tipoPersona','no puede estar vacio').not().isEmpty(),
     check('nombre','no puede estar vacio').not().isEmpty(),
     check('documento','no puede estar vacio').not().isEmpty(),
@@ -50,24 +52,28 @@ router.post('/roles',[
 ],usuario.usuarioGetRoles )
 
 router.put('/activar/:id',[
+    validar.validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
     validarCampos
 ],usuario.personaActivar)
 
 router.put('/desactivar/:id',[
+    validar.validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
     validarCampos
 ],usuario.personaDesactivar)
 
 router.put('/vacaciones/:id',[
+    validar.validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
     validarCampos
 ],usuario.personaVacaciones)
 
 router.put('/modificar/:id',[
+    validar.validarJWT,
     check('id','el id debe ser válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
     validarCampos

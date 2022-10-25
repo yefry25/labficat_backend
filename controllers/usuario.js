@@ -108,8 +108,9 @@ const usuario = {
       }
       usuario.save();
 
-      const idPerson = idUsuario;
-      const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${nombreUsuario}`;
+      const user = req.usuario
+      const idPerson = user._id;
+      const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${user.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         usuario,
@@ -134,10 +135,6 @@ const usuario = {
         });
       }
 
-      idUsuario = usuario._id;
-      nombreUsuario = usuario.nombre;
-      console.log("id del Usuario que inicio sesión: " + idUsuario);
-      console.log("nombre del Usuario que inicio sesión: " + nombreUsuario);
       const token = await validar.generarJWT(usuario.id);
 
       const idPerson = usuario._id;
@@ -157,8 +154,9 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 1 });
 
-    const idPerson = idUsuario;
-    const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${nombreUsuario}`;
+    const user = req.usuario
+    const idPerson = user._id;
+    const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${user.nombre}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
       usuario,
@@ -168,9 +166,9 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 });
 
-    const idPerson = idUsuario;
-    console.log("hola: " + idPerson);
-    const observacion = `El usuario ${usuario.nombre} fue inactivado exitosamente por ${nombreUsuario}`;
+    const user = req.usuario
+    const idPerson = user._id;
+    const observacion = `El usuario ${usuario.nombre} fue inactivado exitosamente por ${user.nombre}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
       usuario,
@@ -180,9 +178,10 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 2 });
 
-    const idPerson = idUsuario;
+    const user = req.usuario
+    const idPerson = user._id;
     console.log("hola: " + idPerson);
-    const observacion = `El usuario ${usuario.nombre} fue actualizado su estado a vacaciones exitosamente por ${nombreUsuario}`;
+    const observacion = `El usuario ${usuario.nombre} fue actualizado su estado a vacaciones exitosamente por ${user.nombre}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
       usuario,
@@ -199,9 +198,10 @@ const usuario = {
           .json({ msg: "No se pudo actualizar la informacion del usuario" });
       }
 
-      const idPerson = idUsuario;
+      const user = req.usuario
+      const idPerson = user._id;
       console.log("hola: " + idPerson);
-      const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${nombreUsuario}`;
+      const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${user.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({
         modificar,
