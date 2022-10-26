@@ -16,10 +16,12 @@ const Ordenschema = new mongoose.Schema({
         responsable:{
             type: mongoose.Schema.ObjectId,
             ref: "Usuario",
+            default:""
         },
         supervisor:{
             type: mongoose.Schema.ObjectId,
             ref: "Usuario",
+            default:""
         },
         resultado:{  //hacer un put para llenar estos datos
             type: Number,

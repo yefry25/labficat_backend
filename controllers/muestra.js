@@ -121,7 +121,7 @@ const muestra = {
     }
     const idMuestra = muestra._id;
     const orden = new Orden({ idMuestra, itemsorden: itemsOrden });
-
+    console.log(itemsOrden);
     orden.save();
     res.json({ orden });
 

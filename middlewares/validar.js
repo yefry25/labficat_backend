@@ -41,10 +41,9 @@ const validar = {
             }
             req.usuario=usuario
             next();
-    
         } catch (error) {
             res.status(501).json({
-                msg: "Token no valido"
+                msg: 'Token expiró, por favor inicie sesión nuevamente'
             })
         }
     }
