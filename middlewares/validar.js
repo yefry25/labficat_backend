@@ -6,7 +6,7 @@ const validar = {
         return new Promise((resolve, reject) => {
             const payload = { uid };
             jwt.sign(payload, process.env.CLAVESECRET, {
-                expiresIn: "4h"//4h
+                expiresIn: "1"//4h
             }, (err, token) => {
                 if (err) {
                     console.log(err);
