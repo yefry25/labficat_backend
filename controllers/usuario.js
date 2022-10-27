@@ -59,16 +59,16 @@ const usuario = {
       });
     }
   },
-  usuarioGetEmail: async (req, res)=> {
-    const {email} = req.body
+  usuarioGetEmail: async (req, res) => {
+    const { email } = req.body
     try {
-      const user = await Usuario.findOne({correo:email})
+      const user = await Usuario.findOne({ correo: email })
 
-      if(!user){
+      if (!user) {
         return res.status(400).json({ msg: "No se encontro" });
       }
 
-      res.json({user})
+      res.json({ user })
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
@@ -236,6 +236,19 @@ const usuario = {
       verificationLink = `
       http://localhost:8080/#/cambiarPrueba`
       user.resetToken = token
+      console.log("token: " + user.resetToken);
+
+      try {
+        const modificar = await Usuario.findByIdAndUpdate(user._id, { resetToken: token });
+        if (!modificar) {
+          return res
+            .status(500)
+            .json({ msg: "No se pudo insertar el token" });
+        }
+
+      } catch (error) {
+        return res.status(500).json({ msg: "Error al ingresar la token" });
+      }
 
     } catch (error) {
       return res.status(404).json({ msg: 'Hable con el WebMaster' })
