@@ -261,7 +261,7 @@ const usuario = {
       await transporter.sendMail({
         from: '"Recuperación de la contraseña" <jefabecerra@misena.edu.co>', // sender address
         to: correo, // list of receivers
-        subject: "Presione el link para poder cambiar tu contraseña", // Subject line
+        subject: "Presione el link para poder cambiar tu contraseña, El link solo tiene validez por 10 minutos", // Subject line
         html: `Link: ${verificationLink}`, // html body
       });
     } catch (error) {

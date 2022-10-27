@@ -2,30 +2,39 @@ import mongoose from "mongoose";
 import Usuario from "../models/usuario.js"
 
 const helpersUsuario = {
-    existeUsuario: async (idCliente)=>{
+    existeUsuario: async (idCliente) => {
         for (let i = 0; i < idCliente.length; i++) {
             const element = idCliente[i];
             const validarId = mongoose.Types.ObjectId(element.codigo);
-    
-            if(!validarId){
+
+            if (!validarId) {
                 throw new Error('el ID no existe')
             }
-            
+
             const x = element.codigo
             const existe = await Usuario.findById(x);
-    
-            if (!existe){
+
+            if (!existe) {
                 throw new Error('el cliente no existe')
             }
         }
     },
 
-    existeEmail:async(correo) => {
+    existeEmail: async (correo) => {
 
         const existe = await Usuario.findOne({ correo });
 
         if (existe) {
             throw new Error(`El email ya esta registrado`)
+        }
+    },
+
+    existeEmailChangePassword: async (correo) => {
+
+        const existe = await Usuario.findOne({ correo });
+
+        if (!existe) {
+            throw new Error('El correo con el cual quieres hacer el cambio de contraseña no existe')
         }
     },
 
@@ -37,10 +46,10 @@ const helpersUsuario = {
     },
 
     existeResponsables: async (responsables) => {
-        const titular = responsables.titular 
-        
+        const titular = responsables.titular
+
         const suplente = responsables.suplente
-        
+
         const existeTitular = await Usuario.findById(titular)
         const existeSuplente = await Usuario.findById(suplente)
 

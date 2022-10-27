@@ -88,6 +88,7 @@ router.put('/modificar/:id',[
 /* recuperar contraseña */
 router.put('/recuperarPassword',[
     check('correo','El campo correo no puede estar vacio').not().isEmpty(),
+    check('correo').custom(helpersUsuario.existeEmailChangePassword),
     validarCampos
 ],usuario.recuperarPassword)
 
@@ -98,6 +99,5 @@ router.put('/nuevaPassword', [
     check('nuevaPassword', 'No puede estar vacio el campo nueva contraseña').not().isEmpty(),
     validarCampos
 ],usuario.crearNuevaPassword)
-
 
 export default router
