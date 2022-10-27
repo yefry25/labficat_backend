@@ -2,9 +2,8 @@ import Usuario from "../models/usuario.js";
 import bcryptjs from "bcryptjs";
 import validar from "../middlewares/validar.js";
 import helperBitacora from "../helpers/bitacora.js";
-
-let idUsuario = "";
-let nombreUsuario = "";
+import jwt from "jsonwebtoken"
+import transporter from "../database/mailer.js";
 
 const usuario = {
   usuarioGet: async (req, res) => {
@@ -210,6 +209,75 @@ const usuario = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  recuperarPassword: async (req, res) => {
+    const { correo } = req.body
+    const message = 'Revisa tu correo electrónico '
+    let verificationLink
+
+    try {
+      const user = await Usuario.findOne({ correo })
+      /* console.log('user: ' + user); */
+
+      const token = jwt.sign({ idUsuario: user._id, nombre: user.nombre }, process.env.CLAVESECRET, { expiresIn: '10m' })
+      verificationLink = `
+      https://labficat.herokuapp.com/usuario/nuevaPassword/${token}`
+      user.resetToken = token
+
+    } catch (error) {
+      return res.status(404).json({ msg: 'Hable con el WebMaster' })
+    }
+
+    try {
+      await transporter.sendMail({
+        from: '"Recuperación de la contraseña" <jefabecerra@misena.edu.co>', // sender address
+        to: correo, // list of receivers
+        subject: "Presione el link para poder cambiar tu contraseña", // Subject line
+        html: `Link: ${verificationLink}`, // html body
+      });
+    } catch (error) {
+      return res.status(404).json({ msg: 'No se pudo enviar el correo de verificación' })
+
+    }
+
+    res.json({ msg: message })
+  },
+  crearNuevaPassword: async (req, res) => {
+    const { nuevaPassword } = req.body;
+    const resetToken = req.header('reset')
+
+    try {
+      const verificar = jwt.verify(resetToken, process.env.CLAVESECRET)
+      console.log(verificar.nombre);
+      const user = await Usuario.findOne({ nombre: verificar.nombre })
+      console.log(user);
+
+      if (!user) {
+        return res.status(401).json({
+          msg: "Token no válido "
+        })
+      }
+      user.password = nuevaPassword
+      const salt = bcryptjs.genSaltSync(10);
+      user.password = bcryptjs.hashSync(nuevaPassword, salt);
+
+      try {
+        const modificar = await Usuario.findByIdAndUpdate(user._id, { password: user.password });
+        if (!modificar) {
+          return res
+            .status(500)
+            .json({ msg: "No se pudo actualizar la contraseña del usuario" });
+        }
+
+      } catch (error) {
+        return res.status(500).json({ msg: "Error al actualizar la contraseña" });
+      }
+
+      res.json({ msg: 'Contraseña cambiada exitosamente' })
+
+    } catch (error) {
+      return res.status(500).json({ msg: 'Hable con el WebMaster' })
+    }
+  }
 };
 
 export default usuario;

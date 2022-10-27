@@ -9,7 +9,6 @@ import validar from '../middlewares/validar.js'
 const router=new Router()
 
 router.post('/',[
-    validar.validarJWT,
     check('tipoPersona','no puede estar vacio').not().isEmpty(),
     check('nombre','no puede estar vacio').not().isEmpty(),
     check('documento','no puede estar vacio').not().isEmpty(),
@@ -78,5 +77,19 @@ router.put('/modificar/:id',[
     check('id').custom(helpersUsuario.existeUsuarioById),
     validarCampos
 ],usuario.usuarioPut)
+
+/* recuperar contraseña */
+router.put('/recuperarPassword',[
+    check('correo','El campo correo no puede estar vacio').not().isEmpty(),
+    validarCampos
+],usuario.recuperarPassword)
+
+/* ruta para cambiar la contraseña */
+
+router.put('/nuevaPassword', [
+    check('nuevaPassword', 'No puede estar vacio el campo nueva contraseña').not().isEmpty(),
+    validarCampos
+],usuario.crearNuevaPassword)
+
 
 export default router

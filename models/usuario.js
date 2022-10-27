@@ -53,6 +53,10 @@ const UsuarioSchema = new mongoose.Schema({
         type: Number,
         default: 1
     },
+    resetToken:{
+        type:String,
+        default:''
+    },
     createdAt: {
         type: Date,
         default: Date.now
