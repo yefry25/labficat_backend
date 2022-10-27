@@ -220,7 +220,7 @@ const usuario = {
 
       const token = jwt.sign({ idUsuario: user._id, nombre: user.nombre }, process.env.CLAVESECRET, { expiresIn: '10m' })
       verificationLink = `
-      https://labficat.herokuapp.com/usuario/nuevaPassword/${token}`
+      http://localhost:8080/#/cambiarPrueba`
       user.resetToken = token
 
     } catch (error) {
