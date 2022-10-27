@@ -59,6 +59,20 @@ const usuario = {
       });
     }
   },
+  usuarioGetEmail: async (req, res)=> {
+    const {email} = req.body
+    try {
+      const user = await Usuario.findOne({email})
+
+      if(!user){
+        return res.status(400).json({ msg: "No se encontro" });
+      }
+
+      res.json({user})
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
   usuarioGetRoles: async (req, res) => {
     const { rol } = req.body;
     try {
