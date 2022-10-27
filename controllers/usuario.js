@@ -218,7 +218,7 @@ const usuario = {
       const user = await Usuario.findOne({ correo })
       /* console.log('user: ' + user); */
 
-      const token = jwt.sign({ idUsuario: user._id, nombre: user.nombre }, process.env.CLAVESECRET, { expiresIn: '10m' })
+      const token = jwt.sign({ idUsuario: user._id, nombre: user.nombre }, process.env.CLAVERESETTOKEN, { expiresIn: '10m' })
       verificationLink = `
       http://localhost:8080/#/cambiarPrueba`
       user.resetToken = token
@@ -246,7 +246,7 @@ const usuario = {
     const resetToken = req.header('reset')
 
     try {
-      const verificar = jwt.verify(resetToken, process.env.CLAVESECRET)
+      const verificar = jwt.verify(resetToken, process.env.CLAVERESETTOKEN)
       console.log(verificar.nombre);
       const user = await Usuario.findOne({ nombre: verificar.nombre })
       console.log(user);

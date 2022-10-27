@@ -87,6 +87,7 @@ router.put('/recuperarPassword',[
 /* ruta para cambiar la contraseña */
 
 router.put('/nuevaPassword', [
+    validar.validarResetJWT,
     check('nuevaPassword', 'No puede estar vacio el campo nueva contraseña').not().isEmpty(),
     validarCampos
 ],usuario.crearNuevaPassword)

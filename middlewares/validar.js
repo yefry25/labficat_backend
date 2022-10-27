@@ -46,6 +46,28 @@ const validar = {
                 msg: 'Token expiró, por favor inicie sesión nuevamente'
             })
         }
+    },
+    validarResetJWT : async (req, res, next) =>{
+        const token = req.header("reset");
+        if (!token) {
+            return res.status(401).json({
+                msg: "No hay token en la peticion"
+            })
+        }
+        try {
+            const tokenValidar = jwt.verify(token, process.env.CLAVERESETTOKEN)
+             
+            if(!tokenValidar){
+                return res.status(401).json({
+                    msg: "No hay token en la peticion"
+                })
+            }
+
+            next();
+            
+        } catch (error) {
+            return res.status.json({msg:'Something goes wrong!'})
+        }
     }
 }
 
