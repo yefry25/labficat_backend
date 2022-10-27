@@ -99,7 +99,6 @@ const Ordenes = {
         .populate({ path: "idMuestra", populate: { path: "munRecoleccion" } })
         .populate({
           path: "idMuestra",
-
           populate: { path: "cotizacion.items.item1.itemsEnsayo" },
         })
         .populate({ path: "idMuestra", populate: { path: "tipoMuestra" } })
