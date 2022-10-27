@@ -42,6 +42,7 @@ router.post('/documento',[
 
 router.get('/email',[
     check('email', 'El campo email no puede estar vacio').not().isEmpty(),
+    
     validarCampos
 ],usuario.usuarioGetEmail)
 

@@ -62,7 +62,7 @@ const usuario = {
   usuarioGetEmail: async (req, res)=> {
     const {email} = req.body
     try {
-      const user = await Usuario.findOne({email})
+      const user = await Usuario.findOne({correo:email})
 
       if(!user){
         return res.status(400).json({ msg: "No se encontro" });
