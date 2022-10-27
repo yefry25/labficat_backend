@@ -40,7 +40,7 @@ router.post('/documento',[
     validarCampos
 ],usuario.usuarioGetDocumento)
 
-router.get('/email',[
+router.post('/email',[
     check('email', 'El campo email no puede estar vacio').not().isEmpty(),
     
     validarCampos
