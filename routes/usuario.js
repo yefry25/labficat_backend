@@ -9,6 +9,7 @@ import validar from '../middlewares/validar.js'
 const router=new Router()
 
 router.post('/',[
+    validar.validarJWT,
     check('tipoPersona','no puede estar vacio').not().isEmpty(),
     check('nombre','no puede estar vacio').not().isEmpty(),
     check('documento','no puede estar vacio').not().isEmpty(),

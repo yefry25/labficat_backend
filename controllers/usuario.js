@@ -121,7 +121,8 @@ const usuario = {
       }
       usuario.save();
 
-      const user = req.usuario
+      let user = req.usuario
+
       const idPerson = user._id;
       const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${user.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
@@ -131,6 +132,7 @@ const usuario = {
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
+
   },
   usuarioLogin: async (req, res) => {
     const { correo, password } = req.body;
@@ -169,6 +171,7 @@ const usuario = {
 
     const user = req.usuario
     const idPerson = user._id;
+
     const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${user.nombre}`;
     helperBitacora.llenarBitacora(idPerson, observacion);
     res.json({
