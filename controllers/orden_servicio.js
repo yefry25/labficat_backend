@@ -71,11 +71,11 @@ const Ordenes = {
   ordenPut: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, idMuestra, estado, ...resto } = req.body;
-    try {
+    
       const modificar = await Orden.findByIdAndUpdate(id, resto);
       if (!modificar) {
         return res.status(400).json({
-          msg: "No se pudo agregar resultado e incertidumbre a la orden",
+          msg: "No se pudo agregar resultado e incertidumbre a la orden" ,
         });
       }
 
@@ -84,9 +84,7 @@ const Ordenes = {
       const observacion = `Orden modificada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
       res.json({ modificar });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
+    
   },
   informeDeResultados: async (req, res) => {
     const { id } = req.params;

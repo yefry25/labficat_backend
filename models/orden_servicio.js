@@ -9,36 +9,35 @@ const Ordenschema = new mongoose.Schema({
     },
     itemsorden: [{
         idensayo:{
-            type: mongoose.Schema.ObjectId,
+            type: mongoose.Types.ObjectId,
             ref: "Ensayo",
             required: true
         },
         responsable:{
-            type: mongoose.Schema.ObjectId,
-            ref: "Usuario",
-            default:""
+            type: mongoose.Types.ObjectId,
+            ref: "Usuario"
         },
         supervisor:{
-            type: mongoose.Schema.ObjectId,
-            ref: "Usuario",
-            default:""
+            type: mongoose.Types.ObjectId,
+            ref: "Usuario"
         },
         resultado:{  //hacer un put para llenar estos datos
             type: Number,
-            default: 0
+            default:0
         },
         incertidumbre:{  //hacer un put para llenar estos datos
-            type: Number,
-            default: 0
+            type: Number ,
+            default:0
         },
         estado:{
             type: String,
-            default: "En proceso"
+            default: "En proceso "
         },
     }],
     observaciones: {
         type: String,
-        default: ""
+        default:""
+        
     },  //informe de resultados en un get de orden de servicio 
     estado: {
         type: Number,
