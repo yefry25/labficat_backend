@@ -36,7 +36,7 @@ const validar = {
             }
             if (usuario.estado == 0) {
                 return res.status(401).json({
-                    msg: "Token no válido " //- usuario con estado: false
+                    msg: "El usuario esta inactivo " //- usuario con estado: false
                 })
             }
             req.usuario=usuario
