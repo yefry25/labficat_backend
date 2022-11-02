@@ -121,11 +121,14 @@ const usuario = {
       }
       usuario.save();
 
-      let user = req.usuario
-
-      const idPerson = user._id;
-      const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${user.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      try {
+        let user = req.usuario
+        const idPerson = user._id;
+        const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${user.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
       res.json({
         usuario,
       });
@@ -152,9 +155,13 @@ const usuario = {
 
       const token = await validar.generarJWT(usuario.id);
 
-      const idPerson = usuario._id;
-      const observacion = `Inicio de sesión realizado por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      try {
+        const idPerson = usuario._id;
+        const observacion = `Inicio de sesión realizado por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
       res.json({
         usuario,
         token,
@@ -169,11 +176,15 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 1 });
 
-    const user = req.usuario
-    const idPerson = user._id;
+    try {
+      const user = req.usuario
+      const idPerson = user._id;
+      const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${user.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
 
-    const observacion = `El usuario ${usuario.nombre} fue activado exitosamente por ${user.nombre}`;
-    helperBitacora.llenarBitacora(idPerson, observacion);
+    } catch (error) {
+      return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+    }
     res.json({
       usuario,
     });
@@ -182,10 +193,16 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 0 });
 
-    const user = req.usuario
-    const idPerson = user._id;
-    const observacion = `El usuario ${usuario.nombre} fue inactivado exitosamente por ${user.nombre}`;
-    helperBitacora.llenarBitacora(idPerson, observacion);
+    try {
+      const user = req.usuario
+      const idPerson = user._id;
+      const observacion = `El usuario ${usuario.nombre} fue inactivado exitosamente por ${user.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
+
+    } catch (error) {
+      return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+    }
+
     res.json({
       usuario,
     });
@@ -194,11 +211,17 @@ const usuario = {
     const { id } = req.params;
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: 2 });
 
-    const user = req.usuario
-    const idPerson = user._id;
-    console.log("hola: " + idPerson);
-    const observacion = `El usuario ${usuario.nombre} fue actualizado su estado a vacaciones exitosamente por ${user.nombre}`;
-    helperBitacora.llenarBitacora(idPerson, observacion);
+    try {
+      const user = req.usuario
+      const idPerson = user._id;
+      console.log("hola: " + idPerson);
+      const observacion = `El usuario ${usuario.nombre} fue actualizado su estado a vacaciones exitosamente por ${user.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
+
+    } catch (error) {
+      return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+    }
+
     res.json({
       usuario,
     });
@@ -214,11 +237,16 @@ const usuario = {
           .json({ msg: "No se pudo actualizar la informacion del usuario" });
       }
 
-      const user = req.usuario
-      const idPerson = user._id;
-      console.log("hola: " + idPerson);
-      const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${user.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      try {
+        const user = req.usuario
+        const idPerson = user._id;
+        console.log("hola: " + idPerson);
+        const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${user.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
       res.json({
         modificar,
       });

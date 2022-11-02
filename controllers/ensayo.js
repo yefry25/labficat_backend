@@ -14,7 +14,7 @@ const ensayo = {
       descripcion,
       limiteCuantificacion,
       responsables,
-    } = req.body ;
+    } = req.body;
     try {
       const ensayos = new Ensayo({
         ensayo,
@@ -35,10 +35,15 @@ const ensayo = {
       }
       ensayos.save();
 
-      const usuario=req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Registro exitoso del ensayo ${ensayos.ensayo} realizado por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Registro exitoso del ensayo ${ensayos.ensayo} realizado por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
       res.json({
         ensayos,
       });
@@ -69,10 +74,14 @@ const ensayo = {
           .json({ msg: "No se pudo actualizar la informacion del usuario" });
       }
 
-      const usuario=req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Ensayo modificado exitosamente, realizado por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Ensayo modificado exitosamente, realizado por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
       res.json({
         modificar,
       });
@@ -88,13 +97,19 @@ const ensayo = {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
 
-      const usuario=req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Ensayo activado exitosamente, realizado por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({
-        activar,
-      });
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Ensayo activado exitosamente, realizado por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+        res.json({
+          activar,
+        });
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
     } catch (error) {
       res.stataus(500).json({ msg: "Hable con el WebMaster" });
     }
@@ -107,13 +122,19 @@ const ensayo = {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
 
-      const usuario=req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Ensayo desactivado exitosamente, realizado por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({
-        desactivar,
-      });
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Ensayo desactivado exitosamente, realizado por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+        res.json({
+          desactivar,
+        });
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
     } catch (error) {
       res.stataus(500).json({ msg: "Hable con el WebMaster" });
     }

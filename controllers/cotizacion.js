@@ -1,6 +1,7 @@
 import Cotizacion from "../models/cotizacion.js";
 import Setup from "../models/setup.js";
 import helperBitacora from '../helpers/bitacora.js'
+import tools from "../helpers/tools.js";
 
 const cotizacion = {
   cotizacionPost: async (req, res) => {
@@ -17,31 +18,30 @@ const cotizacion = {
     } = req.body;
 
     try {
+      tools.cuentasCotizacion(items)
       const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
         return (acc += it.costoEnsayo);
       }, 0);
       items.item1.costo = dale;
-      items.costoItem = items.item1.costo ;
-      if(items.item2)  {
+      items.costoItem = items.item1.costo;
+      if (items.item2) {
         const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
-          return (acc += it.costoEnsayo) ;
+          return (acc += it.costoEnsayo);
         }, 0);
         items.item2.costo = dale;
-        items.costoItem +=  items.item2.costo 
+        items.costoItem += items.item2.costo
       };
-      if(items.item3) {
+      if (items.item3) {
         const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
-          return (acc += it.costoEnsayo) ;
+          return (acc += it.costoEnsayo);
         }, 0);
         items.item3.costo = dale;
-        items.costoItem +=  items.item3.costo
+        items.costoItem += items.item3.costo
       };
-      let sub=items.costoItem-descuento 
+      let sub = items.costoItem - descuento
       const consecutivo = await Setup.findOne();
-      /* console.log("iva"+consecutivo.iva); */
-      let to= Math.round(sub + sub * (consecutivo.iva/100))
-      /* console.log('iva'+to); */
-      let conse = "";
+      let to = Math.round(sub + sub * (consecutivo.iva / 100))
+      /* let conse = "";
       if (consecutivo.consecutivoOferta.toString().length == 1) {
         conse = `000${consecutivo.consecutivoOferta}`;
       } else if (consecutivo.consecutivoOferta.toString().length == 2) {
@@ -50,22 +50,28 @@ const cotizacion = {
         conse = `0${consecutivo.consecutivoOferta}`;
       } else {
         conse = consecutivo.consecutivoOferta;
-      }
+      } */
+      const conse = await tools.consecutivoCotizacion();
       const d = new Date();
       let year = d.getFullYear();
-      let cotiNumero = "".concat(conse, "-", year, "V1");
-      /* console.log(''.concat(conse,'-',year,'V1')); */
-      /* console.log("conca: " + cotiNumero); */
-      /* consecutivo.consecutivoOferta++ */
-      let consecutivooferta = consecutivo.consecutivoOferta + 1;
-      const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
-        consecutivoOferta: consecutivooferta,
-      });
-      if (!guardar) {
-        return res.status(400).json({
-          msg: "No se pudo actualizar la informacion del consecutivo oferta",
+      /* let cotiNumero = "".concat(conse, "-", year, "V1"); */
+      let cotiNumero = `${conse}-${year}V1`
+
+      try {
+        let consecutivooferta = consecutivo.consecutivoOferta + 1;
+        const guardar = await Setup.findByIdAndUpdate(consecutivo._id, {
+          consecutivoOferta: consecutivooferta,
         });
+        if (!guardar) {
+          return res.status(400).json({
+            msg: "No se pudo actualizar la informacion del consecutivo oferta",
+          });
+        }
+
+      } catch (error) {
+        return res.status(504).json({ msg: "Hable con el WebMaster" })
       }
+
       const cotizacion = new Cotizacion({
         numCotizacion: cotiNumero,
         fechaEmision,
@@ -76,10 +82,10 @@ const cotizacion = {
         idElaboradoPor,
         items,
         observaciones,
-        subTotal:items.costoItem,
+        subTotal: items.costoItem,
         descuento,
-        iva:consecutivo.iva,
-        total:to,
+        iva: consecutivo.iva,
+        total: to,
       });
       if (!cotizacion) {
         return res
@@ -88,13 +94,18 @@ const cotizacion = {
       }
       cotizacion.save();
 
-      const usuario=req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Cotizacion registrada exitosamente, realizada por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({ cotizacion });
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Cotizacion registrada exitosamente, realizada por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+        res.json({ cotizacion });
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
     } catch (error) {
-      return res.status(500).json({ msg: "Hable con el webMaster" });
+      return res.status(500).json({ msg: "Hable con el WebMaster" })
     }
   },
   cotizacionPut: async (req, res) => {
@@ -116,43 +127,44 @@ const cotizacion = {
         return (acc += it.costoEnsayo);
       }, 0);
       items.item1.costo = dale;
-      items.costoItem = items.item1.costo ;
-
-      if(items.item2)  {
+      items.costoItem = items.item1.costo;
+      if (items.item2) {
         const dale = items.item2.itemsEnsayo.reduce((acc, it) => {
-          return (acc += it.costoEnsayo) ;
+          return (acc += it.costoEnsayo);
         }, 0);
         items.item2.costo = dale;
-        items.costoItem +=  items.item2.costo 
+        items.costoItem += items.item2.costo
       };
-
-      if(items.item3) {
+      if (items.item3) {
         const dale = items.item3.itemsEnsayo.reduce((acc, it) => {
-          return (acc += it.costoEnsayo) ;
+          return (acc += it.costoEnsayo);
         }, 0);
         items.item3.costo = dale;
-        items.costoItem +=  items.item3.costo
+        items.costoItem += items.item3.costo
       };
-      console.log("costo del item: "+items.costoItem);
-      let sub=items.costoItem-descuento 
-      console.log("subtotal: "+sub);
+      /* console.log("costo del item: " + items.costoItem); */
+      let sub = items.costoItem - descuento
+      /* console.log("subtotal: " + sub); */
       const consecutivoSetup = await Setup.findOne();
-      console.log("iva: "+consecutivoSetup.iva);
-      let to= Math.round(sub + sub * (consecutivoSetup.iva/100))
-      console.log('total: '+to);
+      /* console.log("iva: " + consecutivoSetup.iva); */
+      let to = Math.round(sub + sub * (consecutivoSetup.iva / 100))
 
-      const usuario = await Cotizacion.findByIdAndUpdate(id, { estado: 0 });
-      if (!usuario) {
-        return res
-          .status(400)
-          .json({ msg: "No se puedo registrar la oferta de servicio" });
+      let concaNueva="";
+      try {
+        const usuario = await Cotizacion.findByIdAndUpdate(id, { estado: 0 });
+        if (!usuario) {
+          return res
+            .status(400)
+            .json({ msg: "No se puedo registrar la oferta de servicio" });
+        }
+        let consecutivo = await Cotizacion.findById(id);
+        let version = consecutivo.numCotizacion;
+        let primeraParte = version.split("V")[0];
+        let versionNew = Number(version.split("V")[1]) + 1;
+        concaNueva = `${primeraParte}V${versionNew}`;
+      } catch (error) {
+        return res.status(500).json({ msg: "Ocurrió un error" })
       }
-      let consecutivo = await Cotizacion.findById(id);
-      let version = consecutivo.numCotizacion;
-      let primeraParte = version.split("V")[0];
-      let versionNew = Number(version.split("V")[1]) + 1;
-      let concaNueva = `${primeraParte}V${versionNew}`;
-
       const cotizacion = new Cotizacion({
         numCotizacion: concaNueva,
         fechaEmision,
@@ -163,25 +175,28 @@ const cotizacion = {
         idElaboradoPor,
         items,
         observaciones,
-        subTotal:items.costoItem,
+        subTotal: items.costoItem,
         descuento,
-        iva:consecutivoSetup.iva,
-        total:to,
+        iva: consecutivoSetup.iva,
+        total: to,
       });
-
       if (!cotizacion) {
         return res
           .status(400)
-          .json({ msg: "No se puedo actualizar la oferta de servicio" } );
+          .json({ msg: "No se puedo actualizar la oferta de servicio" });
       }
-
       cotizacion.save();
 
-      const user=req.usuario
-      const idPerson = user._id;
-      const observacion = `Cotizacion modificada exitosamente, realizada por ${user.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({ cotizacion });
+      try {
+        const user = req.usuario
+        const idPerson = user._id;
+        const observacion = `Cotizacion modificada exitosamente, realizada por ${user.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+        res.json({ cotizacion });
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
@@ -189,11 +204,11 @@ const cotizacion = {
   cotizacionGet: async (req, res) => {
     try {
       const cotizacion = await Cotizacion.find()
-      .populate({path:'idCliente',populate:{path:'ciudad',select:['departamento','Ciudad']}})
-      .populate({path:'idElaboradoPor',populate:{path:'ciudad'}})
-      .populate({path:'items.item1.itemsEnsayo.ensayo'})
-      .populate({path:'items.item2.itemsEnsayo.ensayo'})
-      .populate({path:'items.item3.itemsEnsayo.ensayo'});
+        .populate({ path: 'idCliente', populate: { path: 'ciudad', select: ['departamento', 'Ciudad'] } })
+        .populate({ path: 'idElaboradoPor', populate: { path: 'ciudad' } })
+        .populate({ path: 'items.item1.itemsEnsayo.ensayo' })
+        .populate({ path: 'items.item2.itemsEnsayo.ensayo' })
+        .populate({ path: 'items.item3.itemsEnsayo.ensayo' });
 
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" });
@@ -218,15 +233,15 @@ const cotizacion = {
   },
   servicioGetFechaEmision: async (req, res) => {
     const { fechaEmision } = req.body;
-    
+
     let fechaI = `${fechaEmision}T00:00:00.000-05:00`;
     let fechaF = `${fechaEmision}T23:59:59.000-05:00`;
-    console.log('fecha incial: '+fechaI);
-    console.log('fecha final: '+fechaF);
+    console.log('fecha incial: ' + fechaI);
+    console.log('fecha final: ' + fechaF);
 
     try {
       const cotizacion = await Cotizacion.find({
-        $and: [{fechaEmision: {$gte: new Date(fechaI), $lt: new Date(fechaF)}}]
+        $and: [{ fechaEmision: { $gte: new Date(fechaI), $lt: new Date(fechaF) } }]
       });
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro" });
@@ -238,27 +253,27 @@ const cotizacion = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  cotizacionGetCliente: async (req, res)=>{
-    const {idCliente}=req.body
-    try{
-      const cotizacion = await Cotizacion.find({idCliente});
+  cotizacionGetCliente: async (req, res) => {
+    const { idCliente } = req.body
+    try {
+      const cotizacion = await Cotizacion.find({ idCliente });
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" });
       }
       res.json({ cotizacion });
-    }catch(error){
+    } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
   cotizacionGetIdCotizacion: async (req, res) => {
-    const {id} = req.params
-    try{
+    const { id } = req.params
+    try {
       const cotizacion = await Cotizacion.findById(id)
       if (!cotizacion) {
         return res.status(400).json({ msg: "No se encontro nada" });
       }
       res.json({ cotizacion });
-    }catch(error){
+    } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
   }

@@ -37,11 +37,16 @@ const Ordenes = {
       if (!activar) {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Orden activada exitosamente, realizada por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
 
-      const usuario = req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Orden activada exitosamente, realizada por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
       res.json({
         activar,
       });
@@ -57,10 +62,16 @@ const Ordenes = {
         res.status(400).json({ msg: "No se actualizo el estado" });
       }
 
-      const usuario = req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Orden inactivada exitosamente, realizada por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Orden inactivada exitosamente, realizada por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
       res.json({
         desactivar,
       });
@@ -71,20 +82,25 @@ const Ordenes = {
   ordenPut: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, idMuestra, estado, ...resto } = req.body;
-    
-      const modificar = await Orden.findByIdAndUpdate(id, resto);
-      if (!modificar) {
-        return res.status(400).json({
-          msg: "No se pudo agregar resultado e incertidumbre a la orden" ,
-        });
-      }
+
+    const modificar = await Orden.findByIdAndUpdate(id, resto);
+    if (!modificar) {
+      return res.status(400).json({
+        msg: "No se pudo agregar resultado e incertidumbre a la orden",
+      });
+    }
+    try {
 
       const usuario = req.usuario
       const idPerson = usuario._id;
       const observacion = `Orden modificada exitosamente, realizada por ${usuario.nombre}`;
       helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({ modificar });
-    
+    } catch (error) {
+      return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+    }
+
+    res.json({ modificar });
+
   },
   informeDeResultados: async (req, res) => {
     const { id } = req.params;
@@ -113,14 +129,14 @@ const Ordenes = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  lismamu: async(req, res)=> {
+  lismamu: async (req, res) => {
     try {
       const lismamu = await Orden.find()
-      .populate({path:'idMuestra', populate:{path:'solicitante'}})
-      .populate({path:'idMuestra',populate:{path:'cotizacion'}})
-      .populate({path:'idMuestra', populate:{path:'tipoMuestra'}})
-      .populate({path:'idMuestra',populate:{path:'solicitante', populate:{path:'ciudad'}}})
-      .populate({path:'idMuestra', populate:{path:'munRecoleccion'}});
+        .populate({ path: 'idMuestra', populate: { path: 'solicitante' } })
+        .populate({ path: 'idMuestra', populate: { path: 'cotizacion' } })
+        .populate({ path: 'idMuestra', populate: { path: 'tipoMuestra' } })
+        .populate({ path: 'idMuestra', populate: { path: 'solicitante', populate: { path: 'ciudad' } } })
+        .populate({ path: 'idMuestra', populate: { path: 'munRecoleccion' } });
 
       if (!lismamu) {
         res.status(400).json({ msg: "No se encontro lo buscado" });
