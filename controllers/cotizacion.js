@@ -3,7 +3,7 @@ import Setup from "../models/setup.js";
 import helperBitacora from '../helpers/bitacora.js'
 import tools from "../helpers/tools.js";
 
-const cotizacion = {
+const cotizacion ={
   cotizacionPost: async (req, res) => {
     const {
       fechaEmision,
