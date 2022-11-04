@@ -7,6 +7,8 @@ import validar from '../middlewares/validar.js';
 
 const router = new Router();
 
+router.get('/',colores.colorGet)
+
 router.post('/',colores.obtenerColor)
 
 router.put('/modificar/:id',[
