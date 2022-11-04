@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import {dbConnection} from "../database/config.js"
 import ciudad from '../routes/ciudad.js'
+import color from '../routes/color.js'
 import cotizacion from '../routes/cotizacion.js'
 import ensayo from '../routes/ensayo.js'
 import resultado from "../routes/informe_resultados.js"
@@ -25,6 +26,7 @@ class Server {
         this.app.use('/api/calidad',calidad)
         this.app.use('/api/bitacora',bitacora)
         this.app.use('/api/ciudad',ciudad)
+        this.app.use('/api/color', color)
         this.app.use('/api/cotizacion',cotizacion)
         this.app.use('/api/ensayo',ensayo)
         this.app.use('/api/resultado',resultado)

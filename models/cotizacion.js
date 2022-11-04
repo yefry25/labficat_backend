@@ -109,7 +109,7 @@ const ServicioSchema = new mongoose.Schema({
     },
     descuento: {///descuento sobre el subtotal
         type: Number,
-        required: true
+        default:""
     },
     iva: {
         type: Number,

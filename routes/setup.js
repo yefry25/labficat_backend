@@ -16,4 +16,9 @@ router.put('/modificar/:id',[
     validarCampos
 ],consecutivo.ConsecutivoPut)
 
+router.post('/color',[
+    check('color','El campo color no puede estar vacio').not().isEmpty(),
+    validarCampos
+],consecutivo.obtenerColor)
+
 export default router

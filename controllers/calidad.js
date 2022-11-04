@@ -16,35 +16,35 @@ const calidad = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  calidadPut: async (req, res) =>{
+  calidadPut: async (req, res) => {
     const { id } = req.params
-        const { _id, createdAt, estado, ...resto } = req.body;
-        try {
-            const modificar = await Calidad.findByIdAndUpdate(id, resto);
-            if (!modificar) {
-                return res.status(500).json({ msg: "No se pudo actualizar la informacion"})
-            }
-            res.json({
-                modificar
-            })
-        } catch (error) {
-            return res.status(500).json({ msg: "Hable con el WebMaster" })
-        }
+    const { _id, createdAt, estado, ...resto } = req.body;
+    try {
+      const modificar = await Calidad.findByIdAndUpdate(id, resto);
+      if (!modificar) {
+        return res.status(500).json({ msg: "No se pudo actualizar la informacion" })
+      }
+      res.json({
+        modificar
+      })
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" })
+    }
   },
   calidadGet: async (req, res) => {
     try {
-      const calidad = await Calidad.find() ;
+      const calidad = await Calidad.find();
       if (!calidad) {
         return res.status(400).json({ msg: "no se pudo registrar" });
       }
       res.json({
-        calidad ,
+        calidad,
       });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  calidadNombre: async  (req, res) =>{
+  calidadNombre: async (req, res) => {
     const { nombre } = req.body;
     try {
       const calidad = await Calidad.find({

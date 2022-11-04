@@ -46,5 +46,22 @@ const consecutivo = {
             return res.status(500).json({ msg: "Hable con el WebMaster" })
         }
     },
+
+    obtenerColor: async (req, res)=>{
+        const {color}=req.body
+
+        try {
+            const colores = new Consecutivo({color})
+
+            if(!colores){
+                res.status(400).json({ msg: "No se realizo la subida del color" })
+            }
+            colores.save();
+
+            res.json({color});
+        } catch (error) {
+            return res.status(500).json({msg:"Hable con el WebMaster"})
+        }
+    }
 }
 export default consecutivo

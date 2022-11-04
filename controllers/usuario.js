@@ -229,14 +229,15 @@ const usuario = {
   usuarioPut: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, estado, ...resto } = req.body;
+    
     try {
+      console.log("hola: "+resto.password);
       const modificar = await Usuario.findByIdAndUpdate(id, resto);
       if (!modificar) {
         return res
           .status(500)
           .json({ msg: "No se pudo actualizar la informacion del usuario" });
       }
-
       try {
         const user = req.usuario
         const idPerson = user._id;
@@ -337,5 +338,4 @@ const usuario = {
     }
   }
 };
-
 export default usuario;
