@@ -38,4 +38,6 @@ router.get('/informeDeResultados/:id',[
 
 router.get('/lismamu',Ordenes.lismamu)
 
+router.get('/semaforo',Ordenes.semaforo)
+
 export default router

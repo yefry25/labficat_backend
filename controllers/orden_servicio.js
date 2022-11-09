@@ -18,7 +18,8 @@ const Ordenes = {
           path: "itemsorden.supervisor",
           select: ["nombre"],
         })
-        .populate({ path: "idMuestra" });
+        .populate({ path: "idMuestra" })
+        .populate({ path: 'idMuestra', populate: { path: 'cotizacion' } });
 
       if (!orden) {
         return res
@@ -145,6 +146,26 @@ const Ordenes = {
       res.json({ lismamu });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
+  semaforo: async (req, res) => {
+    try {
+      const fecha = await Orden.find()
+        .populate({ path: 'idMuestra', populate: { path: 'cotizacion' } })
+
+      res.json({ fecha })
+
+      let fechaActual = new Date();
+      console.log("fecha Actual: " + fechaActual);
+      let entrega = new Date(fecha[2].idMuestra.cotizacion.entregaResultados);
+      console.log("entrega de resultados: " + entrega);
+      console.log("resta: " + (fechaActual - entrega));
+
+      const diffInDays = Math.floor((fechaActual - entrega) / (1000 * 60 * 60 * 24));
+      console.log("fecha total: " + diffInDays);
+
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" })
     }
   }
 };
