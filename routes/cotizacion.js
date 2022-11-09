@@ -55,5 +55,19 @@ router.put('/modificar/:id',[
     validarCampos
 ],cotizacion.cotizacionPut)
 
+router.put('/aceptar/:id',[
+    validar.validarJWT,
+    check('id','el id no es compatible').isMongoId(),
+    check('id').custom(helpersCotizacion.existeCotizacion),
+    validarCampos
+],cotizacion.cotizacionAceptada)
+
+router.put('/rechazar/:id',[
+    validar.validarJWT,
+    check('id','el id no es compatible').isMongoId(),
+    check('id').custom(helpersCotizacion.existeCotizacion),
+    validarCampos
+],cotizacion.cotizacionRechazada)
+
 export default router
 

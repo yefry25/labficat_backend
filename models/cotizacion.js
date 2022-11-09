@@ -121,7 +121,7 @@ const ServicioSchema = new mongoose.Schema({
     },
     estado:{
         type: Number,
-        default: 1   /* 0: anulada 1: vigente */
+        default: 1   /* 0: rechazada 1: enviada 2: aceptada*/
     },
     createdAt: {
         type: Date,

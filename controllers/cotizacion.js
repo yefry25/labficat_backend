@@ -1,9 +1,11 @@
 import Cotizacion from "../models/cotizacion.js";
+import Usuario from "../models/usuario.js"
 import Setup from "../models/setup.js";
 import helperBitacora from '../helpers/bitacora.js'
 import tools from "../helpers/tools.js";
+import transporter from "../database/mailer.js";
 
-const cotizacion ={
+const cotizacion = {
   cotizacionPost: async (req, res) => {
     const {
       fechaEmision,
@@ -95,6 +97,20 @@ const cotizacion ={
       cotizacion.save();
 
       try {
+        const email = await Usuario.findById(idCliente)
+        /* console.log("persona: " + email.correo); */
+        await transporter.sendMail({
+          from: '"Cotización creada" <jefabecerra@misena.edu.co>', // sender address
+          to: email.correo, // list of receivers
+          subject: "La cotización fue creada exitosamente", // Subject line
+          html: `El consecutivo de la cotización creada es: ${cotizacion.numCotizacion}`, // html body
+        });
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo enviar el correo" })
+      }
+
+      try {
         const usuario = req.usuario
         const idPerson = usuario._id;
         const observacion = `Cotizacion registrada exitosamente, realizada por ${usuario.nombre}`;
@@ -149,7 +165,7 @@ const cotizacion ={
       /* console.log("iva: " + consecutivoSetup.iva); */
       let to = Math.round(sub + sub * (consecutivoSetup.iva / 100))
 
-      let concaNueva="";
+      let concaNueva = "";
       try {
         const usuario = await Cotizacion.findByIdAndUpdate(id, { estado: 0 });
         if (!usuario) {
@@ -276,7 +292,52 @@ const cotizacion ={
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el webMaster" });
     }
-  }
+  },
+  cotizacionRechazada: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const activar = await Cotizacion.findByIdAndUpdate(id, { estado: 0 });
+      if (!activar) {
+        res.status(400).json({ msg: "No se actualizo el estado" });
+      }
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Cotizacion rechazada exitosamente, realizada por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+      res.json({
+        activar,
+      });
+    } catch (error) {
+      res.stataus(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
+  cotizacionAceptada: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const desactivar = await Cotizacion.findByIdAndUpdate(id, { estado: 2 });
+      if (!desactivar) {
+        res.status(400).json({ msg: "No se actualizo el estado" });
+      }
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Cotización aceptada exitosamente, realizada por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+      res.json({
+        desactivar,
+      });
+    } catch (error) {
+      res.stataus(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
 };
 
 export default cotizacion;
