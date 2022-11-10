@@ -69,5 +69,13 @@ router.put('/rechazar/:id',[
     validarCampos
 ],cotizacion.cotizacionRechazada)
 
+router.put('/observacion/:id',[
+    validar.validarJWT,
+    check('id','el id no es compatible').isMongoId(),
+    check('id').custom(helpersCotizacion.existeCotizacion),
+    check('observacionRechazo','El campo no puede estar vacio').not().isEmpty(),
+    validarCampos
+],cotizacion.cotizacionObservada)
+
 export default router
 

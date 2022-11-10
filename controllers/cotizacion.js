@@ -338,6 +338,30 @@ const cotizacion = {
       res.stataus(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  cotizacionObservada: async (req, res) => {
+    const { id } = req.params;
+    const {observacionRechazo} = req.body
+    try {
+      const rechazo = await Cotizacion.findByIdAndUpdate(id, { observacionRechazo });
+      if (!rechazo) {
+        res.status(400).json({ msg: "No se agregó la observación de rechazo" });
+      }
+      try {
+        const usuario = req.usuario
+        const idPerson = usuario._id;
+        const observacion = `Cotización actualizada con la observación de rechazo, realizada por ${usuario.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+      res.json({
+        rechazo,
+      });
+    } catch (error) {
+      res.stataus(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
 };
 
 export default cotizacion;
