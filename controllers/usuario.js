@@ -306,8 +306,8 @@ const usuario = {
 
     try {
       const verificar = jwt.verify(resetToken, process.env.CLAVERESETTOKEN)
-      console.log(verificar.nombre);
-      const user = await Usuario.findOne({ nombre: verificar.nombre })
+      console.log(verificar.idUsuario);
+      const user = await Usuario.findOne({ _id: verificar.idUsuario })
       console.log(user);
 
       if (!user) {

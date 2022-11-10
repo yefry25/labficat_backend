@@ -66,7 +66,7 @@ const validar = {
             next();
             
         } catch (error) {
-            return res.status.json({msg:'Something goes wrong!'})
+            return res.status(500).json({msg:'Something goes wrong!'})
         }
     }
 }

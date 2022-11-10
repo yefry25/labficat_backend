@@ -103,6 +103,10 @@ const ServicioSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    observacionRechazo: {
+        type: String,
+        default: ""
+    },
     subTotal: {
         type: Number,
         required: true
