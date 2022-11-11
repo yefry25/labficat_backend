@@ -13,6 +13,7 @@ router.post('/',[
     check('tipoPersona','no puede estar vacio').not().isEmpty(),
     check('nombre','no puede estar vacio').not().isEmpty(),
     check('documento','no puede estar vacio').not().isEmpty(),
+    check('documento').custom(helpersUsuario.existeDocumento),
     check('direccion','no puede estar vacio').not().isEmpty(),
     check('ciudad').custom(helpersCiudad.existeCiudadById),
     check('ciudad','id debe ser válido').isMongoId(),
@@ -20,8 +21,6 @@ router.post('/',[
     check('telefono','maximo 14 caracteres').isLength({max:14}),
     check('correo','solo formato email').isEmail(),
     check('correo','ya existe un cliente registrado con este correo').custom(helpersUsuario.existeEmail),
-    check('password','el campo password no puede estar vacio').not().isEmpty(),
-    check('password','la contraseña no puede tener menos de 8 caracteres').isLength({min:8}),
     check('rol','no puede estar vacio').not().isEmpty(),
     validarCampos
 ],usuario.usuarioPost)

@@ -29,6 +29,15 @@ const helpersUsuario = {
         }
     },
 
+    existeDocumento: async (documento) => {
+
+        const existe = await Usuario.findOne({ documento });
+
+        if (existe) {
+            throw new Error(`El documento ya esta registrado`)
+        }
+    },
+
     existeEmailChangePassword: async (correo) => {
 
         const existe = await Usuario.findOne({ correo });

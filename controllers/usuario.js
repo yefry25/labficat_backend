@@ -96,45 +96,49 @@ const usuario = {
       celularContacto,
       telefono,
       correo,
-      password,
       rol,
     } = req.body;
 
-    try {
-      const usuario = new Usuario({
-        tipoPersona,
-        nombre,
-        documento,
-        direccion,
-        ciudad,
-        contacto,
-        celularContacto,
-        telefono,
-        correo,
-        password,
-        rol,
-      });
-      const salt = bcryptjs.genSaltSync(10);
-      usuario.password = bcryptjs.hashSync(password, salt);
-      if (!usuario) {
-        return res.status(400).json({ msg: "no se pudo registrar el cliente" });
-      }
-      usuario.save();
+    let pass = documento;
 
-      try {
-        let user = req.usuario
-        const idPerson = user._id;
-        const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${user.nombre}`;
-        helperBitacora.llenarBitacora(idPerson, observacion);
-      } catch (error) {
-        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
-      }
-      res.json({
-        usuario,
-      });
+    const usuario = new Usuario({
+      tipoPersona,
+      nombre,
+      documento,
+      direccion,
+      ciudad,
+      contacto,
+      celularContacto,
+      telefono,
+      correo,
+      password: pass,
+      rol,
+    });
+
+    try {
+      const salt = bcryptjys.genSaltSnc(10);
+      usuario.password = bcryptjs.hashSync(pass, salt);
     } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
+      return res.status(500).json({ msg: "No se pudo encriptar la contraseña" })
     }
+
+    if (!usuario) {
+      return res.status(400).json({ msg: "no se pudo registrar el cliente" });
+    }
+    usuario.save();
+
+    try {
+      let user = req.usuario
+      const idPerson = user._id;
+      const observacion = `Registro exitoso del usuario ${usuario.nombre} realizado por ${user.nombre}`;
+      helperBitacora.llenarBitacora(idPerson, observacion);
+    } catch (error) {
+      return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+    }
+    res.json({
+      usuario,
+    });
+
 
   },
   usuarioLogin: async (req, res) => {
@@ -229,9 +233,9 @@ const usuario = {
   usuarioPut: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, estado, ...resto } = req.body;
-    
+
     try {
-      console.log("hola: "+resto.password);
+      console.log("hola: " + resto.password);
       const modificar = await Usuario.findByIdAndUpdate(id, resto);
       if (!modificar) {
         return res
