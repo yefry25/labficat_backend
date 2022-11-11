@@ -42,7 +42,7 @@ const cotizacion = {
       };
 
       let sub = items.costoItem - descuento
-      const consecutivo = await Setup.findOne();
+      const consecutivo = await Setup.findOne() ;
       let to = Math.round(sub + sub * (consecutivo.iva / 100))
       /* let conse = "";
       if (consecutivo.consecutivoOferta.toString().length == 1) {
