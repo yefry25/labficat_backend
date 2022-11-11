@@ -247,7 +247,15 @@ const usuario = {
     const { _id, createdAt, estado, ...resto } = req.body;
 
     try {
-      console.log("hola: " + resto.password);
+      try {
+        if (resto.password) {
+          const salt = bcryptjs.genSaltSync(10);
+          resto.password = bcryptjs.hashSync(resto.password, salt);
+        }
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo encriptar la contraseña" })
+      }
+
       const modificar = await Usuario.findByIdAndUpdate(id, resto);
       if (!modificar) {
         return res
