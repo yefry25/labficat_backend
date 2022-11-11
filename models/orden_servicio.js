@@ -41,7 +41,7 @@ const Ordenschema = new mongoose.Schema({
     },  //informe de resultados en un get de orden de servicio 
     estado: {
         type: Number,
-        default: 1
+        default: 0
     },
     createdAt: {
         type: Date,
