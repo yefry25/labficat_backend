@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import validar from "../middlewares/validar.js";
 import helperBitacora from "../helpers/bitacora.js";
 import jwt from "jsonwebtoken"
+import ip from "ip"
 import transporter from "../database/mailer.js";
 
 const usuario = {
@@ -165,11 +166,12 @@ const usuario = {
 
       const token = await validar.generarJWT(usuario.id);
       const navegador = req.headers['user-agent']
-      const ip = req.socket.remoteAddress
+      /* const ip = req.socket.remoteAddress */
+      const ipAdd = ip.address();
 
       try {
         const idPerson = usuario._id;
-        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador ${navegador} con la ip ${ip}`;
+        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador ${navegador} con la ip ${ipAdd}`;
         helperBitacora.llenarBitacora(idPerson, observacion);
       } catch (error) {
         return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
