@@ -97,7 +97,7 @@ const usuario = {
       telefono,
       correo,
       rol,
-    } = req.body;
+    } = req.body ;
 
     let pass = documento;
 
@@ -150,6 +150,12 @@ const usuario = {
           msg: "Usuario / Password no son correctos",
         });
       }
+      if(usuario.estado==0){
+        return res.status(400).json({
+          msg: "Usuario inactivo",
+        });
+      }
+
       const validPassword = bcryptjs.compareSync(password, usuario.password);
       if (!validPassword) {
         return res.status(400).json({
@@ -158,10 +164,12 @@ const usuario = {
       }
 
       const token = await validar.generarJWT(usuario.id);
+      const navegador = req.headers['user-agent']
+      const ip = req.socket.remoteAddress
 
       try {
         const idPerson = usuario._id;
-        const observacion = `Inicio de sesión realizado por ${usuario.nombre}`;
+        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador ${navegador} con la ip ${ip}`;
         helperBitacora.llenarBitacora(idPerson, observacion);
       } catch (error) {
         return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
@@ -169,6 +177,8 @@ const usuario = {
       res.json({
         usuario,
         token,
+        navegador,
+        ip
       });
     } catch (error) {
       return res.status(500).json({
