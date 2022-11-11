@@ -98,7 +98,7 @@ const usuario = {
       telefono,
       correo,
       rol,
-    } = req.body ;
+    } = req.body;
 
     let pass = documento;
 
@@ -151,7 +151,7 @@ const usuario = {
           msg: "Usuario / Password no son correctos",
         });
       }
-      if(usuario.estado==0){
+      if (usuario.estado == 0) {
         return res.status(400).json({
           msg: "Usuario inactivo",
         });
@@ -169,9 +169,13 @@ const usuario = {
       /* const ip = req.socket.remoteAddress */
       const ipAdd = ip.address();
 
+      /* let nave= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 con la ip ::ffff:10.1.29.124" */
+      let parteNavegador = navegador.split(")")[2];
+      console.log("navegador:"+parteNavegador.split("/")[0]);
+
       try {
         const idPerson = usuario._id;
-        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador ${navegador} con la ip ${ipAdd}`;
+        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador${parteNavegador.split("/")[0]} con la ip ${ipAdd}`;
         helperBitacora.llenarBitacora(idPerson, observacion);
       } catch (error) {
         return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
