@@ -171,7 +171,7 @@ const usuario = {
 
       try {
         const idPerson = usuario._id;
-        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador${navegador} con la ip ${ipAdd}`;
+        const observacion = `Inicio de sesión realizado por ${usuario.nombre} en el navegador ${navegador} con la ip ${ipAdd}`;
         helperBitacora.llenarBitacora(idPerson, observacion);
       } catch (error) {
         return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
