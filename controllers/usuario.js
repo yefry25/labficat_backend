@@ -116,7 +116,7 @@ const usuario = {
     });
 
     try {
-      const salt = bcryptjys.genSaltSnc(10);
+      const salt = bcryptjs.genSaltSync(10);
       usuario.password = bcryptjs.hashSync(pass, salt);
     } catch (error) {
       return res.status(500).json({ msg: "No se pudo encriptar la contraseña" })
