@@ -19,9 +19,9 @@ const cotizacion = {
       descuento,
     } = req.body;
 
-    try {
-      tools.cuentasCotizacion(items)
-      const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
+  
+
+      const dale = items.item1.itemsEnsayo.reduce((acc, it) => { 
         return (acc += it.costoEnsayo);
       }, 0);
       items.item1.costo = dale;
@@ -40,6 +40,7 @@ const cotizacion = {
         items.item3.costo = dale;
         items.costoItem += items.item3.costo
       };
+
       let sub = items.costoItem - descuento
       const consecutivo = await Setup.findOne();
       let to = Math.round(sub + sub * (consecutivo.iva / 100))
@@ -120,9 +121,7 @@ const cotizacion = {
       } catch (error) {
         return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
       }
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" })
-    }
+    
   },
   cotizacionPut: async (req, res) => {
     const { id } = req.params;

@@ -20,7 +20,6 @@ router.post('/',[
     check('idElaboradoPor','el id del usuario no es correcto').isMongoId(),  
     check('idElaboradoPor').custom(helpersUsuario.existeUsuarioById) ,
     /* check('items').custom(helpersEnsayo.itemEnsayo), */
-    check('descuento','el campo descuento no puede estar vacio').not().isEmpty() ,
     validarCampos
 ],cotizacion.cotizacionPost)
 
