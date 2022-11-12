@@ -84,6 +84,13 @@ router.put('/modificar/:id',[
     validarCampos
 ],usuario.usuarioPut)
 
+router.put('/modificar/password/:id',[
+    validar.validarJWT,
+    check('id','el id debe ser válido').isMongoId(),
+    check('id').custom(helpersUsuario.existeUsuarioById),
+    validarCampos
+],usuario.usuarioPutCambiarPassword)
+
 /* recuperar contraseña */
 router.put('/recuperarPassword',[
     check('correo','El campo correo no puede estar vacio').not().isEmpty(),

@@ -279,6 +279,56 @@ const usuario = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  usuarioPutCambiarPassword: async (req, res) => {
+    const { id } = req.params;
+    const { _id, createdAt, estado, ...resto } = req.body;
+
+    try {
+      try {
+        let passwordActual = resto.passwordActual
+
+        let coincidir = await Usuario.findById(id)
+        const validPassword = bcryptjs.compareSync(passwordActual, coincidir.password);
+        if (!validPassword) {
+          return res.status(400).json({
+            msg: "Usuario / Password no son correctos",
+          });
+        }
+      } catch (error) {
+        return res.status(400).json({ msg: "La contraseña actual incorrecta" })
+      }
+
+      try {
+        if (resto.password) {
+          const salt = bcryptjs.genSaltSync(10);
+          resto.password = bcryptjs.hashSync(resto.password, salt);
+        }
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo encriptar la contraseña" })
+      }
+
+      const modificar = await Usuario.findByIdAndUpdate(id, resto);
+      if (!modificar) {
+        return res
+          .status(500)
+          .json({ msg: "No se pudo actualizar la informacion del usuario" });
+      }
+      try {
+        const user = req.usuario
+        const idPerson = user._id;
+        const observacion = `Actualización exitosa del usuario ${modificar.nombre} realizado por ${user.nombre}`;
+        helperBitacora.llenarBitacora(idPerson, observacion);
+      } catch (error) {
+        return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+      }
+
+      res.json({
+        modificar,
+      });
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
   recuperarPassword: async (req, res) => {
     const { correo } = req.body
     const message = 'Revisa tu correo electrónico '
