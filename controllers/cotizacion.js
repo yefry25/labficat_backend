@@ -19,9 +19,9 @@ const cotizacion = {
       descuento,
     } = req.body;
 
-  
+    try {
 
-      const dale = items.item1.itemsEnsayo.reduce((acc, it) => { 
+      const dale = items.item1.itemsEnsayo.reduce((acc, it) => {
         return (acc += it.costoEnsayo);
       }, 0);
       items.item1.costo = dale;
@@ -42,7 +42,7 @@ const cotizacion = {
       };
 
       let sub = items.costoItem - descuento
-      const consecutivo = await Setup.findOne() ;
+      const consecutivo = await Setup.findOne();
       let to = Math.round(sub + sub * (consecutivo.iva / 100))
       /* let conse = "";
       if (consecutivo.consecutivoOferta.toString().length == 1) {
@@ -121,7 +121,11 @@ const cotizacion = {
       } catch (error) {
         return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
       }
-    
+
+    } catch (error) {
+      return res.status(500).json({ msg: "Habe con el WebMaster" })
+    }
+
   },
   cotizacionPut: async (req, res) => {
     const { id } = req.params;
@@ -339,7 +343,7 @@ const cotizacion = {
   },
   cotizacionObservada: async (req, res) => {
     const { id } = req.params;
-    const {observacionRechazo} = req.body
+    const { observacionRechazo } = req.body
     try {
       const rechazo = await Cotizacion.findByIdAndUpdate(id, { observacionRechazo });
       if (!rechazo) {
