@@ -236,6 +236,22 @@ const muestra = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
+  facturaMuestra: async (req,res) => {
+    const {id} = req.body
+
+    try {
+      const muestra = await Muestra.findById(id)
+      .populate({path: "tipoMuestra"})
+      .populate({path: "munRecoleccion"});
+      
+      if (!muestra) {
+        return res.status(400).json({ msg: "No se encontro lo buscado" });
+      }
+      res.json(muestra);
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
   muestraPut: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, cotizacion, item, ...resto } = req.body;

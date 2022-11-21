@@ -38,6 +38,11 @@ router.get('/lismamu',muestra.muestraGetLisMaMu)
 
 router.get('/solsegrec',muestra.solsegrec)
 
+router.post('/factura',[
+    check('id', 'El campo id no puede estar vacio').not().isEmpty(),
+    validarCampos
+], muestra.facturaMuestra)
+
 router.put('/:id',[
     validar.validarJWT,
     check('id','el id de la muestra debe ser uno válido').isMongoId(),
