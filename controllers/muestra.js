@@ -170,36 +170,38 @@ const muestra = {
   muestraGet: async (req, res) => {
     try {
       const muestra = await Muestra.find()
+        .populate({ path: "tipoMuestra" })
+        .populate({ path: "munRecoleccion" })
         .populate({
           path: "solicitante",
           populate: { path: "ciudad", select: ["departamento", "Ciudad"] },
         })
-        .populate({ path: "cotizacion" });
-      if (!muestra) {
-        return res.status(400).json({ msg: "No hay muestras" });
-      }
+    .populate({ path: "cotizacion" });
+  if(!muestra) {
+    return res.status(400).json({ msg: "No hay muestras" });
+  }
       res.json({ muestra });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
+} catch (error) {
+  return res.status(500).json({ msg: "Hable con el WebMaster" });
+}
   },
-  muestraGetCliente: async (req, res) => {
-    const { solicitante } = req.body;
-    try {
-      const muestra = await Muestra.find({ solicitante })
-        .populate({
-          path: "munRecoleccion",
-          select: ["departamento", "Ciudad"],
-        })
-        .populate({ path: "tipoMuestra", select: ["tipos"] });
-      if (!muestra) {
-        return res.status(400).json({ msg: "No hay muestras" });
-      }
-      res.json({ muestra });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
+muestraGetCliente: async (req, res) => {
+  const { solicitante } = req.body;
+  try {
+    const muestra = await Muestra.find({ solicitante })
+      .populate({
+        path: "munRecoleccion",
+        select: ["departamento", "Ciudad"],
+      })
+      .populate({ path: "tipoMuestra", select: ["tipos"] });
+    if (!muestra) {
+      return res.status(400).json({ msg: "No hay muestras" });
     }
-  },
+    res.json({ muestra });
+  } catch (error) {
+    return res.status(500).json({ msg: "Hable con el WebMaster" });
+  }
+},
   muestraGetLisMaMu: async (req, res) => {
     try {
       const muestra = await Muestra.find({})
@@ -222,131 +224,131 @@ const muestra = {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
     }
   },
-  solsegrec: async (req, res) => {
-    try {
-      const muestra = await Muestra.find().populate({
-        path: "solicitante",
-        populate: { path: "ciudad" },
-      });
-      if (!muestra) {
-        return res.status(400).json({ msg: "No se encontro lo buscado" });
-      }
-      res.json(muestra);
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-  facturaMuestra: async (req,res) => {
-    const {id} = req.body
-
-    try {
-      const muestra = await Muestra.findById(id)
-      .populate({path: "tipoMuestra"})
-      .populate({path: "munRecoleccion"});
-      
-      if (!muestra) {
-        return res.status(400).json({ msg: "No se encontro lo buscado" });
-      }
-      res.json(muestra);
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-  muestraPut: async (req, res) => {
-    const { id } = req.params;
-    const { _id, createdAt, cotizacion, item, ...resto } = req.body;
-    try {
-      const modificar = await Muestra.findByIdAndUpdate(id, resto);
-      if (!modificar) {
-        return res
-          .status(400)
-          .json({ msg: "No se pudo actualizar la informacion de la muestra" });
-      }
-
-      const usuario = req.usuario
-      const idPerson = usuario._id;
-      const observacion = `Muestra modificada exitosamente, realizada por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({
-        modificar,
-      });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-  muestraActivar: async (req, res) => {
-    const { id } = req.params;
-    try {
-      const usuario = req.usuario
-      const muestra = await Muestra.findByIdAndUpdate(id, { estado: 1 });
-      if (!muestra) {
-        return res.status(400).json({ msg: "No se activo la muestra" });
-      }
-      const ordenes = await Orden.find();
-      for (let i = 0; i < ordenes.length; i++) {
-        const element = ordenes[i];
-        if (element.idMuestra == id) {
-          const orden = await Orden.findByIdAndUpdate(element._id, {
-            estado: 1,
-          });
-
-          const idPerson = usuario._id;
-          const observacion = `Orden activada exitosamente, realizada por ${usuario.nombre}`;
-          helperBitacora.llenarBitacora(idPerson, observacion);
-          if (!orden) {
-            return res
-              .status(400)
-              .json({ msg: "No se pudo habilitar la orden" });
-          }
+    solsegrec: async (req, res) => {
+      try {
+        const muestra = await Muestra.find().populate({
+          path: "solicitante",
+          populate: { path: "ciudad" },
+        });
+        if (!muestra) {
+          return res.status(400).json({ msg: "No se encontro lo buscado" });
         }
+        res.json(muestra);
+      } catch (error) {
+        return res.status(500).json({ msg: "Hable con el WebMaster" });
       }
+    },
+      facturaMuestra: async (req, res) => {
+        const { id } = req.body
 
-      const idPerson = usuario._id;
-      const observacion = `Muestra activada exitosamente, realizada por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({
-        muestra,
-      });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
-  muestraDesactivar: async (req, res) => {
-    const { id } = req.params;
-    try {
-      const usuario = req.usuario
-      const muestra = await Muestra.findByIdAndUpdate(id, { estado: 0 });
-      if (!muestra) {
-        return res.status(400).json({ msg: "No se desactivo la muestra" });
-      }
-      const ordenes = await Orden.find();
-      for (let i = 0; i < ordenes.length; i++) {
-        const element = ordenes[i];
-        if (element.idMuestra == id) {
-          const orden = await Orden.findByIdAndUpdate(element._id, {
-            estado: 0,
-          });
+        try {
+          const muestra = await Muestra.findById(id)
+            .populate({ path: "tipoMuestra" })
+            .populate({ path: "munRecoleccion" });
 
-          const idPerson = usuario._id;
-          const observacion = `Orden inactivada exitosamente, realizada por ${usuario.nombre}`;
-          helperBitacora.llenarBitacora(idPerson, observacion);
-          if (!orden) {
-            return res
-              .status(400)
-              .json({ msg: "No se pudo inhabilitar la orden" });
+          if (!muestra) {
+            return res.status(400).json({ msg: "No se encontro lo buscado" });
           }
+          res.json(muestra);
+        } catch (error) {
+          return res.status(500).json({ msg: "Hable con el WebMaster" });
         }
-      }
+      },
+        muestraPut: async (req, res) => {
+          const { id } = req.params;
+          const { _id, createdAt, cotizacion, item, ...resto } = req.body;
+          try {
+            const modificar = await Muestra.findByIdAndUpdate(id, resto);
+            if (!modificar) {
+              return res
+                .status(400)
+                .json({ msg: "No se pudo actualizar la informacion de la muestra" });
+            }
 
-      const idPerson = usuario._id;
-      const observacion = `Muestra inactivada exitosamente, realizada por ${usuario.nombre}`;
-      helperBitacora.llenarBitacora(idPerson, observacion);
-      res.json({
-        muestra,
-      });
-    } catch (error) {
-      return res.status(500).json({ msg: "Hable con el WebMaster" });
-    }
-  },
+            const usuario = req.usuario
+            const idPerson = usuario._id;
+            const observacion = `Muestra modificada exitosamente, realizada por ${usuario.nombre}`;
+            helperBitacora.llenarBitacora(idPerson, observacion);
+            res.json({
+              modificar,
+            });
+          } catch (error) {
+            return res.status(500).json({ msg: "Hable con el WebMaster" });
+          }
+        },
+          muestraActivar: async (req, res) => {
+            const { id } = req.params;
+            try {
+              const usuario = req.usuario
+              const muestra = await Muestra.findByIdAndUpdate(id, { estado: 1 });
+              if (!muestra) {
+                return res.status(400).json({ msg: "No se activo la muestra" });
+              }
+              const ordenes = await Orden.find();
+              for (let i = 0; i < ordenes.length; i++) {
+                const element = ordenes[i];
+                if (element.idMuestra == id) {
+                  const orden = await Orden.findByIdAndUpdate(element._id, {
+                    estado: 1,
+                  });
+
+                  const idPerson = usuario._id;
+                  const observacion = `Orden activada exitosamente, realizada por ${usuario.nombre}`;
+                  helperBitacora.llenarBitacora(idPerson, observacion);
+                  if (!orden) {
+                    return res
+                      .status(400)
+                      .json({ msg: "No se pudo habilitar la orden" });
+                  }
+                }
+              }
+
+              const idPerson = usuario._id;
+              const observacion = `Muestra activada exitosamente, realizada por ${usuario.nombre}`;
+              helperBitacora.llenarBitacora(idPerson, observacion);
+              res.json({
+                muestra,
+              });
+            } catch (error) {
+              return res.status(500).json({ msg: "Hable con el WebMaster" });
+            }
+          },
+            muestraDesactivar: async (req, res) => {
+              const { id } = req.params;
+              try {
+                const usuario = req.usuario
+                const muestra = await Muestra.findByIdAndUpdate(id, { estado: 0 });
+                if (!muestra) {
+                  return res.status(400).json({ msg: "No se desactivo la muestra" });
+                }
+                const ordenes = await Orden.find();
+                for (let i = 0; i < ordenes.length; i++) {
+                  const element = ordenes[i];
+                  if (element.idMuestra == id) {
+                    const orden = await Orden.findByIdAndUpdate(element._id, {
+                      estado: 0,
+                    });
+
+                    const idPerson = usuario._id;
+                    const observacion = `Orden inactivada exitosamente, realizada por ${usuario.nombre}`;
+                    helperBitacora.llenarBitacora(idPerson, observacion);
+                    if (!orden) {
+                      return res
+                        .status(400)
+                        .json({ msg: "No se pudo inhabilitar la orden" });
+                    }
+                  }
+                }
+
+                const idPerson = usuario._id;
+                const observacion = `Muestra inactivada exitosamente, realizada por ${usuario.nombre}`;
+                helperBitacora.llenarBitacora(idPerson, observacion);
+                res.json({
+                  muestra,
+                });
+              } catch (error) {
+                return res.status(500).json({ msg: "Hable con el WebMaster" });
+              }
+            },
 };
 export default muestra;
