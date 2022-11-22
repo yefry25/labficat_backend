@@ -295,7 +295,6 @@ const usuario = {
       cloudinary.uploader.upload(tempFilePath,
         async function (error, result) {
           if (result) {
-            console.log(result);
             let usuario = await Usuario.findById(id);
             if (usuario.foto) {
               /* const nombreTemp = usuario.foto.split('/')
