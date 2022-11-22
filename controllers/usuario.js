@@ -5,6 +5,7 @@ import helperBitacora from "../helpers/bitacora.js";
 import jwt from "jsonwebtoken"
 import ip from "ip"
 import transporter from "../database/mailer.js";
+import { v2 as cloudinary } from 'cloudinary'
 
 const usuario = {
   usuarioGet: async (req, res) => {
@@ -277,6 +278,41 @@ const usuario = {
       });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
+  cargarArchivoCloud: async (req, res) => {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUDINARY_KEY,
+      api_secret: process.env.CLOUDINARY_SECRET,
+      secure: true
+    });
+
+    const { id } = req.params;
+    try {
+      //subir archivo
+      const { tempFilePath } = req.files.archivo;
+      cloudinary.uploader.upload(tempFilePath,
+        async function (error, result) {
+          if (result) {
+            console.log(result);
+            let usuario = await Usuario.findById(id);
+            if (usuario.foto) {
+              /* const nombreTemp = usuario.foto.split('/')
+              const nombreArchivo = nombreTemp[nombreTemp.length - 1] // hgbkoyinhx9ahaqmpcwl jpg
+              const [public_id] = nombreArchivo.split('.') */
+              await cloudinary.uploader.destroy(usuario.borrarFoto)
+            }
+            usuario = await Usuario.findByIdAndUpdate(id, { foto: result.url, borrarFoto: result.public_id })
+            //responder
+            res.json({ url: result.url });
+
+          } else {
+            res.json(error)
+          }
+        })
+    } catch (error) {
+      res.status(400).json({ msg:"Hable con el WebMaster"})
     }
   },
   usuarioPutCambiarPassword: async (req, res) => {

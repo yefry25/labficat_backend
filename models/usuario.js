@@ -35,6 +35,14 @@ const UsuarioSchema = new mongoose.Schema({
         maxLength: 14,
         required: true
     },
+    foto: {
+        type: String,
+        default:""
+    },
+    borrarFoto: {
+        type: String,
+        default:""
+    },
     correo: {
         type: String,
         required: true,

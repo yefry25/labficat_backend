@@ -10,14 +10,14 @@
   "keywords": [
     "ciencia",
     "panela",
-    "miel" 
+    "miel"
   ],
   "type": "module",
   "author": "JEFRY",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.30.0",
+    "cloudinary": "^1.32.0",
     "cors": "^2.8.5",
     "csv": "^6.2.0",
     "dotenv": "^16.0.1",
