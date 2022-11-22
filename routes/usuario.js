@@ -96,7 +96,7 @@ router.post('/uploadinary/:id', [
     validar.validarJWT,
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(helpersUsuario.existeUsuarioById),
-    /* validarArchivo, */
+    validarArchivo,
     validarCampos
 ], usuario.cargarArchivoCloud)
 
