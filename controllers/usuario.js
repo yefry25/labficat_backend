@@ -292,8 +292,15 @@ const usuario = {
     try {
       //subir archivo
       const { tempFilePath } = req.files.archivo;
-      cloudinary.uploader.upload(tempFilePath,
+      cloudinary.uploader.upload(tempFilePath, {
+        eager: [
+          { gravity: "face", height: 400, width: 400, crop: "crop" },
+          { radius: "max" },
+          { width: 200, crop: "scale" }
+        ]
+      },
         async function (error, result) {
+          console.log(result);
           if (result) {
             let usuario = await Usuario.findById(id);
             if (usuario.foto) {
@@ -311,7 +318,7 @@ const usuario = {
           }
         })
     } catch (error) {
-      res.status(400).json({ msg:"Hable con el WebMaster"})
+      res.status(400).json({ msg: "Hable con el WebMaster" })
     }
   },
   usuarioPutCambiarPassword: async (req, res) => {
