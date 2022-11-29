@@ -78,7 +78,8 @@ const usuario = {
   usuarioGetRoles: async (req, res) => {
     const { rol } = req.body;
     try {
-      const usuario = await Usuario.find({ rol });
+      const usuario = await Usuario.find({ rol })
+      .populate({path:'ciudad'});
       if (!usuario) {
         return res.status(400).json({ msg: "No se encontro" });
       }
