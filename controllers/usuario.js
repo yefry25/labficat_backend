@@ -294,13 +294,12 @@ const usuario = {
       const { tempFilePath } = req.files.archivo;
       cloudinary.uploader.upload(tempFilePath, {
         eager: [
-          { gravity: "face", height: 400, width: 400, crop: "crop" },
-          { radius: "max" },
-          { width: 200, crop: "scale" }
+          /* { gravity: "face", height: 400, width: 400, crop: "crop" }, */
+          {  radius:'max',crop: "crop"}, 
         ]
       },
         async function (error, result) {
-          console.log(result);
+          console.log(result.eager[0].url);
           if (result) {
             let usuario = await Usuario.findById(id);
             if (usuario.foto) {

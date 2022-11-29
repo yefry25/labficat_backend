@@ -2,7 +2,7 @@ import Bitacora from '../models/bitacora.js';
 
 const bitacora = {
     bitacoraGet: async (req, res) => {
-        try {
+        try { 
             const bitacoras = await Bitacora.find()
             .populate({ path:'usuario'});
             if (!bitacoras) {

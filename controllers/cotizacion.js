@@ -4,6 +4,8 @@ import Setup from "../models/setup.js";
 import helperBitacora from '../helpers/bitacora.js'
 import tools from "../helpers/tools.js";
 import transporter from "../database/mailer.js";
+import excel4node from "excel4node";
+import path from "path";
 
 const cotizacion = {
   cotizacionPost: async (req, res) => {
@@ -248,6 +250,71 @@ const cotizacion = {
       res.json({ cotizacion });
     } catch (error) {
       return res.status(500).json({ msg: "Hable con el WebMaster" });
+    }
+  },
+  solsegrec: async (req, res) => {
+    try {
+
+      const cotizacion = await Cotizacion.find()
+        .populate({ path: 'idCliente', populate: { path: 'ciudad' } })
+        .populate({ path: 'idElaboradoPor' });
+      if (!cotizacion) {
+        return res.status(400).json({ msg: "No se encontro lo buscado" });
+      }
+
+      res.json(cotizacion)
+
+      const libro = new excel4node.Workbook({
+        dateFormat: 'yyyy/mm/dd'
+      });
+      const hoja = libro.addWorksheet('libro');
+
+      hoja.cell(1, 1).string('Fecha');
+      hoja.cell(1, 2).string('Código cotización');
+      hoja.cell(1, 3).string('Datos del contacto');
+      hoja.cell(1, 4).string('Solicitud');
+      hoja.cell(1, 5).string('Medio de solicitud');
+      hoja.cell(1, 6).string('Recibido por');
+      hoja.cell(1, 7).string('Porcentaje de aceptación');
+      hoja.cell(1, 8).string('Registro de aceptación');
+      hoja.cell(1, 9).string('Motivo de rechazo');
+      hoja.cell(1, 10).string('Seguimiento de cotizaciones');
+
+      hoja.cell(2, 1).string('Fecha');
+      hoja.cell(2, 2).string('Código de cotización');
+      hoja.cell(2, 3).string('Cliente');
+      hoja.cell(2, 3).string('NIT/CC');
+      hoja.cell(2, 3).string('Dirección');
+      hoja.cell(2, 3).string('Ciudad');
+      hoja.cell(2, 3).string('Departamento'); 
+      hoja.cell(2, 3).string('Teléfono');
+
+      hoja.cell(2,4).formula('="first line"&CHAR(10)&"second line"');
+ 
+      const style = libro.createStyle({ 
+        alignment: { 
+          wrapText: true, 
+        },
+      })
+      hoja.cell(4, 2).string('new\nline').style(style)
+ 
+      const __dirname = path.resolve();
+      const pathExcel = path.join(__dirname, 'excel', 'Libro3.xlsx')
+
+      libro.write(pathExcel, (err, stats) => {
+        if (err) {
+          console.log(err)
+        } else {
+          let downloadFile = () => {
+            res.download(pathExcel)
+          }
+          downloadFile();
+          return false;
+        }
+      });
+
+    } catch (error) {
+      return res.status(500).json({ msg: "Hable con el WebMaster" })
     }
   },
   servicioGetFechaEmision: async (req, res) => {

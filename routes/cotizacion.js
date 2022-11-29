@@ -42,6 +42,8 @@ router.post('/fechaEmision',[
     validarCampos
 ],cotizacion.servicioGetFechaEmision)
 
+router.post('/solsegrec',cotizacion.solsegrec) 
+
 router.post('/cliente',[
     check('idCliente','idCliente no puede estar vacio').not().isEmpty(),
     validarCampos
