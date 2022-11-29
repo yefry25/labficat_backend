@@ -141,8 +141,6 @@ const usuario = {
     res.json({
       usuario,
     });
-
-
   },
   usuarioLogin: async (req, res) => {
     const { correo, password } = req.body;
@@ -300,7 +298,7 @@ const usuario = {
         ]
       },
         async function (error, result) {
-          console.log(result.eager[0].url);
+          /* console.log(result.eager[0].url); */
           if (result) {
             let usuario = await Usuario.findById(id);
             if (usuario.foto) {
@@ -312,6 +310,15 @@ const usuario = {
             usuario = await Usuario.findByIdAndUpdate(id, { foto: result.url, borrarFoto: result.public_id })
             //responder
             res.json({ url: result.url });
+
+            try {
+              let user = req.usuario
+              const idPerson = user._id;
+              const observacion = `Imagen de perfil actualizada exitosamente, realizado por ${user.nombre}`;
+              helperBitacora.llenarBitacora(idPerson, observacion);
+            } catch (error) {
+              return res.status(500).json({ msg: "No se pudo crear el registro de bitacora" })
+            }
 
           } else {
             res.json(error)
