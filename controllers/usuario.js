@@ -327,7 +327,7 @@ const usuario = {
     } catch (error) {
       res.status(400).json({ msg: "Hable con el WebMaster" })
     }
-  },
+  }, 
   usuarioPutCambiarPassword: async (req, res) => {
     const { id } = req.params;
     const { _id, createdAt, estado, ...resto } = req.body;
@@ -381,7 +381,7 @@ const usuario = {
   recuperarPassword: async (req, res) => {
     const { correo } = req.body
     const message = 'Revisa tu correo electrónico '
-    let verificationLink
+    let verificationLink 
 
     try {
       const user = await Usuario.findOne({ correo })

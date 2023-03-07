@@ -3,7 +3,7 @@ import Usuario from "../models/usuario.js";
 
 const validar = {
     generarJWT : (uid) => {
-        return new Promise((resolve, reject) => {
+        const token = new Promise((resolve, reject) => {
             const payload = { uid };
             jwt.sign(payload, process.env.CLAVESECRET, {
                 expiresIn: "4h"//4h
@@ -16,7 +16,8 @@ const validar = {
                 }
             })
         })
-    
+
+        
     },
     
     validarJWT : async (req, res, next) => {

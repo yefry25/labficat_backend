@@ -19,7 +19,7 @@ class Server {
     constructor() {
         this.app = express()
         this.middleware()
-        this.port = process.env.PORT || "8080";
+        this.port = process.env.PORT || "8080"
         this.conectarBd()
         this.routes()
     }
